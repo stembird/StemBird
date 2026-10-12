@@ -47,7 +47,7 @@ export function buildJobPostingJsonLd(
   // so it is resolved from date_posted → created_at → posted_date → updated_at.
   // Emitted before description so a huge/messy HTML body cannot hide the field
   // from a partial parser (GSC: "Missing field datePosted").
-  // No `identifier`: the only ID CareerSasa holds is its internal UUID, which is
+  // No `identifier`: the only ID StemBird holds is its internal UUID, which is
   // not the employer's identifier for the job. Google defines identifier as the
   // hiring organization's unique ID, so emitting our UUID would misrepresent it
   // as employer-provided — omit it entirely.

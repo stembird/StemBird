@@ -1,6 +1,6 @@
 /**
  * Restore in-text MyJobMag CTAs to the exact employer URL from the live
- * /apply-now/{id} redirect (not CareerSasa apply_link heuristics).
+ * /apply-now/{id} redirect (not StemBird apply_link heuristics).
  *
  *   npx tsx scripts/restore-myjobmag-cta-hrefs.mts
  *   npx tsx scripts/restore-myjobmag-cta-hrefs.mts --apply

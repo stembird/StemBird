@@ -33,7 +33,7 @@ function asHtmlString(value: unknown): string | null {
   return String(value)
 }
 
-/** True when HTML still has CareerSasa-breaking board-relative anchors. */
+/** True when HTML still has StemBird-breaking board-relative anchors. */
 export function hasBrokenJobBoardRelativeLinks(html: string | null | undefined): boolean {
   if (!html) return false
   return /<a\b[^>]*\bhref\s*=\s*["']\/(?:apply-now|jobs-at|job)\//i.test(html)
@@ -243,7 +243,7 @@ export async function runFixMyJobMagPublishedJobs(
         const brokenDesc = jobHasBrokenBoardLinks(job as Record<string, unknown>)
         // Also fix email-only posts that wrongly still have a board application_url,
         // board-URL posts that need an employer method, and HTML fields with
-        // relative /apply-now/ anchors that 404 on CareerSasa.
+        // relative /apply-now/ anchors that 404 on StemBird.
         if (!stillBoard && hasEmail && !brokenDesc) {
           unchanged++
           results.push({ ...base, status: 'unchanged' })

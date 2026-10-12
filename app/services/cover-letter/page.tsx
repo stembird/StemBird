@@ -28,7 +28,7 @@ export default function CoverLetterServicesPage() {
       getContentValue(
         content,
         "hero_description_2",
-        "At CareerSasa, we write cover letters that connect your experience to the job, speak to the hiring manager's needs, and give them a reason to call you.",
+        "At StemBird, we write cover letters that connect your experience to the job, speak to the hiring manager's needs, and give them a reason to call you.",
       ),
       getContentValue(
         content,
@@ -48,7 +48,7 @@ export default function CoverLetterServicesPage() {
     ],
     painClosing:
       "A great cover letter doesn't repeat your CV — it explains your value in a way your CV can't.",
-    differentiatorsTitle: "Why CareerSasa Cover Letters Get Read",
+    differentiatorsTitle: "Why StemBird Cover Letters Get Read",
     differentiators: [
       "Job-specific, not generic templates",
       "Recruiter-focused writing",

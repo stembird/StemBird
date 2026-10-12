@@ -30,12 +30,12 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
-          <h1 style="margin:0;font-size:24px;">Welcome to CareerSasa!</h1>
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
+          <h1 style="margin:0;font-size:24px;">Welcome to StemBird!</h1>
         </td></tr>
         <tr><td style="padding:30px;">
           <p>Hi John,</p>
-          <p>Welcome aboard! Your CareerSasa account is ready. Here's what you can do:</p>
+          <p>Welcome aboard! Your StemBird account is ready. Here's what you can do:</p>
           <ul style="line-height:2;">
             <li>Browse hundreds of job opportunities across Kenya</li>
             <li>Set up personalized job alerts</li>
@@ -50,7 +50,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a> | <a href="${siteUrl}/privacy" style="color:#666;">Privacy Policy</a></p>
         </td></tr>
       </table>
@@ -63,7 +63,7 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Application Submitted!</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -79,7 +79,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>`;
@@ -91,7 +91,7 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Application Status Update</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -112,7 +112,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -125,7 +125,7 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">New Application Received</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -140,7 +140,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>`;
@@ -152,7 +152,7 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">New Message</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -167,7 +167,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -180,7 +180,7 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Password Reset</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -192,7 +192,7 @@ const TEMPLATES: Record<string, () => string> = {
           <p style="color:#666;font-size:14px;">This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.</p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>`;
@@ -204,12 +204,12 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Confirm Your Subscription</h1>
         </td></tr>
         <tr><td style="padding:30px;">
           <p>Hi John,</p>
-          <p>Thanks for subscribing to the CareerSasa newsletter! Please confirm your email address to start receiving:</p>
+          <p>Thanks for subscribing to the StemBird newsletter! Please confirm your email address to start receiving:</p>
           <ul style="line-height:2;">
             <li>Weekly featured job picks</li>
             <li>Career tips and advice</li>
@@ -221,7 +221,7 @@ const TEMPLATES: Record<string, () => string> = {
           <p style="color:#666;font-size:14px;">If you didn't subscribe, you can safely ignore this email.</p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>`;
@@ -259,7 +259,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/saved-searches" style="color:#666;">Manage Alerts</a> | <a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -272,7 +272,7 @@ const TEMPLATES: Record<string, () => string> = {
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <h1 style="margin:0;font-size:24px;">CareerSasa Weekly Digest</h1>
+          <h1 style="margin:0;font-size:24px;">StemBird Weekly Digest</h1>
           <p style="margin:5px 0 0;opacity:0.8;">Your weekly career roundup</p>
         </td></tr>
         <tr><td style="padding:20px;">
@@ -303,7 +303,7 @@ const TEMPLATES: Record<string, () => string> = {
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a> | <a href="${siteUrl}/newsletter/unsubscribe" style="color:#666;">Unsubscribe</a></p>
         </td></tr>
       </table>
@@ -314,7 +314,7 @@ const TEMPLATES: Record<string, () => string> = {
     return `
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;">
       <div style="max-width:600px;margin:0 auto;background:white;padding:30px;">
-        <h1 style="color:#0A66C2;">CareerSasa Email Test</h1>
+        <h1 style="color:#0A66C2;">StemBird Email Test</h1>
         <p>If you're reading this, the email system is working correctly!</p>
         <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin:20px 0;">
           <p><strong>Sent at:</strong> ${new Date().toISOString()}</p>
@@ -331,7 +331,7 @@ const INDEX_HTML = `
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>CareerSasa Email Template Previews</title>
+  <title>StemBird Email Template Previews</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
     h1 { color: #0A66C2; }
@@ -347,7 +347,7 @@ const INDEX_HTML = `
   </style>
 </head>
 <body>
-  <h1>CareerSasa Email Templates</h1>
+  <h1>StemBird Email Templates</h1>
   <p>Click any template to preview it rendered with sample data.</p>
   <div class="grid">
     <a href="/api/emails/preview?template=popup-newsletter-welcome">

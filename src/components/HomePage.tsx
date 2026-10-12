@@ -83,12 +83,12 @@ export default function HomePage({
   const { data: content } = usePageContent("home");
 
   const heroTitle = getContentValue(content, "hero_title", "Stop Searching. Start Getting Hired.");
-  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. CareerSasa changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
+  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. StemBird changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
   const statsJobsTarget = Math.max(0, activeJobsCount);
   const statsCompaniesTarget = Math.max(0, companiesCount);
   const statsSuccessRateTarget = parseInt(getContentValue(content, "stats_success_rate", "90"));
   const ctaTitle = getContentValue(content, "cta_title", "Your Next Interview Is 60 Seconds Away");
-  const ctaSubtitle = getContentValue(content, "cta_subtitle", "CareerSasa matches your skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on other job boards. Join free today.");
+  const ctaSubtitle = getContentValue(content, "cta_subtitle", "StemBird matches your skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on other job boards. Join free today.");
 
   const companiesPlugin = useRef(
     Autoplay({ delay: 3500, stopOnInteraction: true })
@@ -186,7 +186,7 @@ export default function HomePage({
         <div className="container relative z-10 mx-auto py-12 md:py-16 px-4">
           <div className="max-w-2xl animate-fade-in md:mx-auto md:text-center">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sky-200 mb-3 font-semibold drop-shadow-[0_1px_6px_rgba(0,0,0,0.55)]">
-              CareerSasa · Kenya
+              StemBird · Kenya
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-[3.25rem] font-bold mb-4 text-[#0A66C2] leading-[1.1] drop-shadow-[0_1px_10px_rgba(255,255,255,0.75)]">
               {heroTitle}
@@ -327,7 +327,7 @@ export default function HomePage({
               Why 95% of Our Users Land Interviews Within 3 Months
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              Most job boards dump listings and leave you to figure it out. CareerSasa is
+              Most job boards dump listings and leave you to figure it out. StemBird is
               different. We actively match you to employers using AI, not just keywords.
             </p>
           </div>
@@ -396,21 +396,21 @@ export default function HomePage({
                 role: "Software Developer at Safaricom",
                 image: "/assets/testimonial-1.jpg",
                 quote:
-                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on CareerSasa, I had 3 interviews. The AI matching actually works. It connected me to roles I would never have found myself.",
+                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on StemBird, I had 3 interviews. The AI matching actually works. It connected me to roles I would never have found myself.",
               },
               {
                 name: "Grace Wanjiru",
                 role: "Marketing Manager at KCB",
                 image: "/assets/testimonial-2.jpg",
                 quote:
-                  "I was stuck in a dead-end role for 2 years. CareerSasa's job alerts put a marketing manager position in my inbox that I wasn't even searching for. I applied the same day and got the offer.",
+                  "I was stuck in a dead-end role for 2 years. StemBird's job alerts put a marketing manager position in my inbox that I wasn't even searching for. I applied the same day and got the offer.",
               },
               {
                 name: "Brian Ochieng",
                 role: "Data Analyst at Equity Bank",
                 image: "/assets/testimonial-3.jpg",
                 quote:
-                  "The free CV builder alone was worth signing up for. But what surprised me was getting 3 interview invitations in my first month. CareerSasa shows you jobs that actually match your skills.",
+                  "The free CV builder alone was worth signing up for. But what surprised me was getting 3 interview invitations in my first month. StemBird shows you jobs that actually match your skills.",
               },
             ].map((testimonial, idx) => (
               <Card
@@ -546,7 +546,7 @@ export default function HomePage({
               Your Career, Transformed
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              From fresh graduates to senior executives, CareerSasa has helped thousands of
+              From fresh graduates to senior executives, StemBird has helped thousands of
               Kenyans level up.
             </p>
           </div>
@@ -565,7 +565,7 @@ export default function HomePage({
                   From Graduate to Senior Manager in 3 Years
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  &quot;I started as a fresh graduate with no connections. CareerSasa matched me
+                  &quot;I started as a fresh graduate with no connections. StemBird matched me
                   to my first role, then my second, then my third. In 3 years, I went from intern
                   to Senior Manager at NCBA Bank. Every opportunity was the right next step.&quot;
                 </p>
@@ -595,7 +595,7 @@ export default function HomePage({
                 </h3>
                 <p className="text-muted-foreground mb-4">
                   &quot;I spent 6 years in finance and wanted to move into tech, but every job
-                  board made me feel like I had to start from scratch. CareerSasa&apos;s matching
+                  board made me feel like I had to start from scratch. StemBird&apos;s matching
                   found tech roles that valued my finance background. I&apos;m now a Tech Lead at
                   Andela Kenya.&quot;
                 </p>

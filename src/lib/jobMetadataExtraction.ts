@@ -1,6 +1,6 @@
 /**
  * AI-powered job metadata extraction.
- * Uses DeepSeek → Gemini via callAI (same stack as the rest of CareerSasa).
+ * Uses DeepSeek → Gemini via callAI (same stack as the rest of StemBird).
  *
  * Sends the complete job text (description + requirements + benefits)
  * and extracts structured fields that are not available directly from the source API.

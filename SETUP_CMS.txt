@@ -3,7 +3,7 @@ CMS SETUP - 3 STEPS
 
 STEP 1: Run Database Migration (2 minutes)
 -------------------------------------------
-1. Go to: https://supabase.com/dashboard/project/qxuvqrfqkdpfjfwkqatf/sql/new
+1. Go to: https://supabase.com/dashboard/project/qhfdjccudtqnlkbtsjgg/sql/new
 2. Copy ALL content from: supabase/migrations/20260210_create_page_content.sql
 3. Paste into SQL Editor
 4. Click "Run"

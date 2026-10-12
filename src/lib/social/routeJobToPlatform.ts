@@ -250,7 +250,7 @@ export function remainingDailySlots(
 }
 
 /**
- * True when a Careersasa "scheduled" row is still waiting in Buffer's queue.
+ * True when a StemBird "scheduled" row is still waiting in Buffer's queue.
  *
  * Auto-queue uses Buffer addToQueue and stores status=scheduled. Buffer then
  * publishes at 08:00 / 12:30 / 17:00 EAT, but we never flip the row to

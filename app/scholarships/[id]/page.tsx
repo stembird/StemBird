@@ -311,7 +311,7 @@ export default async function ScholarshipDetails({
                 <div className="flex items-start gap-2">
                   <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
                   <div className="text-sm leading-relaxed text-amber-900">
-                    <strong>CareerSasa Safety Alert:</strong> Never pay anyone for a
+                    <strong>StemBird Safety Alert:</strong> Never pay anyone for a
                     scholarship application, interview, or placement. Legitimate funders
                     do not charge a fee to apply. Report suspicious listings with Flag.
                   </div>
@@ -319,7 +319,7 @@ export default async function ScholarshipDetails({
                 <div className="mt-2.5 flex justify-end gap-2">
                   <SocialShare
                     url={publicUrl}
-                    title={`${job.title} at ${job.companies?.name || job.company || "Funder"} - CareerSasa`}
+                    title={`${job.title} at ${job.companies?.name || job.company || "Funder"} - StemBird`}
                     description={job.description?.replace(/<[^>]*>/g, "").substring(0, 160)}
                   />
                   <Button variant="outline" size="sm" className="flex items-center gap-2 whitespace-nowrap">

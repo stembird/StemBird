@@ -171,7 +171,7 @@ export default function JobTargetingPanel({
         <div className="min-w-0">
           <h3 className="text-sm font-semibold text-[#0A66C2]">Target this job</h3>
           <p className="text-xs text-muted-foreground">
-            Attach a CareerSasa listing or paste a JD. We highlight listing keywords that are missing from this CV. Nothing is rewritten automatically.
+            Attach a StemBird listing or paste a JD. We highlight listing keywords that are missing from this CV. Nothing is rewritten automatically.
           </p>
         </div>
       </div>

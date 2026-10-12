@@ -1,4 +1,4 @@
-# Sell Like Crazy — CareerSasa Copywriting & Feature Playbook
+# Sell Like Crazy — StemBird Copywriting & Feature Playbook
 
 > **Reference this document** every time you create a new feature, write copy, publish a blog post, design a landing page, or send a newsletter. Ensure at least ONE principle is deliberately applied in every piece of content.
 
@@ -6,11 +6,11 @@
 
 ## Our Big Domino
 
-> **"CareerSasa is the fastest path from job search to job offer in Kenya."**
+> **"StemBird is the fastest path from job search to job offer in Kenya."**
 
 Every headline, email, ad, and page should reinforce this single belief. If a piece of content doesn't support it, cut it.
 
-**Employer Big Domino:** "CareerSasa delivers qualified candidates 3x faster than any other Kenyan job board."
+**Employer Big Domino:** "StemBird delivers qualified candidates 3x faster than any other Kenyan job board."
 
 ---
 
@@ -22,9 +22,9 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Does this headline/page/email reinforce the Big Domino?
 - [ ] Can a reader state our core promise after reading?
 
-**CareerSasa Application:**
-- Job seekers: "CareerSasa is the fastest path from job search to job offer in Kenya."
-- Employers: "CareerSasa delivers qualified candidates 3x faster than any other Kenyan job board."
+**StemBird Application:**
+- Job seekers: "StemBird is the fastest path from job search to job offer in Kenya."
+- Employers: "StemBird delivers qualified candidates 3x faster than any other Kenyan job board."
 
 ---
 
@@ -36,7 +36,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Does this page offer something valuable before asking for signup/payment?
 - [ ] Is there a free tool, guide, or resource visible?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - Free CV builder, cover letter generator, LinkedIn optimizer tools
 - Free blog content: "How to Land a Job in Nairobi in 30 Days"
 - Free job alerts (already built — push as #1 CTA)
@@ -49,14 +49,14 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 **What:** Position as the recognized authority. Authority sells better than persuasion.
 
 **Checklist:**
-- [ ] Does this content position CareerSasa as an expert/authority?
+- [ ] Does this content position StemBird as an expert/authority?
 - [ ] Are there data points, media mentions, or partnerships referenced?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - Publish "State of the Kenyan Job Market" annual reports
 - Get featured in Daily Nation, Business Daily, Standard Media
 - Partner with universities (UoN, Strathmore, KU)
-- Host "CareerSasa Talks" webinars/podcasts with HR leaders
+- Host "StemBird Talks" webinars/podcasts with HR leaders
 - Real testimonials with specific outcomes
 
 ---
@@ -70,7 +70,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Is there a risk reversal (guarantee, free trial, no-obligation)?
 - [ ] Would I take this offer myself?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - **Job seekers:** "Build your CV, write your cover letter, and optimize your LinkedIn — all free. If you don't get an interview within 30 days, we'll personally review your application."
 - **Employers:** "Post your first 3 jobs FREE. Get your first qualified candidate within 7 days or we feature your listing for 30 more days at no cost."
 - **Bundled Career Launch Kit:** CV review + cover letter + LinkedIn optimization + job alerts — priced attractively vs. individual services
@@ -86,14 +86,14 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Does the body use storytelling, specifics, and emotion? (Fire)
 - [ ] Is there a clear, urgent CTA?
 
-**CareerSasa Hooks (Oxygen):**
+**StemBird Hooks (Oxygen):**
 - "5,247 jobs posted this week in Kenya. Are you applying to the right ones?"
 - "This CV template got 47 Kenyans hired last month."
 - "Employers spend 6 seconds on your CV. Here's what they see."
 
-**CareerSasa Body (Fire):**
+**StemBird Body (Fire):**
 - Use real candidate journeys, specific numbers, emotional pain points
-- End with: "Create your free CareerSasa account — it takes 60 seconds."
+- End with: "Create your free StemBird account — it takes 60 seconds."
 
 ---
 
@@ -106,7 +106,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Does it solve a real, urgent problem?
 - [ ] Is the exchange clear (email for value)?
 
-**CareerSasa Lead Magnets:**
+**StemBird Lead Magnets:**
 - "The 2026 Kenyan Salary Guide" — PDF with salary ranges by industry/role
 - "5 CV Templates That Beat ATS Systems" — immediate download after signup
 - "The Interview Cheat Sheet" — 50 most-asked interview questions in Kenya
@@ -122,7 +122,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Have we identified potential partners for this initiative?
 - [ ] Is there a co-marketing or referral angle?
 
-**CareerSasa Dream 100:**
+**StemBird Dream 100:**
 - **For job seekers:** Kenyan career coaches, LinkedIn influencers, university career offices, WhatsApp/Telegram job groups, HR bloggers
 - **For employers:** IHRM Kenya, industry chambers of commerce, startup hubs (iHub, Nairobi Garage), business media
 - **Tactics:** Guest posts, co-branded webinars, affiliate partnerships, referral programs
@@ -193,9 +193,9 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Does every CTA include a "because" or reason?
 - [ ] Is the reason specific and believable?
 
-**CareerSasa Examples:**
-- "Join 12,000+ Kenyans who found jobs through CareerSasa **because** we match your skills directly to employer requirements."
-- "Post your job on CareerSasa **because** our AI pre-screens candidates so you only see the top 10%."
+**StemBird Examples:**
+- "Join 12,000+ Kenyans who found jobs through StemBird **because** we match your skills directly to employer requirements."
+- "Post your job on StemBird **because** our AI pre-screens candidates so you only see the top 10%."
 
 ---
 
@@ -207,7 +207,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Is there genuine urgency on this page? (deadline, limited spots, timing)
 - [ ] Is the urgency REAL? (never fake scarcity)
 
-**CareerSasa Application:**
+**StemBird Application:**
 - "This job closes in 48 hours — apply now" (real deadline)
 - "Only 3 featured slots available this week for [industry]" (if true)
 - "January is hiring season — 40% more jobs. Get your CV ready now."
@@ -222,11 +222,11 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 **Checklist:**
 - [ ] Does the copy describe the reader's current pain (before)?
 - [ ] Does it paint the desired outcome (after)?
-- [ ] Is CareerSasa positioned as the bridge?
+- [ ] Is StemBird positioned as the bridge?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - **Before:** "You've sent 50 applications. Zero callbacks. Your CV sits in a pile."
-- **After:** "Your CareerSasa-optimized CV lands 3 interviews in your first week."
+- **After:** "Your StemBird-optimized CV lands 3 interviews in your first week."
 
 ---
 
@@ -240,11 +240,11 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 
 | Objection | Response |
 |-----------|----------|
-| "Job boards don't work" | "CareerSasa actively matches you with employers using AI" |
+| "Job boards don't work" | "StemBird actively matches you with employers using AI" |
 | "I don't have time" | "Set up job alerts in 60 seconds. Jobs come to your inbox" |
 | "It's probably expensive" | "Core features are 100% free. Always." |
 | "Is this legit?" | Show real testimonials, company logos, media mentions |
-| "I already use BrighterMonday/MyJobMag" | "CareerSasa has exclusive listings + free career tools they don't offer" |
+| "I already use BrighterMonday/MyJobMag" | "StemBird has exclusive listings + free career tools they don't offer" |
 
 ---
 
@@ -256,10 +256,10 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Are there specific numbers on this page? (not "thousands" but "2,847")
 - [ ] Are claims concrete and measurable?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - "2,847 active jobs right now" (real-time count)
 - "Average time to first interview: 11 days"
-- "94% of employers say CareerSasa candidates are more qualified"
+- "94% of employers say StemBird candidates are more qualified"
 - Use specific job titles: "Senior Accountant jobs in Westlands"
 
 ---
@@ -273,7 +273,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Are conversion events tracked?
 - [ ] Is there a review cadence?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - A/B test: email subject lines, landing page headlines, ad creatives, CTA text
 - Track: cost per lead, cost per signup, cost per application, employer cost per hire
 - Weekly review: which channels drive most signups
@@ -288,7 +288,7 @@ Every headline, email, ad, and page should reinforce this single belief. If a pi
 - [ ] Is the CTA asking for a small next step (not a big commitment)?
 - [ ] Is there a clear path from free → paid?
 
-**CareerSasa Application:**
+**StemBird Application:**
 - **Employers:** Sell the free trial first → upsell via email/demo call
 - **Job seekers:** Free CV tool → paid review → coaching package
 - Each touchpoint sells ONE next action

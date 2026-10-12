@@ -84,7 +84,7 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
     const from = getFromEmail();
 
     const { data, error } = await resend.emails.send({
-      from: `CareerSasa <${from}>`,
+      from: `StemBird <${from}>`,
       to: Array.isArray(to) ? to : [to],
       subject,
       html,
@@ -239,12 +239,12 @@ export async function sendWelcomeEmail(to: string, name: string, userId?: string
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
-          <h1 style="margin:0;font-size:24px;">Welcome to CareerSasa!</h1>
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
+          <h1 style="margin:0;font-size:24px;">Welcome to StemBird!</h1>
         </td></tr>
         <tr><td style="padding:30px;">
           <p>Hi ${escapeHtml(name || 'there')},</p>
-          <p>Welcome aboard! Your CareerSasa account is ready. Here's what you can do:</p>
+          <p>Welcome aboard! Your StemBird account is ready. Here's what you can do:</p>
           <ul style="line-height:2;">
             <li>Browse hundreds of job opportunities across Kenya</li>
             <li>Set up personalized job alerts</li>
@@ -259,7 +259,7 @@ export async function sendWelcomeEmail(to: string, name: string, userId?: string
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a> | <a href="${siteUrl}/privacy" style="color:#666;">Privacy Policy</a></p>
         </td></tr>
       </table>
@@ -267,7 +267,7 @@ export async function sendWelcomeEmail(to: string, name: string, userId?: string
     </html>
   `;
 
-  return sendEmail({ to, subject: 'Welcome to CareerSasa - Start Your Job Search!', html, emailType: 'welcome', userId });
+  return sendEmail({ to, subject: 'Welcome to StemBird - Start Your Job Search!', html, emailType: 'welcome', userId });
 }
 
 /**
@@ -284,7 +284,7 @@ export async function sendApplicationConfirmation(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Application Submitted!</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -300,7 +300,7 @@ export async function sendApplicationConfirmation(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>
@@ -330,7 +330,7 @@ export async function sendApplicationStatusUpdate(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Application Status Update</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -349,7 +349,7 @@ export async function sendApplicationStatusUpdate(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -374,7 +374,7 @@ export async function sendEmployerNewApplication(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">New Application Received</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -389,7 +389,7 @@ export async function sendEmployerNewApplication(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>
@@ -413,7 +413,7 @@ export async function sendNewMessageEmail(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">New Message</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -428,7 +428,7 @@ export async function sendNewMessageEmail(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -451,7 +451,7 @@ export async function sendPasswordResetEmail(to: string, resetLink: string): Pro
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Password Reset</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -463,14 +463,14 @@ export async function sendPasswordResetEmail(to: string, resetLink: string): Pro
           <p style="color:#666;font-size:14px;">This link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.</p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>
     </html>
   `;
 
-  return sendEmail({ to, subject: 'Reset Your CareerSasa Password', html, emailType: 'password_reset' });
+  return sendEmail({ to, subject: 'Reset Your StemBird Password', html, emailType: 'password_reset' });
 }
 
 // =====================================================
@@ -491,12 +491,12 @@ export async function sendSubscriptionConfirmation(to: string, confirmToken: str
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Confirm Your Subscription</h1>
         </td></tr>
         <tr><td style="padding:30px;">
           <p>Hi ${escapeHtml(name || 'there')},</p>
-          <p>Thanks for subscribing to CareerSasa! Please confirm your email address to start receiving:</p>
+          <p>Thanks for subscribing to StemBird! Please confirm your email address to start receiving:</p>
           <ul style="line-height:2;">
             <li>Weekly featured job picks</li>
             <li>Salary insights and career tips</li>
@@ -518,14 +518,14 @@ export async function sendSubscriptionConfirmation(to: string, confirmToken: str
           <p style="color:#666;font-size:14px;">If you didn't subscribe, you can safely ignore this email.</p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>
     </html>
   `;
 
-  return sendEmail({ to, subject: 'Confirm Your CareerSasa Newsletter Subscription', html, emailType: 'confirmation' });
+  return sendEmail({ to, subject: 'Confirm Your StemBird Newsletter Subscription', html, emailType: 'confirmation' });
 }
 
 /**
@@ -540,7 +540,7 @@ export async function sendNewsletterWelcome(to: string, name?: string): Promise<
   const unsubscribeUrl = `${siteUrl}/newsletter/unsubscribe?email=${encodeURIComponent(to)}`;
   const year = String(new Date().getFullYear());
 
-  let subject = '🎁 Welcome to CareerSasa — Your Free Toolkit Is Inside';
+  let subject = '🎁 Welcome to StemBird — Your Free Toolkit Is Inside';
   let html = '';
 
   try {
@@ -577,8 +577,8 @@ export async function sendNewsletterWelcome(to: string, name?: string): Promise<
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
-          <h1 style="margin:0;font-size:24px;">Welcome to CareerSasa!</h1>
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
+          <h1 style="margin:0;font-size:24px;">Welcome to StemBird!</h1>
           <p style="margin:8px 0 0;opacity:0.9;font-size:16px;">Your free toolkit is ready — no strings attached</p>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -606,7 +606,7 @@ export async function sendNewsletterWelcome(to: string, name?: string): Promise<
           <a href="${toolkitUrl}" style="color:#0A66C2;">${toolkitUrl}</a></p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${year} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${year} StemBird. All rights reserved.</p>
           <p><a href="${unsubscribeUrl}" style="color:#666;">Unsubscribe</a> | <a href="${siteUrl}/privacy" style="color:#666;">Privacy Policy</a></p>
         </td></tr>
       </table>
@@ -636,9 +636,9 @@ export async function sendCampaignEmail(
   // Append unsubscribe link to the HTML body
   const htmlWithUnsub = htmlBody + `
     <div style="margin-top:30px;padding-top:20px;border-top:1px solid #eee;text-align:center;font-size:12px;color:#999;">
-      <p>You're receiving this email because you subscribed to CareerSasa updates.</p>
+      <p>You're receiving this email because you subscribed to StemBird updates.</p>
       <p><a href="${unsubUrl}" style="color:#999;">Unsubscribe</a></p>
-      <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+      <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
     </div>
   `;
 
@@ -683,7 +683,7 @@ export async function sendJobAlertDigest(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/saved-searches" style="color:#666;">Manage Alerts</a> | <a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -725,7 +725,7 @@ export async function sendWeeklyDigest(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <h1 style="margin:0;font-size:24px;">CareerSasa Weekly Digest</h1>
+          <h1 style="margin:0;font-size:24px;">StemBird Weekly Digest</h1>
           <p style="margin:5px 0 0;opacity:0.8;">Your weekly career roundup</p>
         </td></tr>
         <tr><td style="padding:20px;">
@@ -745,7 +745,7 @@ export async function sendWeeklyDigest(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a> | <a href="${siteUrl}/newsletter/unsubscribe" style="color:#666;">Unsubscribe</a></p>
         </td></tr>
       </table>
@@ -753,7 +753,7 @@ export async function sendWeeklyDigest(
     </html>
   `;
 
-  return sendEmail({ to, subject: 'CareerSasa Weekly Digest: Top Jobs & Career Tips', html, emailType: 'weekly_digest', userId });
+  return sendEmail({ to, subject: 'StemBird Weekly Digest: Top Jobs & Career Tips', html, emailType: 'weekly_digest', userId });
 }
 
 // =====================================================
@@ -779,7 +779,7 @@ export async function sendTestEmail(to: string): Promise<SendEmailResult> {
     <head><meta charset="UTF-8"></head>
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;">
       <div style="max-width:600px;margin:0 auto;background:white;padding:30px;">
-        <h1 style="color:#0A66C2;">CareerSasa Email Test</h1>
+        <h1 style="color:#0A66C2;">StemBird Email Test</h1>
         <p>If you're reading this, the email system is working correctly!</p>
         <div style="background:#f8f9fa;padding:20px;border-radius:8px;margin:20px 0;">
           <p><strong>Sent at:</strong> ${new Date().toISOString()}</p>
@@ -791,7 +791,7 @@ export async function sendTestEmail(to: string): Promise<SendEmailResult> {
     </html>
   `;
 
-  return sendEmail({ to, subject: '[Test] CareerSasa Email System', html, emailType: 'transactional' });
+  return sendEmail({ to, subject: '[Test] StemBird Email System', html, emailType: 'transactional' });
 }
 
 // =====================================================
@@ -812,12 +812,12 @@ export async function sendReengagementEmail(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">We Miss You, ${escapeHtml(name)}!</h1>
           <p style="margin:5px 0 0;opacity:0.8;">It's been ${daysSinceLogin} days since your last visit</p>
         </td></tr>
         <tr><td style="padding:30px;">
-          <p>A lot has happened since you were last on CareerSasa. Here's what you're missing:</p>
+          <p>A lot has happened since you were last on StemBird. Here's what you're missing:</p>
           <ul style="line-height:2;">
             <li>New job opportunities posted daily</li>
             <li>Featured positions from top Kenyan employers</li>
@@ -832,7 +832,7 @@ export async function sendReengagementEmail(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -857,7 +857,7 @@ export async function sendIncompleteApplicationReminder(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Don't Forget Your Application!</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -871,7 +871,7 @@ export async function sendIncompleteApplicationReminder(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -896,13 +896,13 @@ export async function sendEmployerWelcomeEmail(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
-          <h1 style="margin:0;font-size:24px;">Welcome to CareerSasa for Employers!</h1>
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
+          <h1 style="margin:0;font-size:24px;">Welcome to StemBird for Employers!</h1>
           <p style="margin:5px 0 0;opacity:0.8;">${escapeHtml(companyName)}</p>
         </td></tr>
         <tr><td style="padding:30px;">
           <p>Hi ${escapeHtml(name)},</p>
-          <p>Welcome aboard! Your employer account for <strong>${escapeHtml(companyName)}</strong> is ready. Here's how to get the most out of CareerSasa:</p>
+          <p>Welcome aboard! Your employer account for <strong>${escapeHtml(companyName)}</strong> is ready. Here's how to get the most out of StemBird:</p>
           <div style="margin:20px 0;">
             <div style="padding:15px;border-bottom:1px solid #eee;">
               <h3 style="margin:0 0 5px;color:#0A66C2;">1. Post Your First Job</h3>
@@ -929,14 +929,14 @@ export async function sendEmployerWelcomeEmail(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>
     </html>
   `;
 
-  return sendEmail({ to, subject: `Welcome to CareerSasa for Employers - Let's Find Great Talent!`, html, emailType: 'employer_welcome', userId });
+  return sendEmail({ to, subject: `Welcome to StemBird for Employers - Let's Find Great Talent!`, html, emailType: 'employer_welcome', userId });
 }
 
 /**
@@ -954,7 +954,7 @@ export async function sendProfileCompletionNudge(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Your Profile is ${completionPercent}% Complete</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -978,7 +978,7 @@ export async function sendProfileCompletionNudge(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
           <p><a href="${siteUrl}/dashboard/preferences" style="color:#666;">Email Preferences</a></p>
         </td></tr>
       </table>
@@ -1003,7 +1003,7 @@ export async function sendJobExpiryWarning(
     <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
         <tr><td style="background:#E8712B;color:white;padding:30px;text-align:center;">
-          <img src="${siteUrl}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
+          <img src="${siteUrl}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
           <h1 style="margin:0;font-size:24px;">Job Listing Expiring Soon</h1>
         </td></tr>
         <tr><td style="padding:30px;">
@@ -1021,7 +1021,7 @@ export async function sendJobExpiryWarning(
           </p>
         </td></tr>
         <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-          <p>&copy; ${new Date().getFullYear()} CareerSasa. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} StemBird. All rights reserved.</p>
         </td></tr>
       </table>
     </body>

@@ -8,7 +8,7 @@
 -- markup without the required datePosted field (GSC: Regenerative
 -- Market Garden Lead, crawled 2026-09-09).
 --
--- Fill remaining NULLs from created_at (CareerSasa publish time).
+-- Fill remaining NULLs from created_at (StemBird publish time).
 -- ============================================================
 
 BEGIN;

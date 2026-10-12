@@ -4,8 +4,8 @@ import MobileNav from "@/components/MobileNav";
 import { FileText } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions - CareerSasa Job Portal",
-  description: "Read CareerSasa's terms and conditions for using our job portal. Understand your rights and responsibilities as a user of our platform.",
+  title: "Terms & Conditions - StemBird Job Portal",
+  description: "Read StemBird's terms and conditions for using our job portal. Understand your rights and responsibilities as a user of our platform.",
 };
 
 export default function TermsPage() {
@@ -32,14 +32,14 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">1. Acceptance of Terms</h2>
               <p className="text-muted-foreground">
-                By accessing and using CareerSasa (&quot;the Platform&quot;), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, you should not use this Platform.
+                By accessing and using StemBird (&quot;the Platform&quot;), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, you should not use this Platform.
               </p>
             </section>
 
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">2. Use of Service</h2>
               <p className="text-muted-foreground">
-                CareerSasa provides a platform for job seekers and employers to connect. You may use our services only as permitted by law and these Terms and Conditions.
+                StemBird provides a platform for job seekers and employers to connect. You may use our services only as permitted by law and these Terms and Conditions.
               </p>
               <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
                 <li>You must be at least 18 years old to use this service</li>
@@ -59,7 +59,7 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">4. Job Postings</h2>
               <p className="text-muted-foreground">
-                Employers posting jobs on CareerSasa agree to:
+                Employers posting jobs on StemBird agree to:
               </p>
               <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
                 <li>Post only genuine job opportunities</li>
@@ -73,7 +73,7 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">5. Job Applications</h2>
               <p className="text-muted-foreground">
-                Job seekers using CareerSasa agree to:
+                Job seekers using StemBird agree to:
               </p>
               <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
                 <li>Provide truthful and accurate information in applications</li>
@@ -86,7 +86,7 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">6. Intellectual Property</h2>
               <p className="text-muted-foreground">
-                The Platform and its original content, features, and functionality are owned by CareerSasa and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+                The Platform and its original content, features, and functionality are owned by StemBird and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
               </p>
             </section>
 
@@ -115,14 +115,14 @@ export default function TermsPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">9. Limitation of Liability</h2>
               <p className="text-muted-foreground">
-                CareerSasa shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the service.
+                StemBird shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of or inability to use the service.
               </p>
             </section>
 
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">10. Disclaimer</h2>
               <p className="text-muted-foreground">
-                The Platform is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. CareerSasa makes no warranties, expressed or implied, regarding the Platform&apos;s operation or the information, content, or materials included on it.
+                The Platform is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis. StemBird makes no warranties, expressed or implied, regarding the Platform&apos;s operation or the information, content, or materials included on it.
               </p>
             </section>
 

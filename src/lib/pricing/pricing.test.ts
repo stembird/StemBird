@@ -114,7 +114,7 @@ function testMpesaSettingsParse() {
     phoneNumber: '+254795564135',
     tillNumber: '123456',
     paybillNumber: '',
-    accountReference: 'CareerSasaPay',
+    accountReference: 'StemBirdPay',
   });
   assert.equal(parsed.environment, 'production');
   assert.equal(parsed.phoneNumber, '254795564135');

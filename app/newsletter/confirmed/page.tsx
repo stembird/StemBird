@@ -23,7 +23,7 @@ function ConfirmedContent() {
         <p className="text-muted-foreground mb-8">
           {already
             ? 'You are already subscribed to our newsletter. Welcome back!'
-            : 'Welcome! You are now subscribed to the CareerSasa newsletter. You will receive curated job opportunities, career tips, and industry updates.'}
+            : 'Welcome! You are now subscribed to the StemBird newsletter. You will receive curated job opportunities, career tips, and industry updates.'}
         </p>
 
         {/* Toolkit Download Section */}

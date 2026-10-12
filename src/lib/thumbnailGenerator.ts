@@ -138,7 +138,7 @@ const drawTextContent = (
   // Draw branding
   ctx.font = 'bold 24px system-ui, -apple-system, sans-serif';
   ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-  ctx.fillText('CareerSasa.co.ke', width * 0.1, height * 0.9);
+  ctx.fillText('StemBird.co.ke', width * 0.1, height * 0.9);
 };
 
 const drawLogoPlaceholder = (
@@ -157,7 +157,7 @@ const drawLogoPlaceholder = (
   ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
   ctx.fill();
   
-  // Letter "C" to represent CareerSasa
+  // Letter "C" to represent StemBird
   ctx.font = 'bold 48px system-ui, -apple-system, sans-serif';
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';

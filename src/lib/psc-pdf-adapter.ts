@@ -383,6 +383,11 @@ export async function processPscPdfQueueItem(
         title: outcome.title || normalized.title,
         status: 'expired',
       })
+    } else if (outcome.status === 'skipped') {
+      results.push({
+        title: outcome.title || normalized.title,
+        status: 'skipped',
+      })
     } else {
       errors.push(`${extracted.title}: ${outcome.error}`)
       results.push({ title: extracted.title, status: 'error' })

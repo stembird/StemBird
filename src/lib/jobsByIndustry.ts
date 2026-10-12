@@ -9,7 +9,7 @@ import {
 const supabase = createClient(getSupabaseUrl(), getSupabaseAnonKey());
 
 export type IndustryJobCount = {
-  /** Canonical Careersasa industry name (see src/lib/jobParseNormalization.ts). */
+  /** Canonical StemBird industry name (see src/lib/jobParseNormalization.ts). */
   name: string;
   /** Number of currently active/live jobs attributed to the industry. */
   count: number;

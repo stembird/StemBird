@@ -175,7 +175,7 @@ export function PostComposer({ open, onOpenChange, state, bufferStatus, onChange
               Generate Social Posts
             </DialogTitle>
             <DialogDescription>
-              {state?.jobIds?.length} job(s) selected. Choose a platform — Careersasa will write
+              {state?.jobIds?.length} job(s) selected. Choose a platform — StemBird will write
               platform-appropriate copy from the job details already in the database.
             </DialogDescription>
           </DialogHeader>

@@ -20,10 +20,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const SITE = 'https://www.careersasa.co.ke'
 
 const SUPABASE_URL =
-  process.env.SUPABASE_URL || 'https://qxuvqrfqkdpfjfwkqatf.supabase.co'
+  process.env.SUPABASE_URL || 'https://qhfdjccudtqnlkbtsjgg.supabase.co'
 const ANON_KEY =
   process.env.SUPABASE_ANON_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4dXZxcmZxa2RwZmpmd2txYXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0MjcxNTIsImV4cCI6MjA3NTAwMzE1Mn0.mAiL1p6YqlSaSFOIDW_G-3e_Mqck0cFqLl74_jyNpk8'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoZmRqY2N1ZHRxbmxrYnRzamdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NzYwOTcsImV4cCI6MjEwNzM1MjA5N30.JFdPkbqs4dPOahVmBSS8jGcAlHABrGJVeN4ezvquvLs'
 
 const STATIC_PAGES = [
   { loc: `${SITE}/`, lastmod: today(), changefreq: 'daily', priority: '0.7' },

@@ -2,11 +2,11 @@
 -- Existing keys are left unchanged.
 
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata, seo_title, seo_meta_description, seo_url_slug, seo_canonical_url, seo_h1_title, seo_index, seo_follow) VALUES
-  ('about', 'hero_title', 'text', 'About CareerSasa', '{}'::jsonb, 'About CareerSasa - Kenya''s Fastest Path from Job Search to Job Offer', 'Learn how CareerSasa uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.', '/about', 'https://www.careersasa.co.ke/about', 'About CareerSasa', true, true),
+  ('about', 'hero_title', 'text', 'About StemBird', '{}'::jsonb, 'About StemBird - Kenya''s Fastest Path from Job Search to Job Offer', 'Learn how StemBird uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.', '/about', 'https://www.careersasa.co.ke/about', 'About StemBird', true, true),
   ('about', 'hero_subtitle', 'text', 'Kenya''s AI-Powered Job Platform. Where Skills Meet Opportunity', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'story_title', 'text', 'Why We Built CareerSasa', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'story_title', 'text', 'Why We Built StemBird', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_p1', 'text', 'We watched thousands of talented Kenyans send 50, 100, even 200 applications and hear nothing back. Not for lack of qualifications. The system was broken. Generic job boards match keywords, not skills. Resumes disappear into black holes. And employers waste weeks sifting through unqualified applicants.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'story_p2', 'text', 'CareerSasa was built to fix that. We use AI-powered matching that connects candidates to jobs they''ll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'story_p2', 'text', 'StemBird was built to fix that. We use AI-powered matching that connects candidates to jobs they''ll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_p3', 'text', 'The result? Our users report 3x more interview callbacks than on other platforms, and employers fill positions faster with candidates who actually fit the role.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'values_title', 'text', 'Our Core Values', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_speed_title', 'text', 'Speed', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
@@ -14,10 +14,10 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
   ('about', 'value_transparency_title', 'text', 'Transparency', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_transparency_body', 'text', 'No hidden fees. No ghost listings. Every job is verified, every salary shown where possible, and every application tracked. You deserve honesty in your job search.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_fairness_title', 'text', 'Fairness', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'value_fairness_body', 'text', 'Your background shouldn''t determine your future. CareerSasa is free for every job seeker. The best candidate might be someone who can''t afford a KES 5,000 CV service.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'value_fairness_body', 'text', 'Your background shouldn''t determine your future. StemBird is free for every job seeker. The best candidate might be someone who can''t afford a KES 5,000 CV service.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_innovation_title', 'text', 'Kenyan-First Innovation', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_innovation_body', 'text', 'We build for Kenya''s job market, from county-specific job filters to M-Pesa-friendly pricing to Swahili-friendly support. International tools don''t understand our market. We do.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'stats_title', 'text', 'CareerSasa by the Numbers', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'stats_title', 'text', 'StemBird by the Numbers', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'stats_subtitle', 'text', 'Real results, not empty promises', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'stats_jobs_value', 'text', '1,070+', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'stats_jobs_label', 'text', 'Verified Active Jobs', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
@@ -31,7 +31,7 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata, seo_title, seo_meta_description, seo_url_slug, seo_canonical_url, seo_h1_title, seo_index, seo_follow) VALUES
-  ('contact', 'hero_title', 'text', 'Contact Us', '{}'::jsonb, 'Contact CareerSasa | Support for Job Seekers and Employers', 'Get in touch with CareerSasa. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.', '/contact', 'https://www.careersasa.co.ke/contact', 'Contact Us', true, true),
+  ('contact', 'hero_title', 'text', 'Contact Us', '{}'::jsonb, 'Contact StemBird | Support for Job Seekers and Employers', 'Get in touch with StemBird. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.', '/contact', 'https://www.careersasa.co.ke/contact', 'Contact Us', true, true),
   ('contact', 'hero_subtitle', 'text', 'We''re here to help. Reach out with any questions or concerns.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('contact', 'form_title', 'text', 'Send Us a Message', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('contact', 'form_subtitle', 'text', 'Fill out the form below and we''ll get back to you soon.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
@@ -50,7 +50,7 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata, seo_title, seo_meta_description, seo_url_slug, seo_canonical_url, seo_h1_title, seo_index, seo_follow) VALUES
-  ('companies', 'eyebrow', 'text', 'Employers on CareerSasa', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('companies', 'hero_title', 'text', 'Companies', '{}'::jsonb, 'Companies by Industry | CareerSasa', 'Browse Kenyan employers by industry on CareerSasa. Pick a sector to see company profiles and open jobs.', '/companies', 'https://www.careersasa.co.ke/companies', 'Companies', true, true),
+  ('companies', 'eyebrow', 'text', 'Employers on StemBird', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('companies', 'hero_title', 'text', 'Companies', '{}'::jsonb, 'Companies by Industry | StemBird', 'Browse Kenyan employers by industry on StemBird. Pick a sector to see company profiles and open jobs.', '/companies', 'https://www.careersasa.co.ke/companies', 'Companies', true, true),
   ('companies', 'hero_subtitle', 'text', 'Choose an industry to explore employers hiring in Kenya — or browse all companies at once.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true)
 ON CONFLICT (page_slug, section_key) DO NOTHING;

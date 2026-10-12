@@ -11,7 +11,7 @@ export const revalidate = 300;
 
 const title = "Jobs by Function";
 const description =
-  "Browse every job function on CareerSasa. See live counts, compare fields, and open roles in the area you work.";
+  "Browse every job function on StemBird. See live counts, compare fields, and open roles in the area you work.";
 
 export const metadata: Metadata = {
   title,
@@ -20,11 +20,11 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/jobs/functions`,
   },
   openGraph: {
-    title: `${title} | CareerSasa`,
+    title: `${title} | StemBird`,
     description,
     url: `${SITE_URL}/jobs/functions`,
     type: "website",
-    siteName: "CareerSasa",
+    siteName: "StemBird",
   },
 };
 

@@ -139,7 +139,7 @@ function MetaTile({ icon, label, caption, s }: MetaTileProps) {
 
 /**
  * Template 2: light editorial split-panel card.
- * This is the default CareerSasa job OG / social card.
+ * This is the default StemBird job OG / social card.
  */
 export function JobSocialCardTemplate2(data: OgJobCardData) {
   const { width, height } = OG_CARD_SIZES[data.size];
@@ -294,7 +294,7 @@ export function JobSocialCardTemplate2(data: OgJobCardData) {
         )),
       )}
 
-      {/* Dynamic category strip remains part of the CareerSasa template system. */}
+      {/* Dynamic category strip remains part of the StemBird template system. */}
       <div
         style={{
           position: 'absolute',
@@ -597,7 +597,7 @@ export function JobSocialCardTemplate2(data: OgJobCardData) {
         </div>
       </div>
 
-      {/* Inset CareerSasa signature footer. */}
+      {/* Inset StemBird signature footer. */}
       <div
         style={{
           position: 'absolute',

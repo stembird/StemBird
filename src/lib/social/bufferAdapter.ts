@@ -1,8 +1,8 @@
 /**
  * Buffer adapter — the ONLY module that talks to the Buffer GraphQL API.
  *
- * Careersasa talks to this adapter (via the Social Post Service); Buffer can
- * later be swapped for a native Careersasa publishing engine by replacing
+ * StemBird talks to this adapter (via the Social Post Service); Buffer can
+ * later be swapped for a native StemBird publishing engine by replacing
  * this file with an adapter that implements the same surface.
  *
  * Buffer GraphQL API (2026):

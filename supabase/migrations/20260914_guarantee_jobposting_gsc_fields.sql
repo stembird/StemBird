@@ -6,7 +6,7 @@
 --   failed Missing validThrough        (8)
 --   warn   Missing employmentType      (4)
 --
--- CareerSasa listings always expire 30 days after posting when the employer
+-- StemBird listings always expire 30 days after posting when the employer
 -- did not supply a deadline (scraper + JobPostingForm already do this).
 -- Fill remaining NULLs and keep future inserts complete so JSON-LD and the
 -- visible page stay in sync.

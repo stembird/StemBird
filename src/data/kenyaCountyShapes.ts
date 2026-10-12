@@ -411,7 +411,7 @@ export const KENYA_COUNTY_SHAPES: KenyaCountyShape[] = [
   },
 ];
 
-// Map a GeoJSON shape name to the Careersasa canonical county name.
+// Map a GeoJSON shape name to the StemBird canonical county name.
 // Canonical names come from the shared county list used by the jobs search filter.
 export const KENYA_SHAPE_TO_CANONICAL: Record<string, string> = {
   "Baringo": "Baringo",

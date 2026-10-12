@@ -133,7 +133,7 @@ export const KNOWN_COMPANY_BRANDS: Record<string, BrandEntry> = {
   "united nations office for project services unops": { domain: "unops.org", twitter: "UNOPS" },
   "world bank": { domain: "worldbank.org", twitter: "WorldBank" },
 
-  // ── Scraped Kenyan employers / NGOs (common CareerSasa sources) ─────
+  // ── Scraped Kenyan employers / NGOs (common StemBird sources) ─────
   amref: { domain: "amref.org", twitter: "Amref_Worldwide" },
   "amref health africa": { domain: "amref.org", twitter: "Amref_Worldwide" },
   "amref health africa4": { domain: "amref.org", twitter: "Amref_Worldwide" },

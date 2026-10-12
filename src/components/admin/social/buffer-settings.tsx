@@ -121,7 +121,7 @@ export function BufferSettings({ open, onOpenChange, status, onStatusChange }: P
             Buffer Connection
           </DialogTitle>
           <DialogDescription>
-            Careersasa publishes through your Buffer account. Your API key stays on the server and is
+            StemBird publishes through your Buffer account. Your API key stays on the server and is
             never exposed to the browser.
           </DialogDescription>
         </DialogHeader>

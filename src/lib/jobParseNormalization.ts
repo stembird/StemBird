@@ -133,7 +133,7 @@ export function resolveValidThrough(
 }
 
 /**
- * Common free-text / scrape industry labels → canonical CareerSasa industries.
+ * Common free-text / scrape industry labels → canonical StemBird industries.
  * Keys must be lowercase trimmed.
  */
 export const INDUSTRY_VALUE_ALIASES: Record<string, string> = {

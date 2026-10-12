@@ -54,8 +54,8 @@ export function getDefaultPopupNewsletterWelcomeHtml(): string {
 <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
     <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-      <img src="{{site_url}}/logo.png" alt="CareerSasa" style="width:60px;height:60px;margin-bottom:10px;" />
-      <h1 style="margin:0;font-size:24px;">Welcome to CareerSasa!</h1>
+      <img src="{{site_url}}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
+      <h1 style="margin:0;font-size:24px;">Welcome to StemBird!</h1>
       <p style="margin:8px 0 0;opacity:0.9;font-size:16px;">Your free toolkit is ready — no strings attached</p>
     </td></tr>
     <tr><td style="padding:30px;">
@@ -85,7 +85,7 @@ export function getDefaultPopupNewsletterWelcomeHtml(): string {
       <a href="{{toolkit_url}}" style="color:#0A66C2;">{{toolkit_url}}</a></p>
     </td></tr>
     <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-      <p>&copy; {{year}} CareerSasa. All rights reserved.</p>
+      <p>&copy; {{year}} StemBird. All rights reserved.</p>
       <p><a href="{{unsubscribe_url}}" style="color:#666;">Unsubscribe</a> | <a href="{{site_url}}/privacy" style="color:#666;">Privacy Policy</a></p>
     </td></tr>
   </table>
@@ -99,7 +99,7 @@ export function getDefaultPopupNewsletterWelcome(): EmailTemplateRecord {
     name: "Popup Newsletter Welcome",
     description:
       "Sent automatically when a visitor submits the homepage email subscription popup. Includes the free toolkit download link.",
-    subject: "🎁 Welcome to CareerSasa — Your Free Toolkit Is Inside",
+    subject: "🎁 Welcome to StemBird — Your Free Toolkit Is Inside",
     html_body: getDefaultPopupNewsletterWelcomeHtml(),
     placeholders: DEFAULT_POPUP_PLACEHOLDERS,
     metadata: {

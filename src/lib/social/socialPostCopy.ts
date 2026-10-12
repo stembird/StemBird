@@ -308,7 +308,7 @@ export function hashtag(value: string): string {
 
 export function buildHashtags(job: JobForCopy): string[] {
   const tags = new Set<string>()
-  tags.add('#CareerSasa')
+  tags.add('#StemBird')
   tags.add('#JobsInKenya')
   for (const fn of jobFunctions(job)) {
     const h = hashtag(fn.replace(/\s+/g, ''))
@@ -350,7 +350,7 @@ function templateLinkedIn(job: JobForCopy): string {
     lines.push(`Application deadline: ${deadline}`)
   }
   lines.push('')
-  lines.push(`Apply on CareerSasa: ${jobUrl(job)}`)
+  lines.push(`Apply on StemBird: ${jobUrl(job)}`)
   return lines.join('\n')
 }
 
@@ -378,7 +378,7 @@ function templateFacebook(job: JobForCopy): string {
   const deadline = deadlineLabel(job)
   if (deadline) lines.push(`⏳ Apply by ${deadline}`)
   lines.push('')
-  lines.push(`Ready to make a move? Apply now on CareerSasa 👉 ${jobUrl(job)}`)
+  lines.push(`Ready to make a move? Apply now on StemBird 👉 ${jobUrl(job)}`)
   lines.push('')
   lines.push(buildHashtags(job).join(' '))
   return lines.join('\n')
@@ -429,16 +429,16 @@ function buildFactsBlock(job: JobForCopy): string {
 
 const PLATFORM_PROMPTS: Record<SocialPlatform, string> = {
   linkedin:
-    'Professional, confident tone. Open with the job title (not a question). Then employer, location, a short description, key requirements, clear CTA and the Careersasa URL. No emojis. Under 3000 characters.',
+    'Professional, confident tone. Open with the job title (not a question). Then employer, location, a short description, key requirements, clear CTA and the StemBird URL. No emojis. Under 3000 characters.',
   facebook:
-    'Conversational and engaging tone. Use a few relevant emojis sparingly. Open with the job title, employer, or location as the first line. Never open with "Looking for…", "Looking to…?", "Are you looking…", or "We\'re looking for…". Vary the first line from post to post. Include a short description and requirements, and end with a clear CTA to Careersasa. Under 2200 characters.',
+    'Conversational and engaging tone. Use a few relevant emojis sparingly. Open with the job title, employer, or location as the first line. Never open with "Looking for…", "Looking to…?", "Are you looking…", or "We\'re looking for…". Vary the first line from post to post. Include a short description and requirements, and end with a clear CTA to StemBird. Under 2200 characters.',
   instagram:
-    'Short copy. Lead with the job title or employer, not a "Looking for…?" question. A couple of relevant hashtags and the Careersasa URL. Designed to accompany a Careersasa job graphic. Under 2200 characters.',
+    'Short copy. Lead with the job title or employer, not a "Looking for…?" question. A couple of relevant hashtags and the StemBird URL. Designed to accompany a StemBird job graphic. Under 2200 characters.',
 }
 
 export function systemPromptFor(platform: SocialPlatform): string {
   return [
-    'You write social media posts for CareerSasa (careersasa.co.ke), a Kenyan jobs platform.',
+    'You write social media posts for StemBird (careersasa.co.ke), a Kenyan jobs platform.',
     `Platform: ${PLATFORM_SPECS[platform].label}. Style: ${PLATFORM_PROMPTS[platform]}`,
     'STRICT RULES:',
     '- Use ONLY the facts in the JSON block. Never invent salary, qualifications, benefits, employer details, deadlines, or locations.',

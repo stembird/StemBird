@@ -6,6 +6,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js'
 import { fetchHtml, extractJobDetails, normalizeJob, ScraperSelectors, datePostedForInsert } from '@/lib/scraper'
+import { matchesSubjectFocus } from '@/lib/scrapeSubjectFilter'
 import {
   fetchWorkableJobDetails,
   normalizeWorkableJob,
@@ -659,6 +660,54 @@ export async function runScrapeProcessOne(
         processed: 1,
         expired: true,
         valid_through: deadline.validThrough,
+        job_url: queueItem.job_url,
+        title: normalized.title,
+      }
+    }
+
+    // Subject focus gate: StemBird currently publishes only biology/chemistry
+    // roles. Off-topic listings are recorded as skipped (so discover won't
+    // re-queue the URL). Tune via STEMBIRD_SUBJECT_TERMS / disable via
+    // STEMBIRD_SUBJECT_FILTER_ENABLED=false — see scrapeSubjectFilter.ts.
+    if (
+      !matchesSubjectFocus([
+        normalized.title,
+        parsed.field_of_study,
+        parsed.area_of_study,
+        parsed.job_function,
+        ...(parsed.job_functions || []),
+        parsed.tags || normalized.tags,
+        parsed.required_qualifications || normalized.required_qualifications,
+      ])
+    ) {
+      await supabase
+        .from('scrape_queue')
+        .update({
+          status: 'done',
+          processed_at: new Date().toISOString(),
+          error_message: 'Skipped: outside biology/chemistry focus',
+        })
+        .eq('id', queueItem.id)
+
+      await supabase.from('scraped_job_sources').upsert(
+        {
+          source_id: source.source_id,
+          job_url: canonicalUrl,
+          content_hash: contentHash,
+          job_id: null,
+          status: 'skipped',
+          raw_data: {
+            ...(typeof rawData === 'object' && rawData ? (rawData as object) : {}),
+            skip_reason: 'off_topic',
+          },
+        },
+        { onConflict: 'job_url' }
+      )
+
+      return {
+        message: 'Off-topic job skipped (not biology/chemistry)',
+        processed: 1,
+        off_topic: true,
         job_url: queueItem.job_url,
         title: normalized.title,
       }

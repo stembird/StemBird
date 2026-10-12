@@ -65,7 +65,7 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
     'Jobs by Function',
     '{}',
     'Jobs by Function',
-    'Browse every job function on CareerSasa. See live counts, compare fields, and open roles in the area you work.',
+    'Browse every job function on StemBird. See live counts, compare fields, and open roles in the area you work.',
     '/jobs/functions',
     'https://www.careersasa.co.ke/jobs/functions',
     'Jobs by Function'

@@ -11,14 +11,14 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.careersasa.co.ke'),
   title: {
-    default: "CareerSasa – Your Career Starts Sasa",
-    template: "%s | CareerSasa"
+    default: "StemBird – Your Career Starts Sasa",
+    template: "%s | StemBird"
   },
-  description: "Discover the latest job opportunities in Kenya. Connect with top employers and advance your career with CareerSasa.",
+  description: "Discover the latest job opportunities in Kenya. Connect with top employers and advance your career with StemBird.",
   keywords: "jobs, careers, Kenya, employment, job search, career opportunities, Kenyan jobs",
-  authors: [{ name: "CareerSasa" }],
-  creator: "CareerSasa",
-  publisher: "CareerSasa",
+  authors: [{ name: "StemBird" }],
+  creator: "StemBird",
+  publisher: "StemBird",
   robots: {
     index: true,
     follow: true,

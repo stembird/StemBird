@@ -19,11 +19,11 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/jobs/industries`,
   },
   openGraph: {
-    title: `${title} | CareerSasa`,
+    title: `${title} | StemBird`,
     description,
     url: `${SITE_URL}/jobs/industries`,
     type: "website",
-    siteName: "CareerSasa",
+    siteName: "StemBird",
   },
 };
 

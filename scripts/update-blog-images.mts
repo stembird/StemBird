@@ -1,5 +1,5 @@
 /**
- * Attach featured + in-body images to existing CareerSasa blog posts.
+ * Attach featured + in-body images to existing StemBird blog posts.
  * Run: npx tsx scripts/update-blog-images.mts
  *
  * Images live in /public/assets/blog/ and are referenced by site-relative paths.
@@ -139,7 +139,7 @@ async function updateInterview() {
   );
   content = insertAfterHeading(
     content,
-    "3. Use the CareerSasa STAR Method to Tell Strong Stories",
+    "3. Use the StemBird STAR Method to Tell Strong Stories",
     figure(
       "/assets/blog/interview-storytelling.jpg",
       "A focused young professional preparing clear STAR interview stories"

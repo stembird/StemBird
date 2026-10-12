@@ -153,13 +153,13 @@ export default function BlogPostPage() {
   const ogImageUrl = `https://www.careersasa.co.ke/api/og/blog/${slug}`;
   const pageUrl = `https://www.careersasa.co.ke/blog/${slug}`;
   const readingTime = post.reading_time ?? estimateReadingTime(post.content || "");
-  const shareText = encodeURIComponent(`${post.title} - CareerSasa Blog`);
+  const shareText = encodeURIComponent(`${post.title} - StemBird Blog`);
   const shareUrl = encodeURIComponent(pageUrl);
 
   return (
     <>
       <Head>
-        <title>{post.title} - CareerSasa Blog</title>
+        <title>{post.title} - StemBird Blog</title>
         <meta name="description" content={post.excerpt || post.title} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={pageUrl} />

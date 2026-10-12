@@ -9,7 +9,7 @@
  *
  * Recommended GSC fields (streetAddress, postalCode, addressLocality,
  * addressRegion, validThrough, employmentType, baseSalary.maxValue) are filled
- * from real job/place data or CareerSasa product defaults (30-day listing
+ * from real job/place data or StemBird product defaults (30-day listing
  * window, FULL_TIME). baseSalary uses the same numbers shown on the page
  * (employer pay or Kenyan market estimate). Employer-hidden stated pay is omitted.
  */
@@ -420,7 +420,7 @@ function addUtcDays(iso: string, days: number): string {
 
 /**
  * Google requires JobPosting.datePosted. Prefer the employer/board posting
- * date; fall back to created_at (when CareerSasa published the listing),
+ * date; fall back to created_at (when StemBird published the listing),
  * posted_date, then updated_at. Never invent the current time at render.
  */
 export function resolveDatePosted(job: {
@@ -439,7 +439,7 @@ export function resolveDatePosted(job: {
 
 /**
  * validThrough is required by Google whenever a posting has an expiry.
- * CareerSasa listings expire 30 days after datePosted when no employer
+ * StemBird listings expire 30 days after datePosted when no employer
  * deadline was supplied (same default used by scrape + JobPostingForm).
  */
 export function resolveValidThrough(job: {

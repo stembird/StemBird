@@ -493,7 +493,7 @@ export default function PreferencesPage() {
         <Card>
           <CardHeader>
             <CardTitle>Email Preferences</CardTitle>
-            <CardDescription>Control which emails you receive from CareerSasa</CardDescription>
+            <CardDescription>Control which emails you receive from StemBird</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">

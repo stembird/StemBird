@@ -1,4 +1,4 @@
-# CareerSasa JobPosting Structured Data — Forensic Audit
+# StemBird JobPosting Structured Data — Forensic Audit
 
 **Date:** 2026-08-15
 **Auditor:** Cursor agent (forensic audit mandate)
@@ -100,7 +100,7 @@
 
 ---
 
-## F. GOOGLE GUIDELINE CHANGES (relevant to CareerSasa)
+## F. GOOGLE GUIDELINE CHANGES (relevant to StemBird)
 
 1. **`validThrough`** — Google now explicitly says: "This is **required for job postings that have an expiration date**… If a job posting never expires, or you do not know when the job will expire, **do not include this property**." The `+30d` fabrication directly contradicts this.
 2. **`jobLocationType`** — only `TELECOMMUTE` is supported, and only for genuinely 100%-remote jobs; required if the job is 100% remote.
@@ -127,7 +127,7 @@
 | 9 | **Expire jobs properly**: make `expire_old_jobs()` also expire rows where `valid_through <= now()` (and `auto_renew=false`), or add a cron sweep over scraped jobs, so expired jobs stop being served as active with markup. | `app/api/cron/expire-jobs/route.ts` + SQL function |
 | 10 | **`datePosted` / `description` fail-safe**: omit the property (or the whole markup) rather than fabricate when missing. | `JobStructuredData.tsx` |
 | 11 | **`jobLocation.address` quality**: parse `job.location` into locality/region where city/county are null; never put "Kenya" in `streetAddress`/`addressLocality`; prefer ISO country code `KE`; add `postalCode` when known. | `JobStructuredData.tsx` |
-| 12 | **`identifier`**: add `{ "@type": "PropertyValue", "name": "CareerSasa", "value": job.id }` to improve matching/dedup. | `JobStructuredData.tsx` |
+| 12 | **`identifier`**: add `{ "@type": "PropertyValue", "name": "StemBird", "value": job.id }` to improve matching/dedup. | `JobStructuredData.tsx` |
 | 13 | **Logo hygiene**: prefer verified company logos; avoid hotlinking job-board CDNs and generic gstatic favicons in `hiringOrganization.logo`. | `companyLogo.ts` / enrichment |
 
 ---
@@ -266,7 +266,7 @@ A ChatGPT discussion summarizing Google's current JobPosting documentation was r
 
 **Fixes applied in this round (per user decisions):**
 
-1. **`identifier` omitted** (`JobStructuredData.tsx`). CareerSasa only holds its internal UUID; Google defines `identifier` as the *hiring organization's* unique job ID. Emitting our UUID with the employer's name misrepresented it as employer-provided. Now omitted entirely.
+1. **`identifier` omitted** (`JobStructuredData.tsx`). StemBird only holds its internal UUID; Google defines `identifier` as the *hiring organization's* unique job ID. Emitting our UUID with the employer's name misrepresented it as employer-provided. Now omitted entirely.
 
 2. **`experienceRequirements` only from real numbers** (`jobStructuredDataMapping.ts`). The `experience_level` → months fallback (Mid→24, Senior→48, Managerial→60) manufactured a requirement number. Now emitted only when `minimum_experience` is a genuine parsed value; 462 label-only jobs omit the property instead of guessing.
 

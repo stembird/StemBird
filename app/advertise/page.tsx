@@ -16,7 +16,7 @@ export default function AdvertisePage() {
         <div className="space-y-12">
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Advertise With CareerSasa
+              Advertise With StemBird
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Connect with Kenya&apos;s Top Talent - Maximize Your Recruitment ROI
@@ -178,7 +178,7 @@ export default function AdvertisePage() {
           <section className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-8 text-center space-y-4">
             <h2 className="text-3xl font-bold text-primary">Ready to Get Started?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Join hundreds of companies already finding top talent on CareerSasa. Post your first job today or contact our sales team for a custom package.
+              Join hundreds of companies already finding top talent on StemBird. Post your first job today or contact our sales team for a custom package.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
               <Link href="/post-job" prefetch={true}>

@@ -370,4 +370,4 @@ For issues or feature requests, please contact the development team or create an
 
 ## License
 
-This template is part of the CareerSasa platform and is subject to the project's license terms.
+This template is part of the StemBird platform and is subject to the project's license terms.

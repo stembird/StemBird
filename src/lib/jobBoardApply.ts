@@ -443,7 +443,7 @@ export interface RewriteJobBoardDescriptionLinksOptions {
   /**
    * Exact employer destination from following MyJobMag `/apply-now/{id}`
    * (the Location redirect). When set, relative apply-now anchors use this URL.
-   * Do not pass CareerSasa apply_link / application_url heuristics here.
+   * Do not pass StemBird apply_link / application_url heuristics here.
    */
   applyNowDestinationUrl?: string | null
   /** @deprecated Use applyNowDestinationUrl — same meaning. */
@@ -454,7 +454,7 @@ export interface RewriteJobBoardDescriptionLinksOptions {
 }
 
 /**
- * Fix board-relative anchors in scraped HTML so they do not 404 on CareerSasa.
+ * Fix board-relative anchors in scraped HTML so they do not 404 on StemBird.
  *
  * MyJobMag CTAs look like:
  *   Go to <a href="/apply-now/1284199">KRA on erecruitment.kra.go.ke</a> to apply
@@ -528,7 +528,7 @@ export function rewriteJobBoardDescriptionLinks(
  * Strip &lt;script&gt; blocks (including JSON-LD) from scraped HTML before it
  * is rendered. A leftover source-board JobPosting in the body is parsed by
  * Google as a second item — often without datePosted — which GSC flags as
- * invalid even when CareerSasa's own JSON-LD is correct.
+ * invalid even when StemBird's own JSON-LD is correct.
  */
 export function stripEmbeddedScripts(html: string): string {
   return html
@@ -539,7 +539,7 @@ export function stripEmbeddedScripts(html: string): string {
 /**
  * Display-time fix for scraped job HTML: rewrite relative MyJobMag `/apply-now/`
  * anchors to absolute MyJobMag URLs so they keep the original employer redirect.
- * Does not substitute CareerSasa apply_link / application_url.
+ * Does not substitute StemBird apply_link / application_url.
  */
 export function sanitizeScrapedJobHtmlForDisplay(
   html: string | null | undefined

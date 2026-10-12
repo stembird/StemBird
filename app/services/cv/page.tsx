@@ -28,7 +28,7 @@ export default function CVServicesPage() {
       getContentValue(
         content,
         "hero_description_2",
-        "At CareerSasa, we engineer CVs to beat ATS systems, pass the recruiter scan, and get you shortlisted for the Kenyan job market.",
+        "At StemBird, we engineer CVs to beat ATS systems, pass the recruiter scan, and get you shortlisted for the Kenyan job market.",
       ),
       getContentValue(
         content,
@@ -48,7 +48,7 @@ export default function CVServicesPage() {
     ],
     painClosing:
       "A weak CV silently blocks opportunities. We engineer yours to pass every filter and land on the interview pile.",
-    differentiatorsTitle: "Why CareerSasa CVs Get More Interview Callbacks",
+    differentiatorsTitle: "Why StemBird CVs Get More Interview Callbacks",
     differentiators: [
       "ATS-friendly formatting",
       "Achievement-focused writing (not job descriptions)",
@@ -183,7 +183,7 @@ export default function CVServicesPage() {
     ctaTitle: "Ready to Get Shortlisted?",
     ctaLines: [
       "Every week with a weak CV is a week of interviews you missed.",
-      "Our clients report far more callbacks after switching to a CareerSasa CV.",
+      "Our clients report far more callbacks after switching to a StemBird CV.",
     ],
     ctaWhatsappMessage: "Hi, I'd like to choose a CV package today!",
     ctaButtonLabel: "I'm Ready",

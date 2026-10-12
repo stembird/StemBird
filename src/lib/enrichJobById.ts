@@ -1,5 +1,5 @@
 /**
- * Universal job enrichment — works for ANY CareerSasa job, regardless of intake
+ * Universal job enrichment — works for ANY StemBird job, regardless of intake
  * (scraper, manual post, parse-job form, template, n8n, etc.).
  *
  * Prefers scraped raw_data when available (richer ATS HTML); otherwise builds

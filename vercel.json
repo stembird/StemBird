@@ -17,14 +17,6 @@
       "schedule": "30 4 * * *"
     },
     {
-      "path": "/api/cron/scrape-discover",
-      "schedule": "0 5 * * *"
-    },
-    {
-      "path": "/api/cron/scrape-process",
-      "schedule": "30 5 * * *"
-    },
-    {
       "path": "/api/cron/enrich-jobs",
       "schedule": "0 6 * * *"
     },

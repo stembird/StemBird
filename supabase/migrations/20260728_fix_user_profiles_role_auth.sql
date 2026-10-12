@@ -120,7 +120,7 @@ BEGIN
 END;
 $$;
 
--- 6) Optional: ensure known CareerSasa admin accounts stay admins.
+-- 6) Optional: ensure known StemBird admin accounts stay admins.
 -- Safe to re-run. Uses auth.users emails (service-role / SQL editor only).
 INSERT INTO public.user_roles (user_id, role)
 SELECT au.id, 'admin'::public.app_role

@@ -4,8 +4,8 @@ import MobileNav from "@/components/MobileNav";
 import { Rocket, Eye, Lightbulb, TrendingUp, Users, Building2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Our Mission - Kenya's Fastest Path from Job Search to Job Offer | CareerSasa",
-  description: "CareerSasa's mission: end the broken job search cycle in Kenya by using AI matching, free career tools, and verified listings so every qualified Kenyan lands interviews, not rejection silence.",
+  title: "Our Mission - Kenya's Fastest Path from Job Search to Job Offer | StemBird",
+  description: "StemBird's mission: end the broken job search cycle in Kenya by using AI matching, free career tools, and verified listings so every qualified Kenyan lands interviews, not rejection silence.",
 };
 
 export default function MissionPage() {
@@ -33,7 +33,7 @@ export default function MissionPage() {
             </div>
             <h2 className="text-3xl font-bold text-foreground">The Problem We're Solving</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Every day, thousands of qualified Kenyans send applications into a void. CVs are filtered out by keyword algorithms that don't understand skills. Employers receive hundreds of applicants but struggle to find the right fit. The result? Months of unemployment for talented people and months of unfilled roles for growing companies. CareerSasa exists to end this waste, for both sides.
+              Every day, thousands of qualified Kenyans send applications into a void. CVs are filtered out by keyword algorithms that don't understand skills. Employers receive hundreds of applicants but struggle to find the right fit. The result? Months of unemployment for talented people and months of unfilled roles for growing companies. StemBird exists to end this waste, for both sides.
             </p>
           </section>
 
@@ -46,7 +46,7 @@ export default function MissionPage() {
               <h2 className="text-3xl font-bold text-primary">Where We're Going</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              We envision a Kenya where no qualified professional is invisible to employers, and no employer wastes months on the wrong candidates. A Kenya where a fresh graduate in Kisumu has the same access to opportunity as an executive in Nairobi. Where getting hired is measured in days, not months. CareerSasa is building that future, one AI-matched connection at a time.
+              We envision a Kenya where no qualified professional is invisible to employers, and no employer wastes months on the wrong candidates. A Kenya where a fresh graduate in Kisumu has the same access to opportunity as an executive in Nairobi. Where getting hired is measured in days, not months. StemBird is building that future, one AI-matched connection at a time.
             </p>
           </section>
 
@@ -127,7 +127,7 @@ export default function MissionPage() {
           <section className="bg-card border border-border rounded-lg p-8 text-center space-y-4">
             <h2 className="text-2xl font-bold text-primary">Ready to See the Difference?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Join free. Get matched to jobs that fit your skills. Land your next interview. That's not a slogan. That's what happens on CareerSasa every day.
+              Join free. Get matched to jobs that fit your skills. Land your next interview. That's not a slogan. That's what happens on StemBird every day.
             </p>
           </section>
         </div>

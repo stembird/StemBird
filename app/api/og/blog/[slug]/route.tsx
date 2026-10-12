@@ -204,7 +204,7 @@ export async function GET(
               fontWeight: 'bold',
             }}
           >
-            CareerSasa.co.ke — Career Insights
+            StemBird.co.ke — Career Insights
           </div>
           
           {/* Read More CTA - Bottom Right */}
@@ -316,7 +316,7 @@ function getDefaultImage() {
               marginBottom: '20px',
             }}
           >
-            CareerSasa Blog
+            StemBird Blog
           </h1>
           <p
             style={{

@@ -82,7 +82,7 @@ export const INDUSTRY_MODEL_FILENAMES: Record<JobIndustryModelCategory, string> 
 };
 
 /**
- * Canonical Careersasa job function → portrait category.
+ * Canonical StemBird job function → portrait category.
  * Every FALLBACK_JOB_FUNCTIONS entry must appear here.
  */
 export const JOB_FUNCTION_MODEL_CATEGORY: Record<

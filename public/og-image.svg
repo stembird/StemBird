@@ -17,10 +17,10 @@
   <circle cx="240" cy="441" r="60" fill="rgba(255, 255, 255, 0.1)" />
   
   <!-- Text content -->
-  <text x="120" y="189" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="bold" fill="white">CareerSasa</text>
+  <text x="120" y="189" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="bold" fill="white">StemBird</text>
   <text x="120" y="283.5" font-family="system-ui, -apple-system, sans-serif" font-size="42" fill="rgba(255, 255, 255, 0.9)">Find Your Dream Job in Kenya</text>
   <text x="120" y="346.5" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="rgba(255, 255, 255, 0.8)">Discover exciting career opportunities</text>
-  <text x="120" y="567" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="bold" fill="rgba(255, 255, 255, 0.7)">CareerSasa.co.ke</text>
+  <text x="120" y="567" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="bold" fill="rgba(255, 255, 255, 0.7)">StemBird.co.ke</text>
   
   <!-- Apply Now Button -->
   <rect x="120" y="472.5" width="220" height="60" rx="8" fill="rgba(255, 255, 255, 0.2)" />

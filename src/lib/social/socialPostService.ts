@@ -517,7 +517,7 @@ export async function cancelPost(
 ): Promise<SocialPostDTO> {
   const post = await getPost(adminClient, postId)
   if (post.status === 'published') {
-    throw new Error('A published post cannot be cancelled from Careersasa — delete it from Buffer directly.')
+    throw new Error('A published post cannot be cancelled from StemBird — delete it from Buffer directly.')
   }
 
   // Best-effort removal from Buffer (only queued/scheduled posts can be deleted).

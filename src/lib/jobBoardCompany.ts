@@ -4,7 +4,7 @@
  * Boards often expose a company tab (Fuzu /company/{slug}, MyJobMag
  * /jobs-at/{slug}, …) with logo, about, website, size, and location.
  * Adapters fetch that into this shape; scrape publish passes it to
- * ensureCompanyForJob so CareerSasa company pages get real portal data
+ * ensureCompanyForJob so StemBird company pages get real portal data
  * instead of only a name + favicon guess.
  */
 

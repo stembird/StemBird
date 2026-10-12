@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { ContactPage } from "@/components/ContactPage";
 import { fetchPageContentMap, fetchPageSeo } from "@/lib/fetchPageContent";
 
-const FALLBACK_TITLE = "Contact CareerSasa | Support for Job Seekers and Employers";
+const FALLBACK_TITLE = "Contact StemBird | Support for Job Seekers and Employers";
 const FALLBACK_DESCRIPTION =
-  "Get in touch with CareerSasa. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.";
+  "Get in touch with StemBird. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await fetchPageSeo("contact");

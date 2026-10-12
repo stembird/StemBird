@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Social Publishing module (Phase 1: Buffer integration)
 --
--- Central place for social posts so Careersasa can later replace Buffer with
+-- Central place for social posts so StemBird can later replace Buffer with
 -- a native publishing engine without redesigning the data model.
 --
 -- Design notes:

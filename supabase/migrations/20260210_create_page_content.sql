@@ -34,23 +34,23 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
   ('home', 'stats_success_rate', 'number', '90', '{"label": "Success Rate", "suffix": "%"}'),
   ('home', 'featured_section_title', 'text', 'Featured Opportunities', '{}'),
   ('home', 'featured_section_subtitle', 'text', 'Hand-picked roles from top employers', '{}'),
-  ('home', 'why_choose_title', 'text', 'Why Kenyan Professionals Choose CareerSasa', '{}'),
+  ('home', 'why_choose_title', 'text', 'Why Kenyan Professionals Choose StemBird', '{}'),
   ('home', 'cta_title', 'text', 'Ready to Transform Your Career?', '{}'),
-  ('home', 'cta_subtitle', 'text', 'Join thousands of Kenyan professionals who''ve found their dream jobs through CareerSasa', '{}')
+  ('home', 'cta_subtitle', 'text', 'Join thousands of Kenyan professionals who''ve found their dream jobs through StemBird', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 -- Insert default CV services page content
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata) VALUES
-  ('services-cv', 'hero_title', 'text', 'CV & Resume Services by CareerSasa', '{}'),
+  ('services-cv', 'hero_title', 'text', 'CV & Resume Services by StemBird', '{}'),
   ('services-cv', 'hero_subtitle', 'text', 'Professional CVs That Open Doors 🚪📄', '{}'),
-  ('services-cv', 'hero_description', 'html', '<p>Your CV is often the <strong>first decision-maker</strong> in your job search. Before interviews. Before LinkedIn. Before explanations.</p><p>At CareerSasa, we don''t just rewrite CVs — we <strong>position you to be shortlisted</strong>.</p>', '{}'),
+  ('services-cv', 'hero_description', 'html', '<p>Your CV is often the <strong>first decision-maker</strong> in your job search. Before interviews. Before LinkedIn. Before explanations.</p><p>At StemBird, we don''t just rewrite CVs — we <strong>position you to be shortlisted</strong>.</p>', '{}'),
   ('services-cv', 'why_cv_matters_title', 'text', 'Why Your CV Matters More Than You Think', '{}'),
-  ('services-cv', 'what_we_do_title', 'text', 'What We Do Differently at CareerSasa', '{}')
+  ('services-cv', 'what_we_do_title', 'text', 'What We Do Differently at StemBird', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 -- Insert default LinkedIn services page content
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata) VALUES
-  ('services-linkedin', 'hero_title', 'text', 'LinkedIn Career Services by CareerSasa', '{}'),
+  ('services-linkedin', 'hero_title', 'text', 'LinkedIn Career Services by StemBird', '{}'),
   ('services-linkedin', 'hero_subtitle', 'text', 'Turn Your LinkedIn Profile Into Opportunities 🚀', '{}'),
   ('services-linkedin', 'hero_description', 'html', '<p>Your LinkedIn profile is no longer optional. It''s your <strong>digital CV</strong>, your <strong>personal brand</strong>, and often the <strong>first interview filter</strong>.</p>', '{}'),
   ('services-linkedin', 'why_linkedin_matters_title', 'text', 'Why LinkedIn Matters More Than Ever', '{}')
@@ -58,7 +58,7 @@ ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 -- Insert default Cover Letter services page content
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata) VALUES
-  ('services-cover-letter', 'hero_title', 'text', 'Outstanding Cover Letters by CareerSasa', '{}'),
+  ('services-cover-letter', 'hero_title', 'text', 'Outstanding Cover Letters by StemBird', '{}'),
   ('services-cover-letter', 'hero_subtitle', 'text', 'Cover Letters That Get Read 📄✉️', '{}'),
   ('services-cover-letter', 'hero_description', 'html', '<p>Your CV shows what you''ve done. Your cover letter explains <strong>why you''re the right fit</strong>.</p>', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;

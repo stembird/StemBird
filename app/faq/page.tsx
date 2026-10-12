@@ -153,7 +153,7 @@ export default function FAQPage() {
               Frequently Asked Questions
             </h1>
             <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-              Everything you need to know about CareerSasa. Find answers for candidates and employers.
+              Everything you need to know about StemBird. Find answers for candidates and employers.
             </p>
 
             {/* Search */}

@@ -126,7 +126,7 @@ function BlogPageInner() {
             <div className="max-w-3xl animate-fade-in md:mx-auto md:text-center">
               <div className="inline-flex items-center gap-2 bg-black/25 text-sky-100 border border-white/30 px-4 py-1.5 rounded-full text-sm font-medium mb-5 backdrop-blur-sm drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)]">
                 <BookOpen className="h-4 w-4" />
-                CareerSasa Blog
+                StemBird Blog
               </div>
               <h1 className="text-4xl sm:text-5xl md:text-[3.25rem] font-bold mb-4 text-white leading-[1.1] drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]">
                 Insights That Move Your Career Forward

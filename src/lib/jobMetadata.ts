@@ -75,7 +75,7 @@ export async function getJobMetadata(jobId: string): Promise<JobMetadata | null>
       title: job.title || 'Job Opening',
       company: companyData?.name || job.company || 'Company',
       location: job.location || 'Kenya',
-      description: job.description || `Apply for ${job.title} position at ${companyData?.name || job.company} in ${job.location}. Find more jobs on CareerSasa.`,
+      description: job.description || `Apply for ${job.title} position at ${companyData?.name || job.company} in ${job.location}. Find more jobs on StemBird.`,
       companyId: job.company_id || undefined,
       companyLogo: companyData?.logo || undefined,
       jobSlug: job.job_slug || undefined

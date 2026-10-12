@@ -28,7 +28,7 @@ export function RequireAdmin({ children }: { children: ReactNode }) {
       <div className="container mx-auto flex min-h-[40vh] flex-col items-center justify-center gap-3 px-4 py-12 text-center">
         <p className="text-lg font-medium">Admin access required</p>
         <p className="text-sm text-muted-foreground">
-          This page is only available to CareerSasa admins.
+          This page is only available to StemBird admins.
         </p>
         <Button asChild variant="outline">
           <Link href="/dashboard">Back to dashboard</Link>

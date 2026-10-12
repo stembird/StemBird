@@ -1,7 +1,7 @@
 -- Create site_settings table for branding customization
 CREATE TABLE IF NOT EXISTS site_settings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  site_name TEXT NOT NULL DEFAULT 'CareerSasa',
+  site_name TEXT NOT NULL DEFAULT 'StemBird',
   logo_url TEXT,
   favicon_url TEXT,
   primary_color TEXT DEFAULT '#8B5CF6',
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
 
 -- Insert default settings
 INSERT INTO site_settings (site_name, primary_color, secondary_color)
-VALUES ('CareerSasa', '#8B5CF6', '#EC4899')
+VALUES ('StemBird', '#8B5CF6', '#EC4899')
 ON CONFLICT DO NOTHING;
 
 -- Enable RLS

@@ -207,7 +207,7 @@ assert.equal(
 assert.equal(boardOnly.apply_link, null)
 assert.equal(boardOnly.used_board_fallback, true)
 
-// Relative /apply-now/ must not stay site-relative (404s on CareerSasa).
+// Relative /apply-now/ must not stay site-relative (404s on StemBird).
 // Prefer the exact MyJobMag apply-now redirect target when known.
 const kraCta = `
 <div>Interested and qualified? Go to

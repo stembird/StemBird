@@ -31,6 +31,7 @@ import {
   scholarshipPublishFields,
   withoutScholarshipColumns,
 } from './listingKind'
+import { matchesSubjectFocus } from './scrapeSubjectFilter'
 
 export interface PublishScrapedJobParams {
   supabase: SupabaseClient
@@ -46,7 +47,7 @@ export interface PublishScrapedJobParams {
 }
 
 export interface PublishScrapedJobResult {
-  status: 'published' | 'duplicate' | 'expired' | 'error'
+  status: 'published' | 'duplicate' | 'expired' | 'skipped' | 'error'
   job_id?: string
   title?: string
   error?: string
@@ -216,6 +217,35 @@ export async function publishScrapedJob(
         title: normalized.title,
         valid_through: deadline.validThrough,
       }
+    }
+
+    // Subject focus gate (biology/chemistry only). See scrapeSubjectFilter.ts.
+    if (
+      !matchesSubjectFocus([
+        normalized.title,
+        parsed.field_of_study,
+        parsed.area_of_study,
+        parsed.job_function,
+        ...(parsed.job_functions || []),
+        parsed.tags || normalized.tags,
+        parsed.required_qualifications || normalized.required_qualifications,
+      ])
+    ) {
+      await supabase.from('scraped_job_sources').upsert(
+        {
+          source_id: sourceId,
+          job_url: canonicalUrl,
+          content_hash: contentHash,
+          job_id: null,
+          status: 'skipped',
+          raw_data: {
+            ...(typeof rawData === 'object' && rawData ? (rawData as object) : {}),
+            skip_reason: 'off_topic',
+          },
+        },
+        { onConflict: 'job_url' }
+      )
+      return { status: 'skipped', title: normalized.title }
     }
 
     const educationLevelId = mapEducationLevel(parsed.education_level, educationLevels || [])

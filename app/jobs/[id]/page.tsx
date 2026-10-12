@@ -250,7 +250,7 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
   const jobExpired = isJobExpiredFromDeadline(resolveValidThrough(job));
   const hasRelatedJobs = relatedJobs && relatedJobs.length > 0;
 
-  // Only fix relative MyJobMag /apply-now/ anchors (404 on CareerSasa).
+  // Only fix relative MyJobMag /apply-now/ anchors (404 on StemBird).
   // Do not substitute apply_link / application_url into body HTML.
   const descriptionHtml = sanitizeScrapedJobHtmlForDisplay(job.description);
   const responsibilitiesHtml = sanitizeScrapedJobHtmlForDisplay(job.responsibilities);
@@ -399,13 +399,13 @@ export default async function JobDetails({ params }: { params: Promise<{ id: str
                 <div className="flex items-start gap-2">
                   <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
                   <div className="text-sm leading-relaxed text-amber-900">
-                    <strong>CareerSasa Safety Alert:</strong> Never pay employers or agencies for interviews, training, or job placement. Does a job request payment? Report it immediately using the "Flag" button. While CareerSasa vets job postings thoroughly, always verify opportunities independently.
+                    <strong>StemBird Safety Alert:</strong> Never pay employers or agencies for interviews, training, or job placement. Does a job request payment? Report it immediately using the "Flag" button. While StemBird vets job postings thoroughly, always verify opportunities independently.
                   </div>
                 </div>
                 <div className="mt-2.5 flex justify-end gap-2">
                   <SocialShare 
                     url={`https://www.careersasa.co.ke/jobs/${job.job_slug || job.id}`}
-                    title={`${job.title} at ${job.companies?.name || job.company || 'Company'} - CareerSasa`}
+                    title={`${job.title} at ${job.companies?.name || job.company || 'Company'} - StemBird`}
                     description={job.description?.replace(/<[^>]*>/g, '').substring(0, 160)}
                   />
                   <Button 

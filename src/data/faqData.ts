@@ -30,9 +30,9 @@ export const faqData: FAQSection[] = [
         icon: "Rocket",
         questions: [
           { q: "How do I create an account?", a: "Click 'Sign Up' on the top right, or go to the [Sign Up page](/auth). You can register with your email address and a password. After signing up, you'll be taken to your [dashboard](/dashboard) where you can complete your profile." },
-          { q: "Is CareerSasa free for job seekers?", a: "Yes. Browsing jobs, applying, saving jobs, using career tools, and all candidate features are completely free." },
+          { q: "Is StemBird free for job seekers?", a: "Yes. Browsing jobs, applying, saving jobs, using career tools, and all candidate features are completely free." },
           { q: "How do I complete my profile?", a: "Go to [My Profile](/dashboard/profile). Fill in your personal details, work experience, education, skills, and upload your CV. A complete profile helps employers find you and improves your applications." },
-          { q: "Can I use CareerSasa on my phone?", a: "Yes. CareerSasa is fully responsive and works on any device. You can browse jobs, apply, and manage your account from your phone or tablet." },
+          { q: "Can I use StemBird on my phone?", a: "Yes. StemBird is fully responsive and works on any device. You can browse jobs, apply, and manage your account from your phone or tablet." },
         ],
       },
       {
@@ -40,11 +40,11 @@ export const faqData: FAQSection[] = [
         icon: "Search",
         questions: [
           { q: "How do I search for jobs?", a: "Use the search bar on the [homepage](/) or the [Browse Jobs](/jobs) page. You can search by keyword, job title, company, or location. Use the filters to narrow results by employment type, experience level, and location." },
-          { q: "How do I apply for a job?", a: "Click on a job listing to view details, then click the 'Apply Now' button. Some jobs allow instant apply with your CareerSasa profile, while others may redirect you to the employer's application page." },
+          { q: "How do I apply for a job?", a: "Click on a job listing to view details, then click the 'Apply Now' button. Some jobs allow instant apply with your StemBird profile, while others may redirect you to the employer's application page." },
           { q: "Can I save jobs to apply later?", a: "Yes. Click the bookmark icon on any job listing to save it. View all saved jobs from [Saved Jobs](/dashboard/saved-jobs)." },
           { q: "Can I save my search criteria?", a: "Yes. After performing a search, click 'Save Search' to store your filters. Access [Saved Searches](/dashboard/saved-searches) from your dashboard. You can also set up email alerts for new matching jobs." },
           { q: "How do job alerts work?", a: "Job alerts send you email notifications when new jobs match your saved search criteria. Set them up at the [Job Alerts](/job-alerts) page or from your [Saved Searches](/dashboard/saved-searches) in the dashboard." },
-          { q: "Can I track my applications?", a: "Yes. [All Applications](/dashboard/applications) shows every job you've applied to through CareerSasa, with status updates when employers respond." },
+          { q: "Can I track my applications?", a: "Yes. [All Applications](/dashboard/applications) shows every job you've applied to through StemBird, with status updates when employers respond." },
           { q: "Can I compare multiple jobs side by side?", a: "Yes. Use the [Compare Jobs](/dashboard/compare-jobs) feature to view salary, location, requirements, and benefits of multiple listings side by side." },
         ],
       },
@@ -64,7 +64,7 @@ export const faqData: FAQSection[] = [
         title: "Career Boost Services",
         icon: "Zap",
         questions: [
-          { q: "What career services does CareerSasa offer?", a: "We offer three premium services: [CV Writing](/services/cv), [Cover Letter Writing](/services/cover-letter), and [LinkedIn Profile Optimization](/services/linkedin). Find them under the Career Boost menu or at the [Services](/services/cv) page." },
+          { q: "What career services does StemBird offer?", a: "We offer three premium services: [CV Writing](/services/cv), [Cover Letter Writing](/services/cover-letter), and [LinkedIn Profile Optimization](/services/linkedin). Find them under the Career Boost menu or at the [Services](/services/cv) page." },
           { q: "How do I request a CV writing service?", a: "Go to the [CV Writing Service](/services/cv) page or click Career Boost in the menu. Fill in the form with your details and our team will craft a professional CV for you." },
           { q: "What's included in the LinkedIn optimization service?", a: "Our [LinkedIn Optimization](/services/linkedin) service reviews and rewrites your LinkedIn profile to improve visibility to recruiters. This includes headline optimization, summary writing, experience section enhancement, and keyword strategy." },
         ],
@@ -126,7 +126,7 @@ export const faqData: FAQSection[] = [
         icon: "Users",
         questions: [
           { q: "How do I view applications for my jobs?", a: "Go to [Applications](/dashboard/applications) to see all applications across your posted jobs. You can filter by job, status, and date." },
-          { q: "Can I contact applicants directly?", a: "Yes. Use the [Messages](/dashboard/messages) feature to communicate with candidates directly through CareerSasa." },
+          { q: "Can I contact applicants directly?", a: "Yes. Use the [Messages](/dashboard/messages) feature to communicate with candidates directly through StemBird." },
           { q: "How do I shortlist or reject candidates?", a: "In the [Applications](/dashboard/applications) tab, you can change each application's status: Received, Under Review, Shortlisted, Interview, Rejected, or Offered." },
         ],
       },

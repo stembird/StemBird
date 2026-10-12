@@ -212,7 +212,7 @@ END $$;
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'cv_templates' AND policyname = 'Admins can manage templates') THEN
         CREATE POLICY "Admins can manage templates" ON cv_templates FOR ALL USING (
-            EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin')
+            EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.id = auth.uid() AND user_profiles.role = 'admin')
         );
     END IF;
 END $$;
@@ -256,7 +256,7 @@ END $$;
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'cover_letter_templates' AND policyname = 'Admins can manage cover letter templates') THEN
         CREATE POLICY "Admins can manage cover letter templates" ON cover_letter_templates FOR ALL USING (
-            EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin')
+            EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.id = auth.uid() AND user_profiles.role = 'admin')
         );
     END IF;
 END $$;
@@ -300,7 +300,7 @@ END $$;
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'skill_assessments' AND policyname = 'Admins can manage assessments') THEN
         CREATE POLICY "Admins can manage assessments" ON skill_assessments FOR ALL USING (
-            EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin')
+            EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.id = auth.uid() AND user_profiles.role = 'admin')
         );
     END IF;
 END $$;
@@ -344,7 +344,7 @@ END $$;
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'career_paths' AND policyname = 'Admins can manage career paths') THEN
         CREATE POLICY "Admins can manage career paths" ON career_paths FOR ALL USING (
-            EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin')
+            EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.id = auth.uid() AND user_profiles.role = 'admin')
         );
     END IF;
 END $$;

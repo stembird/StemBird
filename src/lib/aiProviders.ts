@@ -92,7 +92,7 @@ async function callDeepSeek(
     messages,
     temperature: opts.temperature ?? 0.2,
     max_tokens: opts.maxTokens ?? 2000,
-    // Bulk CareerSasa work: disable thinking for speed/cost
+    // Bulk StemBird work: disable thinking for speed/cost
     thinking: { type: 'disabled' },
   };
   if (opts.json) {

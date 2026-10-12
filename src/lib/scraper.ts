@@ -65,7 +65,7 @@ export interface NormalizedJob {
   valid_through: string | null
   /**
    * Source board publish time (ISO). Written to jobs.date_posted when present.
-   * When missing, publish uses the CareerSasa insert time — never NULL, because
+   * When missing, publish uses the StemBird insert time — never NULL, because
    * Google JobPosting requires datePosted.
    */
   date_posted?: string | null

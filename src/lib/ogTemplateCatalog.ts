@@ -1,5 +1,5 @@
 /**
- * Catalog of CareerSasa job OG / social card templates.
+ * Catalog of StemBird job OG / social card templates.
  * Accepted for social shares: 2, 4, 5 (stable pseudo-random pick per job).
  */
 
@@ -45,7 +45,7 @@ export const OG_TEMPLATE_CATALOG: Array<{
     id: '4',
     name: 'Light Hex Frame',
     description:
-      'Light editorial card with CareerSasa blue hexagonal portrait frame. In share rotation.',
+      'Light editorial card with StemBird blue hexagonal portrait frame. In share rotation.',
     queryValue: '4',
     accent: 'bg-indigo-100 text-indigo-800',
   },

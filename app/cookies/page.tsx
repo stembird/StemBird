@@ -4,8 +4,8 @@ import MobileNav from "@/components/MobileNav";
 import { Cookie } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy - How We Use Cookies | CareerSasa",
-  description: "Learn about how CareerSasa uses cookies and similar technologies to improve your experience on our job portal platform.",
+  title: "Cookie Policy - How We Use Cookies | StemBird",
+  description: "Learn about how StemBird uses cookies and similar technologies to improve your experience on our job portal platform.",
 };
 
 export default function CookiesPage() {
@@ -37,7 +37,7 @@ export default function CookiesPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">2. How We Use Cookies</h2>
               <p className="text-muted-foreground">
-                CareerSasa uses cookies to improve your experience on our platform. We use cookies for various purposes, including:
+                StemBird uses cookies to improve your experience on our platform. We use cookies for various purposes, including:
               </p>
               <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
                 <li>Keeping you signed in to your account</li>

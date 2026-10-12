@@ -186,7 +186,7 @@ async function loadCandidateJobs(
 }
 
 /**
- * Buffer publishes queued posts at the slot time, but Careersasa leaves the
+ * Buffer publishes queued posts at the slot time, but StemBird leaves the
  * row as status=scheduled. Flip past-due rows to published so the admin
  * Scheduled tab and the 10-slot cap match what Buffer actually still holds.
  */

@@ -4,8 +4,8 @@ import MobileNav from "@/components/MobileNav";
 import { Shield } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - How We Protect Your Data | CareerSasa",
-  description: "Learn how CareerSasa collects, uses, and protects your personal information. We are committed to your privacy and data security.",
+  title: "Privacy Policy - How We Protect Your Data | StemBird",
+  description: "Learn how StemBird collects, uses, and protects your personal information. We are committed to your privacy and data security.",
 };
 
 export default function PrivacyPage() {
@@ -32,7 +32,7 @@ export default function PrivacyPage() {
             <section className="space-y-3">
               <h2 className="text-2xl font-bold text-primary">1. Introduction</h2>
               <p className="text-muted-foreground">
-                At CareerSasa, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our job portal platform.
+                At StemBird, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our job portal platform.
               </p>
             </section>
 

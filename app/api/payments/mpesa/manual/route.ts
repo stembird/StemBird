@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     const description =
       (typeof body.description === 'string' && body.description.trim()) ||
       quoted.product?.name ||
-      'CareerSasa payment';
+      'StemBird payment';
 
     const transactionReference = generateTransactionReference();
     const { data: payment, error } = await auth.adminClient

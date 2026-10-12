@@ -28,7 +28,7 @@ export default function LinkedInServicesPage() {
       getContentValue(
         content,
         "hero_description_2",
-        "At CareerSasa, we turn LinkedIn into a recruiter magnet — not just a digital CV — so you get found, verified, and contacted.",
+        "At StemBird, we turn LinkedIn into a recruiter magnet — not just a digital CV — so you get found, verified, and contacted.",
       ),
       getContentValue(
         content,
@@ -48,7 +48,7 @@ export default function LinkedInServicesPage() {
     ],
     painClosing:
       "Many people lose interviews without knowing why. Often, LinkedIn told a different story than their CV. We fix that.",
-    differentiatorsTitle: "Why CareerSasa LinkedIn Services Actually Work",
+    differentiatorsTitle: "Why StemBird LinkedIn Services Actually Work",
     differentiators: [
       "Career-focused, not generic marketing",
       "Industry-specific optimization",

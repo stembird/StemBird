@@ -182,7 +182,7 @@ export default function NewsletterPage() {
                   {loading ? 'Subscribing\u2026' : 'Subscribe & Get My Toolkit'}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
-                  By subscribing you agree to receive marketing emails from CareerSasa.
+                  By subscribing you agree to receive marketing emails from StemBird.
                   You can unsubscribe at any time.
                 </p>
               </form>

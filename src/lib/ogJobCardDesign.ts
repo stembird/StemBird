@@ -1,17 +1,17 @@
 /**
- * Design tokens + helpers for CareerSasa social / OG job cards.
+ * Design tokens + helpers for StemBird social / OG job cards.
  * Tuned for @vercel/og (Satori): flexbox + inline styles only.
  */
 
 import { OG_FETCH_TIMEOUT_MS, fetchWithTimeout } from '@/lib/ogFetch';
 
 export const OG_COLORS = {
-  /** CareerSasa primary — LinkedIn / corporate blue family */
+  /** StemBird primary — LinkedIn / corporate blue family */
   primaryBlue: '#1565C0',
   linkedinBlue: '#0077B5',
   primaryBlueDeep: '#0D47A1',
   primaryBlueMid: '#1976D2',
-  /** CareerSasa secondary */
+  /** StemBird secondary */
   accentOrange: '#FF7A00',
   accentOrangeDeep: '#E86A00',
   white: '#FFFFFF',

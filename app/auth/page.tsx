@@ -140,7 +140,7 @@ export default function AuthPage() {
             <Briefcase className="h-8 w-8 text-primary-foreground" />
           </div>
           <span className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            CareerSasa
+            StemBird
           </span>
         </div>
 

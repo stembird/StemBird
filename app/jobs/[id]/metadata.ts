@@ -89,7 +89,7 @@ export async function generateJobMetadata(id: string): Promise<Metadata> {
     
     if (!job) {
       return {
-        title: 'Job Not Found - CareerSasa',
+        title: 'Job Not Found - StemBird',
         description: 'The job you are looking for could not be found.',
       };
     }
@@ -103,18 +103,18 @@ export async function generateJobMetadata(id: string): Promise<Metadata> {
       job.location,
     );
 
-    // SEO-friendly title: "[Post] at [Company] in [City], [County], Kenya | CareerSasa"
+    // SEO-friendly title: "[Post] at [Company] in [City], [County], Kenya | StemBird"
     const isScholarship = isScholarshipRow(job);
     const kindLabel = isScholarship ? 'Scholarship' : 'Job';
     const pathPrefix = isScholarship ? 'scholarships' : 'jobs';
 
     const title = isRemote
-      ? `${jobTitle}${companyName ? ` at ${companyName}` : ''} ${kindLabel} — Remote (Kenya) | CareerSasa`
-      : `${jobTitle}${companyName ? ` at ${companyName}` : ''} ${kindLabel} in ${locationPart} | CareerSasa`;
+      ? `${jobTitle}${companyName ? ` at ${companyName}` : ''} ${kindLabel} — Remote (Kenya) | StemBird`
+      : `${jobTitle}${companyName ? ` at ${companyName}` : ''} ${kindLabel} in ${locationPart} | StemBird`;
 
     const description = isRemote
-      ? `${jobTitle}${isScholarship ? ' scholarship' : ' job'}${companyName ? ` at ${companyName}` : ''} — Remote (Kenya). Apply now on CareerSasa.`
-      : `${jobTitle}${isScholarship ? ' scholarship' : ' job'}${companyName ? ` at ${companyName}` : ''} in ${locationPart}. Apply now on CareerSasa.`;
+      ? `${jobTitle}${isScholarship ? ' scholarship' : ' job'}${companyName ? ` at ${companyName}` : ''} — Remote (Kenya). Apply now on StemBird.`
+      : `${jobTitle}${isScholarship ? ' scholarship' : ' job'}${companyName ? ` at ${companyName}` : ''} in ${locationPart}. Apply now on StemBird.`;
 
     const siteUrl = 'https://www.careersasa.co.ke';
     // Same .png URL Buffer warms before Facebook scrapes the link card.
@@ -129,7 +129,7 @@ export async function generateJobMetadata(id: string): Promise<Metadata> {
         title,
         description,
         url,
-        siteName: 'CareerSasa',
+        siteName: 'StemBird',
         images: [
           {
             url: thumbnailUrl,

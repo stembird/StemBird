@@ -137,7 +137,7 @@ export function buildSuggestMessages(request: SuggestRequest): { systemPrompt: s
   const jd = request.jdText ? stripJdPlaintext(request.jdText).slice(0, 4000) : '';
 
   const systemPrompt = [
-    'You rewrite CareerSasa CV and cover-letter fields for Kenyan job applications.',
+    'You rewrite StemBird CV and cover-letter fields for Kenyan job applications.',
     'Use ONLY facts present in the provided CV JSON, current field text, and optional job description.',
     'Never invent employers, dates, degrees, tools, metrics, awards, or responsibilities.',
     'If the job description has keywords, emphasize ones already supported by the CV. Do not add JD-only claims.',

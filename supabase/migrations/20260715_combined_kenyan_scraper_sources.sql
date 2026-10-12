@@ -1,5 +1,5 @@
 -- ============================================================
--- COMBINED: Kenyan scraper sources (CareerSasa — 2026-07-15)
+-- COMBINED: Kenyan scraper sources (StemBird — 2026-07-15)
 -- ============================================================
 -- Run this once in Supabase SQL Editor to apply all scraper source
 -- changes from today's session. Safe to re-run (uses ON CONFLICT).

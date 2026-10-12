@@ -1005,7 +1005,7 @@ export function parseMyJobMagJobHtml(
     boardHosts: BOARD_HOSTS,
   })
 
-  // Relative /apply-now/ hrefs 404 on CareerSasa. Use the exact employer URL
+  // Relative /apply-now/ hrefs 404 on StemBird. Use the exact employer URL
   // from following MyJobMag's apply-now redirect when we have it (options.linkoutUrl
   // from resolveMyJobMagApplyNowRedirect). Otherwise absolutize to
   // myjobmag.co.ke/apply-now/{id}. Never put host-from-text or apply_link guesses

@@ -4,6 +4,7 @@ VALUES ('public', 'public', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Create branding folder policy
+DROP POLICY IF EXISTS "Allow public read access to branding files" ON storage.objects;
 CREATE POLICY "Allow public read access to branding files"
   ON storage.objects
   FOR SELECT
@@ -11,6 +12,7 @@ CREATE POLICY "Allow public read access to branding files"
   USING (bucket_id = 'public' AND (storage.foldername(name))[1] = 'branding');
 
 -- Allow authenticated admins to upload branding files
+DROP POLICY IF EXISTS "Allow admin upload to branding folder" ON storage.objects;
 CREATE POLICY "Allow admin upload to branding folder"
   ON storage.objects
   FOR INSERT
@@ -26,6 +28,7 @@ CREATE POLICY "Allow admin upload to branding folder"
   );
 
 -- Allow authenticated admins to update branding files
+DROP POLICY IF EXISTS "Allow admin update to branding folder" ON storage.objects;
 CREATE POLICY "Allow admin update to branding folder"
   ON storage.objects
   FOR UPDATE
@@ -41,6 +44,7 @@ CREATE POLICY "Allow admin update to branding folder"
   );
 
 -- Allow authenticated admins to delete branding files
+DROP POLICY IF EXISTS "Allow admin delete from branding folder" ON storage.objects;
 CREATE POLICY "Allow admin delete from branding folder"
   ON storage.objects
   FOR DELETE

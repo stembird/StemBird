@@ -1,5 +1,5 @@
 # ============================================================
-# CareerSasa background worker image
+# StemBird background worker image
 # Used by Railway to run the standalone scrape worker.
 #
 # Vercel builds the Next.js app with its own pipeline and

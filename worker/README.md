@@ -1,4 +1,4 @@
-# CareerSasa Background Worker
+# StemBird Background Worker
 
 Runs the heavy background work (scraping, processing, AI enrichment, and social posting via Buffer) outside of Vercel serverless functions.
 
@@ -94,7 +94,7 @@ A **CX22** (2 vCPU / 4 GB RAM) at ~€4.15/month handles the workload easily.
 6. **Run as a service** — `/etc/systemd/system/careersasa-worker.service`:
    ```ini
    [Unit]
-   Description=CareerSasa Background Worker
+   Description=StemBird Background Worker
    After=network.target
 
    [Service]

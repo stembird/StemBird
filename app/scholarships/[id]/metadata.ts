@@ -88,7 +88,7 @@ export async function generateScholarshipMetadata(id: string): Promise<Metadata>
 
   if (!job || !isScholarshipRow(job)) {
     return {
-      title: "Scholarship Not Found - CareerSasa",
+      title: "Scholarship Not Found - StemBird",
       description: "The scholarship you are looking for could not be found.",
     };
   }
@@ -103,12 +103,12 @@ export async function generateScholarshipMetadata(id: string): Promise<Metadata>
   );
 
   const title = isRemote
-    ? `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship — Remote (Kenya) | CareerSasa`
-    : `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship in ${locationPart} | CareerSasa`;
+    ? `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship — Remote (Kenya) | StemBird`
+    : `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship in ${locationPart} | StemBird`;
 
   const description = `${titleText} scholarship${companyName ? ` at ${companyName}` : ""}${
     isRemote ? " — Remote (Kenya)" : ` in ${locationPart}`
-  }. Eligibility, award details, and how to apply on CareerSasa.`;
+  }. Eligibility, award details, and how to apply on StemBird.`;
 
   const siteUrl = "https://www.careersasa.co.ke";
   const thumbnailUrl = `${siteUrl}${buildShareOgImagePath(id)}`;
@@ -123,7 +123,7 @@ export async function generateScholarshipMetadata(id: string): Promise<Metadata>
       title,
       description,
       url,
-      siteName: "CareerSasa",
+      siteName: "StemBird",
       images: [
         {
           url: thumbnailUrl,

@@ -6,7 +6,7 @@ import { FileText, CheckCircle2, Briefcase, ArrowRight } from "lucide-react";
 import { PrintButton } from "@/components/PrintButton";
 
 export const metadata: Metadata = {
-  title: "Free Job Seeker's Toolkit - CareerSasa",
+  title: "Free Job Seeker's Toolkit - StemBird",
   description: "Download your free Kenyan Job Seeker's Toolkit: CV template, cover letter template, interview checklist, and salary negotiation script.",
   robots: { index: false, follow: false },
 };

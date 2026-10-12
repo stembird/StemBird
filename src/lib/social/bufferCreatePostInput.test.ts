@@ -81,7 +81,7 @@ assertThrows(
     service: 'linkedin',
     mediaUrl: og,
     linkTitle: 'Nurse at Acme — Nairobi',
-    linkDescription: 'Apply on CareerSasa',
+    linkDescription: 'Apply on StemBird',
   })
   const assets = input.assets as { image: { url: string; metadata?: { altText?: string } } }[]
   assert(assets.length === 1, 'linkedin attaches og as photo')

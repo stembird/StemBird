@@ -6,7 +6,7 @@ import { resolveCountyName } from "@/lib/counties";
 const supabase = createClient(getSupabaseUrl(), getSupabaseAnonKey());
 
 export type CountyJobCount = {
-  /** Canonical Careersasa county name (see src/lib/counties.ts). */
+  /** Canonical StemBird county name (see src/lib/counties.ts). */
   name: string;
   /** Number of currently active/live jobs attributed to the county. */
   count: number;

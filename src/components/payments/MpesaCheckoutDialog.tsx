@@ -384,7 +384,7 @@ export function MpesaCheckoutDialog({
                 <div className="rounded-lg border border-dashed border-border p-3 text-sm space-y-1">
                   <p className="font-medium">Send Money</p>
                   <p>
-                    Name: <span className="font-semibold">CareerSasa</span>
+                    Name: <span className="font-semibold">StemBird</span>
                   </p>
                   <p>
                     Number:{" "}

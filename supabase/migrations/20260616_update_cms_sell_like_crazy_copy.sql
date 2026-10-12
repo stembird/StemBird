@@ -7,7 +7,7 @@
 UPDATE page_content SET content_value = 'Stop Searching. Start Getting Hired.'
 WHERE page_slug = 'home' AND section_key = 'hero_title';
 
-UPDATE page_content SET content_value = 'You''ve sent dozens of applications with zero callbacks. CareerSasa changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.'
+UPDATE page_content SET content_value = 'You''ve sent dozens of applications with zero callbacks. StemBird changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.'
 WHERE page_slug = 'home' AND section_key = 'hero_subtitle';
 
 UPDATE page_content SET content_value = 'Featured Opportunities'
@@ -22,7 +22,7 @@ WHERE page_slug = 'home' AND section_key = 'why_choose_title';
 UPDATE page_content SET content_value = 'Your Next Interview Is 60 Seconds Away'
 WHERE page_slug = 'home' AND section_key = 'cta_title';
 
-UPDATE page_content SET content_value = 'CareerSasa matches your skills directly to employer requirements, not just keywords. That''s why our users get 3x more interview callbacks than on other job boards. Join free today.'
+UPDATE page_content SET content_value = 'StemBird matches your skills directly to employer requirements, not just keywords. That''s why our users get 3x more interview callbacks than on other job boards. Join free today.'
 WHERE page_slug = 'home' AND section_key = 'cta_subtitle';
 
 -- ============================================================
@@ -40,7 +40,7 @@ WHERE page_slug = 'services-cv' AND section_key = 'hero_description';
 UPDATE page_content SET content_value = 'The 6-Second Problem That''s Costing You Interviews'
 WHERE page_slug = 'services-cv' AND section_key = 'why_cv_matters_title';
 
-UPDATE page_content SET content_value = 'Why CareerSasa CVs Get 3x More Interview Callbacks'
+UPDATE page_content SET content_value = 'Why StemBird CVs Get 3x More Interview Callbacks'
 WHERE page_slug = 'services-cv' AND section_key = 'what_we_do_title';
 
 -- ============================================================

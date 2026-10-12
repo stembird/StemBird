@@ -1,5 +1,5 @@
 /**
- * Live domain verification — CareerSasa must never store invented / dead-end domains.
+ * Live domain verification — StemBird must never store invented / dead-end domains.
  *
  * Outcomes:
  * - alive: hostname responded like a real site
@@ -11,7 +11,7 @@
  */
 
 const UA =
-  'Mozilla/5.0 (compatible; CareerSasaBot/1.0; +https://careersasa.co.ke)';
+  'Mozilla/5.0 (compatible; StemBirdBot/1.0; +https://careersasa.co.ke)';
 
 /** Status codes that still prove a host exists (bot-blocked / method-not-allowed). */
 const ALIVE_STATUSES = new Set([401, 403, 405, 429, 503]);

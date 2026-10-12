@@ -43,7 +43,7 @@ export default function PublicCvView({
           <div className="flex flex-wrap items-center gap-3">
             <PublicCvDownloads title={title} content={content} templateName={templateName} />
             <Link href="/" className="text-xs text-[#0A66C2] hover:underline">
-              Shared via CareerSasa
+              Shared via StemBird
             </Link>
           </div>
         </div>

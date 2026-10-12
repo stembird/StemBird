@@ -1,7 +1,7 @@
 -- Migration: Seed salary_data with Kenyan market salary data
 -- Description: The salary_data table only had 6 US rows. This adds realistic
 -- Kenyan salary data across common job families so the Salary Insights tool
--- returns useful results for CareerSasa users.
+-- returns useful results for StemBird users.
 
 -- ============================================================================
 -- KENYAN SALARY DATA (monthly, in KES)

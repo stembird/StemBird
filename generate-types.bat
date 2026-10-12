@@ -4,7 +4,7 @@ echo.
 echo This will connect to your production database.
 echo You may be prompted for your database password.
 echo.
-npx supabase gen types typescript --project-id qxuvqrfqkdpfjfwkqatf > src/integrations/supabase/types.ts
+npx supabase gen types typescript --project-id qhfdjccudtqnlkbtsjgg > src/integrations/supabase/types.ts
 echo.
 if %ERRORLEVEL% EQU 0 (
     echo Success! Types generated in src/integrations/supabase/types.ts
@@ -17,6 +17,6 @@ if %ERRORLEVEL% EQU 0 (
     echo Failed to generate types. Error code: %ERRORLEVEL%
     echo.
     echo Try running manually:
-    echo   npx supabase gen types typescript --project-id qxuvqrfqkdpfjfwkqatf
+    echo   npx supabase gen types typescript --project-id qhfdjccudtqnlkbtsjgg
 )
 pause

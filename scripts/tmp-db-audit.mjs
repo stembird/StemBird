@@ -4,8 +4,8 @@
  * analyze jobs data that feeds the JobPosting JSON-LD.
  * Anon key is a public credential shipped to browsers.
  */
-const SUPABASE_URL = 'https://qxuvqrfqkdpfjfwkqatf.supabase.co'
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4dXZxcmZxa2RwZmpmd2txYXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk0MjcxNTIsImV4cCI6MjA3NTAwMzE1Mn0.mAiL1p6YqlSaSFOIDW_G-3e_Mqck0cFqLl74_jyNpk8'
+const SUPABASE_URL = 'https://qhfdjccudtqnlkbtsjgg.supabase.co'
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFoZmRqY2N1ZHRxbmxrYnRzamdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NzYwOTcsImV4cCI6MjEwNzM1MjA5N30.JFdPkbqs4dPOahVmBSS8jGcAlHABrGJVeN4ezvquvLs'
 
 if (!ANON_KEY) {
   console.error('ANON_KEY missing')

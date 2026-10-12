@@ -33,37 +33,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (slug === ALL_INDUSTRIES_SLUG) {
     const url = `${SITE_URL.replace(/\/$/, "")}/companies/industry/all`;
     return {
-      title: "All Companies | CareerSasa",
+      title: "All Companies | StemBird",
       description:
-        "Browse all employers hiring on CareerSasa across every industry in Kenya.",
+        "Browse all employers hiring on StemBird across every industry in Kenya.",
       alternates: { canonical: url },
       openGraph: {
-        title: "All Companies | CareerSasa",
+        title: "All Companies | StemBird",
         description:
-          "Browse all employers hiring on CareerSasa across every industry in Kenya.",
+          "Browse all employers hiring on StemBird across every industry in Kenya.",
         url,
         type: "website",
-        siteName: "CareerSasa",
+        siteName: "StemBird",
       },
     };
   }
 
   const industry = resolveIndustryFromSlug(slug, industries);
   if (!industry) {
-    return { title: "Industry Not Found | CareerSasa" };
+    return { title: "Industry Not Found | StemBird" };
   }
 
   const url = `${SITE_URL.replace(/\/$/, "")}/companies/industry/${slug}`;
   return {
-    title: `${industry} Companies | CareerSasa`,
-    description: `Explore ${industry} employers hiring on CareerSasa. View company profiles and open jobs in Kenya.`,
+    title: `${industry} Companies | StemBird`,
+    description: `Explore ${industry} employers hiring on StemBird. View company profiles and open jobs in Kenya.`,
     alternates: { canonical: url },
     openGraph: {
-      title: `${industry} Companies | CareerSasa`,
-      description: `Explore ${industry} employers hiring on CareerSasa. View company profiles and open jobs in Kenya.`,
+      title: `${industry} Companies | StemBird`,
+      description: `Explore ${industry} employers hiring on StemBird. View company profiles and open jobs in Kenya.`,
       url,
       type: "website",
-      siteName: "CareerSasa",
+      siteName: "StemBird",
     },
   };
 }
@@ -85,8 +85,8 @@ export default async function CompaniesByIndustryPage({ params }: PageProps) {
 
   const heading = isAll ? "All industries" : industryName!;
   const subcopy = isAll
-    ? "Every employer listed on CareerSasa, across all sectors."
-    : `Employers in ${industryName} hiring on CareerSasa.`;
+    ? "Every employer listed on StemBird, across all sectors."
+    : `Employers in ${industryName} hiring on StemBird.`;
   const imageUrl = isAll
     ? ALL_INDUSTRIES_IMAGE
     : getIndustryCardImage(industryName);

@@ -4,6 +4,7 @@ VALUES ('candidate-documents', 'candidate-documents', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Set up storage policies for candidate documents
+DROP POLICY IF EXISTS "Users can upload their own documents" ON storage.objects;
 CREATE POLICY "Users can upload their own documents"
 ON storage.objects FOR INSERT
 TO authenticated
@@ -12,6 +13,7 @@ WITH CHECK (
   (storage.foldername(name))[1] = auth.uid()::text
 );
 
+DROP POLICY IF EXISTS "Users can view their own documents" ON storage.objects;
 CREATE POLICY "Users can view their own documents"
 ON storage.objects FOR SELECT
 TO authenticated
@@ -20,6 +22,7 @@ USING (
   (storage.foldername(name))[1] = auth.uid()::text
 );
 
+DROP POLICY IF EXISTS "Users can update their own documents" ON storage.objects;
 CREATE POLICY "Users can update their own documents"
 ON storage.objects FOR UPDATE
 TO authenticated
@@ -28,6 +31,7 @@ USING (
   (storage.foldername(name))[1] = auth.uid()::text
 );
 
+DROP POLICY IF EXISTS "Users can delete their own documents" ON storage.objects;
 CREATE POLICY "Users can delete their own documents"
 ON storage.objects FOR DELETE
 TO authenticated
@@ -37,6 +41,7 @@ USING (
 );
 
 -- Allow public read access (for when employers view applications)
+DROP POLICY IF EXISTS "Public can view documents" ON storage.objects;
 CREATE POLICY "Public can view documents"
 ON storage.objects FOR SELECT
 TO public

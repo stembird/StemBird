@@ -5,7 +5,7 @@ import { getSupabaseAnonKey, getSupabaseUrl } from "@/lib/supabaseEnv";
 const supabase = createClient(getSupabaseUrl(), getSupabaseAnonKey());
 
 export type FunctionJobCount = {
-  /** Canonical Careersasa job function name (see src/lib/jobParseNormalization.ts). */
+  /** Canonical StemBird job function name (see src/lib/jobParseNormalization.ts). */
   name: string;
   /** Number of currently active/live jobs attributed to the function. */
   count: number;

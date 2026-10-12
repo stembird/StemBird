@@ -148,7 +148,7 @@ export async function createPendingPaymentAndStkPush(
     throw new Error('Amount must be at least 1 KES');
   }
 
-  const description = (input.description || 'CareerSasa payment').trim().slice(0, 100);
+  const description = (input.description || 'StemBird payment').trim().slice(0, 100);
   const transactionReference = generateTransactionReference();
 
   const { data: payment, error: insertError } = await adminClient

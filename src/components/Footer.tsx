@@ -91,7 +91,7 @@ export function Footer() {
               <ul className="space-y-2.5">
                 <li>
                   <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors" prefetch={true}>
-                    About CareerSasa
+                    About StemBird
                   </Link>
                 </li>
                 <li>
@@ -197,7 +197,7 @@ export function Footer() {
               <ul className="space-y-2.5">
                 <li>
                   <a
-                    href="https://www.facebook.com/CareerSasa"
+                    href="https://www.facebook.com/StemBird"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -273,7 +273,7 @@ export function Footer() {
       <div className="w-full py-6 bg-muted/30 border-t border-border/40">
         <div className="container mx-auto px-4">
           <p className="text-center text-sm text-muted-foreground">
-            © 2025 CareerSasa — Enrich Your Career Now!
+            © 2025 StemBird — Enrich Your Career Now!
           </p>
         </div>
       </div>

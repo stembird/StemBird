@@ -131,14 +131,14 @@ export function extractCareerTipsFromModelText(text: string): string | null {
   return html || null
 }
 
-const TIPS_SYSTEM_PROMPT = `You write job-specific career advice for Kenyan job seekers on CareerSasa.
+const TIPS_SYSTEM_PROMPT = `You write job-specific career advice for Kenyan job seekers on StemBird.
 Return ONLY valid JSON: {"career_tips":"<h3>...</h3><p>intro</p><p><strong>1. ...</strong>...</p>"}.
 Do not include a How to Apply block — that already exists. Produce only the tips HTML.`
 
 function buildTipsUserPrompt(job: CareerTipsJobContext): string {
   const title = job.title?.trim() || 'This role'
   const company = job.company?.trim() || 'the hiring company'
-  return `Write career tips for this CareerSasa job posting.
+  return `Write career tips for this StemBird job posting.
 
 Title: ${title}
 Company: ${company}

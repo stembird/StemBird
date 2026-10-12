@@ -19,6 +19,6 @@ CREATE INDEX IF NOT EXISTS idx_candidate_cvs_target_job
 COMMENT ON COLUMN candidate_cvs.parent_cv_id IS
   'Source CV when this row is a tailored copy for a specific job.';
 COMMENT ON COLUMN candidate_cvs.target_job_id IS
-  'CareerSasa job this CV is targeted at, when attached from a listing.';
+  'StemBird job this CV is targeted at, when attached from a listing.';
 COMMENT ON COLUMN candidate_cvs.target_jd_text IS
   'Plain-text job description used for keyword comparison (from the listing or a paste).';

@@ -1,0 +1,58 @@
+name: Social Auto-Queue
+
+on:
+  # Production cadence is Vercel Cron (`/api/cron/social-auto-queue`).
+  # Keep workflow_dispatch for a manual dry-run or one-off refill.
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview selected jobs without sending to Buffer'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: social-auto-queue
+  cancel-in-progress: false
+
+jobs:
+  social:
+    name: Queue social posts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SCRAPER_USER_ID: ${{ secrets.SCRAPER_USER_ID }}
+      BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      DEEPSEEK_API_KEY_2: ${{ secrets.DEEPSEEK_API_KEY_2 }}
+      DEEPSEEK_MODEL: ${{ secrets.DEEPSEEK_MODEL }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+      GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Queue up to 3 posts per Buffer channel
+        env:
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run || '' }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            npm run worker:social -- --dry-run
+          else
+            npm run worker:social
+          fi

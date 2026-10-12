@@ -1,0 +1,547 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide scrollbar for horizontal scroll areas */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 20% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 210 89% 40%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 210 89% 50%;
+
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-glow: 25 95% 63%;
+
+    --muted: 220 13% 95%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 199 89% 58%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 210 89% 40%;
+
+    --radius: 0.75rem;
+
+    /* Modern SaaS Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(210 89% 40%), hsl(199 89% 48%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210 89% 40%), hsl(199 89% 55%));
+    --gradient-hero: linear-gradient(135deg, hsl(210 89% 40%) 0%, hsl(199 89% 48%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(220 20% 98%), hsl(220 13% 95%));
+    --gradient-mesh: radial-gradient(at 40% 20%, hsl(210 89% 40% / 0.3) 0px, transparent 50%),
+                      radial-gradient(at 80% 0%, hsl(199 89% 48% / 0.25) 0px, transparent 50%),
+                      radial-gradient(at 0% 50%, hsl(199 89% 48% / 0.2) 0px, transparent 50%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(220 13% 91% / 0.5);
+    --shadow-md: 0 4px 6px -1px hsl(220 13% 91% / 0.5), 0 2px 4px -2px hsl(220 13% 91% / 0.5);
+    --shadow-lg: 0 10px 15px -3px hsl(220 13% 91% / 0.5), 0 4px 6px -4px hsl(220 13% 91% / 0.5);
+    --shadow-xl: 0 20px 25px -5px hsl(220 13% 91% / 0.5), 0 8px 10px -6px hsl(220 13% 91% / 0.5);
+    --shadow-glow: 0 0 20px hsl(210 89% 40% / 0.3);
+    --shadow-glow-accent: 0 0 20px hsl(199 89% 48% / 0.3);
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 89% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 210 89% 60%;
+
+    --secondary: 25 95% 53%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-glow: 25 95% 63%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 199 89% 58%;
+
+    --success: 142 76% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 210 89% 50%;
+    
+    /* Dark Mode Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(210 89% 50%), hsl(199 89% 55%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210 89% 50%), hsl(199 89% 65%));
+    --gradient-hero: linear-gradient(135deg, hsl(210 89% 50%) 0%, hsl(199 89% 55%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(222 47% 6%), hsl(217 33% 17%));
+    --gradient-mesh: radial-gradient(at 40% 20%, hsl(210 89% 50% / 0.25) 0px, transparent 50%),
+                      radial-gradient(at 80% 0%, hsl(199 89% 55% / 0.2) 0px, transparent 50%),
+                      radial-gradient(at 0% 50%, hsl(199 89% 55% / 0.15) 0px, transparent 50%);
+
+    /* Dark Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.5);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.5), 0 2px 4px -2px hsl(0 0% 0% / 0.5);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -4px hsl(0 0% 0% / 0.5);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.5), 0 8px 10px -6px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 25px hsl(210 89% 50% / 0.4);
+    --shadow-glow-accent: 0 0 25px hsl(199 89% 55% / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  /* Prevent any element from causing horizontal overflow */
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Rich text content styling */
+  .richtext-content,
+  .prose {
+    @apply leading-relaxed;
+  }
+
+  .richtext-content h1,
+  .richtext-content h2,
+  .richtext-content h3,
+  .richtext-content h4,
+  .richtext-content h5,
+  .richtext-content h6,
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    @apply font-bold mt-4 mb-2 text-foreground;
+  }
+
+  .richtext-content h1,
+  .prose h1 {
+    @apply text-3xl;
+  }
+
+  .richtext-content h2,
+  .prose h2 {
+    @apply text-2xl;
+  }
+
+  .richtext-content h3,
+  .prose h3 {
+    @apply text-xl;
+  }
+
+  .richtext-content h4,
+  .prose h4 {
+    @apply text-lg;
+  }
+
+  .richtext-content p,
+  .prose p {
+    @apply mb-2 leading-relaxed;
+  }
+
+  /* Remove extra spacing from empty paragraphs */
+  .richtext-content p:empty,
+  .prose p:empty {
+    @apply mb-0 h-0;
+  }
+
+  /* Reduce spacing for consecutive paragraphs */
+  .richtext-content p + p,
+  .prose p + p {
+    @apply mt-0;
+  }
+
+  .richtext-content strong,
+  .richtext-content b,
+  .prose strong,
+  .prose b {
+    @apply font-bold;
+  }
+
+  .richtext-content em,
+  .richtext-content i,
+  .prose em,
+  .prose i {
+    @apply italic;
+  }
+
+  .richtext-content ul,
+  .richtext-content ol,
+  .prose ul,
+  .prose ol {
+    @apply list-disc list-inside mb-2 ml-4;
+  }
+
+  .richtext-content ol,
+  .prose ol {
+    @apply list-decimal;
+  }
+
+  .richtext-content ul ul,
+  .richtext-content ol ol,
+  .richtext-content ul ol,
+  .richtext-content ol ul,
+  .prose ul ul,
+  .prose ol ol,
+  .prose ul ol,
+  .prose ol ul {
+    @apply ml-6 mb-0;
+  }
+
+  .richtext-content li,
+  .prose li {
+    @apply mb-1 leading-relaxed;
+  }
+
+  .richtext-content li:last-child,
+  .prose li:last-child {
+    @apply mb-0;
+  }
+
+  .richtext-content a,
+  .prose a {
+    @apply text-primary underline hover:text-primary/80;
+  }
+
+  .richtext-content blockquote,
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 italic my-3;
+  }
+
+  .richtext-content pre,
+  .prose pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto my-3;
+  }
+
+  .richtext-content code,
+  .prose code {
+    @apply bg-muted px-1 py-0.5 rounded font-mono text-sm;
+  }
+
+  .richtext-content img,
+  .prose img {
+    @apply max-w-full h-auto my-6 rounded-xl shadow-md;
+  }
+
+  .richtext-content hr,
+  .prose hr {
+    @apply my-6 border-t border-border;
+  }
+
+  .richtext-content table,
+  .prose table {
+    @apply w-full my-4 border-collapse;
+  }
+
+  .richtext-content th,
+  .prose th {
+    @apply bg-muted px-4 py-2 text-left font-semibold border border-border;
+  }
+
+  .richtext-content td,
+  .prose td {
+    @apply px-4 py-2 border border-border;
+  }
+
+  .richtext-content tr:nth-child(even),
+  .prose tr:nth-child(even) {
+    @apply bg-muted/30;
+  }
+
+  /* Override Tailwind prose max-width */
+  .prose {
+    max-width: none !important;
+  }
+
+  /* Handle br tags - reduce their spacing */
+  .richtext-content br,
+  .prose br {
+    display: block;
+    content: "";
+    margin-top: 0.25rem;
+  }
+
+  /* Remove excessive spacing between elements */
+  .richtext-content > *:first-child,
+  .prose > *:first-child {
+    @apply mt-0;
+  }
+
+  .richtext-content > *:last-child,
+  .prose > *:last-child {
+    @apply mb-0;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-accent {
+    box-shadow: var(--shadow-glow-accent);
+  }
+
+  /* Mesh background */
+  .mesh-gradient {
+    background: var(--gradient-mesh);
+  }
+  
+  /* Mobile responsive utilities */
+  .mobile-safe {
+    @apply max-w-full overflow-x-hidden;
+  }
+}
+
+/* ============================================================
+   Interactive Kenya jobs map ("Live Jobs Across Kenya")
+   County shapes use the neutral brand tint; green (hsl 142) is
+   reserved exclusively for live-job markers/indicators.
+   ============================================================ */
+@layer components {
+  .kenya-county-shape {
+    fill: hsl(220 20% 97%);
+    stroke: hsl(220 13% 88%);
+    stroke-width: 1.5;
+    transition: fill 150ms ease, stroke 150ms ease;
+    cursor: pointer;
+  }
+  .kenya-county-shape:hover {
+    fill: hsl(210 70% 88%);
+  }
+  .kenya-county-shape:focus-visible {
+    outline: 2px solid hsl(210 89% 40%);
+    outline-offset: -2px;
+  }
+  .kenya-county-active {
+    fill: hsl(210 55% 93%);
+  }
+  .kenya-county-hover {
+    fill: hsl(210 75% 86%);
+    stroke: hsl(210 89% 40%);
+    stroke-width: 2.2;
+  }
+  .kenya-county-selected {
+    fill: hsl(210 85% 80%);
+    stroke: hsl(210 89% 40%);
+    stroke-width: 2.2;
+  }
+  .kenya-marker-pill {
+    fill: hsl(0 0% 100%);
+    stroke: hsl(142 76% 36%);
+    stroke-width: 1.5;
+  }
+  .kenya-marker-count {
+    fill: hsl(142 72% 26%);
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .kenya-marker-label {
+    fill: hsl(222 47% 22%);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    paint-order: stroke;
+    stroke: hsl(0 0% 100%);
+    stroke-width: 3px;
+  }
+
+  .kenya-map-popover {
+    position: absolute;
+    z-index: 20;
+  }
+
+  .kenya-marker-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: kenya-pulse 2.8s ease-out infinite;
+  }
+
+  .dark .kenya-county-shape {
+    fill: hsl(222 47% 12%);
+    stroke: hsl(217 33% 26%);
+  }
+  .dark .kenya-county-shape:hover {
+    fill: hsl(210 45% 22%);
+  }
+  .dark .kenya-county-active {
+    fill: hsl(210 40% 18%);
+  }
+  .dark .kenya-county-hover {
+    fill: hsl(210 45% 26%);
+    stroke: hsl(210 89% 50%);
+  }
+  .dark .kenya-county-selected {
+    fill: hsl(210 50% 32%);
+    stroke: hsl(210 89% 50%);
+  }
+  .dark .kenya-county-shape:focus-visible {
+    outline-color: hsl(210 89% 50%);
+  }
+  .dark .kenya-marker-pill {
+    fill: hsl(222 47% 14%);
+    stroke: hsl(142 76% 40%);
+  }
+  .dark .kenya-marker-count {
+    fill: hsl(142 80% 66%);
+  }
+  .dark .kenya-marker-label {
+    fill: hsl(210 40% 92%);
+    stroke: hsl(222 47% 10%);
+  }
+}
+
+@keyframes kenya-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* ============================================================
+   Mobile spacing: halve the container's default 2rem side
+   padding below the md breakpoint. Components that already add
+   their own px-4 then total 24px per side instead of 48px.
+   ============================================================ */
+@media (max-width: 767px) {
+  .container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}

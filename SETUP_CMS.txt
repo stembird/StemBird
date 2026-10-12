@@ -1,0 +1,48 @@
+CMS SETUP - 3 STEPS
+====================
+
+STEP 1: Run Database Migration (2 minutes)
+-------------------------------------------
+1. Go to: https://supabase.com/dashboard/project/qxuvqrfqkdpfjfwkqatf/sql/new
+2. Copy ALL content from: supabase/migrations/20260210_create_page_content.sql
+3. Paste into SQL Editor
+4. Click "Run"
+5. You should see "Success. No rows returned"
+
+STEP 2: Test Setup (30 seconds)
+--------------------------------
+Run: node test-cms.js
+
+You should see:
+✅ CMS is working!
+Found X content items
+
+STEP 3: Access Admin Panel
+---------------------------
+1. Start server: npm run dev
+2. Go to: http://localhost:3000/dashboard/content-editor
+3. Log in with your admin account
+4. Start editing!
+
+USAGE IN YOUR PAGES
+===================
+
+1. Import the hook:
+   import { usePageContent, getContentValue } from "@/hooks/usePageContent";
+
+2. Fetch content:
+   const { data: content } = usePageContent("home");
+
+3. Use content:
+   const title = getContentValue(content, "hero_title", "Default Title");
+   return <h1>{title}</h1>;
+
+4. Edit in admin panel:
+   - Go to /dashboard/content-editor
+   - Click "Edit" on any section
+   - Change text
+   - Click "Save"
+   - Refresh your page to see changes
+
+THAT'S IT!
+==========

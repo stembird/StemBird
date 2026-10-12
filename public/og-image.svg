@@ -1,0 +1,32 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:hsl(210, 89%, 40%);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:hsl(199, 89%, 48%);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)" />
+  
+  <!-- Overlay -->
+  <rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.3)" />
+  
+  <!-- Decorative elements -->
+  <circle cx="960" cy="126" r="80" fill="rgba(255, 255, 255, 0.1)" />
+  <circle cx="240" cy="441" r="60" fill="rgba(255, 255, 255, 0.1)" />
+  
+  <!-- Text content -->
+  <text x="120" y="189" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="bold" fill="white">CareerSasa</text>
+  <text x="120" y="283.5" font-family="system-ui, -apple-system, sans-serif" font-size="42" fill="rgba(255, 255, 255, 0.9)">Find Your Dream Job in Kenya</text>
+  <text x="120" y="346.5" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="rgba(255, 255, 255, 0.8)">Discover exciting career opportunities</text>
+  <text x="120" y="567" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="bold" fill="rgba(255, 255, 255, 0.7)">CareerSasa.co.ke</text>
+  
+  <!-- Apply Now Button -->
+  <rect x="120" y="472.5" width="220" height="60" rx="8" fill="rgba(255, 255, 255, 0.2)" />
+  <text x="230" y="512.5" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">Browse Jobs</text>
+  
+  <!-- Logo -->
+  <circle cx="1060" cy="103" r="50" fill="rgba(255, 255, 255, 0.2)" />
+  <text x="1060" y="120" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="bold" fill="white" text-anchor="middle">C</text>
+</svg>

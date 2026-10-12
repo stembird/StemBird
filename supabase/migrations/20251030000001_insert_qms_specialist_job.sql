@@ -1,0 +1,36 @@
+-- Insert Quality Management Systems Specialist job at Kenya Wine Agencies Limited (KWAL)
+INSERT INTO public.jobs (
+  title,
+  company,
+  location,
+  county_id,
+  description,
+  responsibilities,
+  qualifications,
+  education_level_id,
+  experience_level_ref_id,
+  minimum_experience,
+  job_function_id,
+  industry_id,
+  application_deadline,
+  apply_link,
+  salary_visibility,
+  source
+) VALUES (
+  'Quality Management Systems Specialist',
+  'Kenya Wine Agencies Limited (KWAL)',
+  'Kiambu',
+  (SELECT id FROM public.counties WHERE name = 'Kiambu'),
+  'This position is responsible for execution and management of KWAL''s ISO standards certifications, legal and statutory compliance requirements for alcoholic beverage manufacturing plant, Heineken requirements per Heirules/Heiquest as well as the internal KWAL''s standards and procedures. The role ensures the delivery of the above through deployment, coordination of initiatives and capability development, ultimately ensuring KWAL''s products meet expected quality standards set internally and externally to the satisfaction of the customers in a world-class compliant environment.',
+  'Oversee effective implementation of KWAL''s Quality Management System across operations; Develop and update the QA/QC policies, procedures, protocols and checklists in line with Food Safety and QMS standards; Conduct regular internal and 3rd-party audits to assess compliance with QMS requirements; Lead quality control and assurance of manufacturing processes, managing process non-conformances/outputs; Identify and train teams as Internal Auditors and Lead Auditors for the QMS standard; Run capability development initiatives across the organization to improve awareness on QMS standards and compliance; Collaborate with the QSHE Manager to recommend process improvements; Work with customer service to ensure product complaints are investigated and resolved promptly; Manage Pre-Requisite Programs (PRPs) including pest control, waste management, drainage, hygiene, calibrations, and utilities; Update policies and procedures in line with Food Safety Management Systems; Maintain an up-to-date HACCP register with identified CCPs and verification protocols; Conduct regular internal and 3rd-party audits to assess compliance with FSSC and other food safety requirements; Run capability initiatives to improve awareness on hygiene and food safety mandates; Identify and train teams as Internal/Lead Auditors on FSSC, HACCP, and control protocols; Lead quality control, assurance, and food safety assessments for non-conformances/outputs; Review inspection results, reports, and logs to identify trends and recommend remedial actions; Support development and review of EMS/OHMS/NEMA/EMCA/DOSH/EPR procedures; Maintain up-to-date Risk Assessment (HIRA) and Environmental Aspect Registers; Conduct regular audits for compliance with legal, statutory, and ISO standards; Run awareness initiatives to promote environmental, health, and safety culture; Train teams as Internal/Lead Auditors on EMS/OHMS/NEMA/EMCA/DOSH/EPR standards; Manage QMS processes for main and mini laboratories; Plan calibration and servicing of lab equipment; Monitor compliance to LSS requirements per Heineken standards; Track legal and statutory compliance for manufacturing labs; Prepare analysis reports on abnormalities, recommend corrective actions, and oversee their implementation; Maintain detailed documentation on EMS/OHMS/NEMA/EMCA/DOSH/EPR/QMS/FSSC and other regulatory standards; Conduct regular audits to ensure adherence to standards and regulatory compliance; Ensure compliance with GLP, GMP, and ISO standards; Liaise with regulatory bodies (Public Health, KEBS, NEMA, DOSH, etc.) for certification and legal requirements; Participate in technical root-cause analyses for quality and safety non-conformances; Participate in OHS and environment incident investigations; Manage supplier quality and conduct audits per QMS & FSSC standards; Validate compliance of service providers (Canteen, Sheer Logic & Cyka); Support the TPM way of working; Support implementation of improvement initiatives',
+  'Bachelor of Science in Food Science, Microbiology, Chemistry, Biotechnology, Biochemistry, or related field',
+  (SELECT id FROM public.education_levels WHERE name = 'Bachelor''s Degree'),
+  (SELECT id FROM public.experience_levels WHERE name = 'Senior Level'),
+  5,
+  (SELECT id FROM public.job_functions WHERE name = 'Quality Control & Assurance'),
+  (SELECT id FROM public.industries WHERE name = 'Manufacturing & Warehousing'),
+  '2025-11-11',
+  'https://careers.theheinekencompany.com',
+  'Hide',
+  'Employer'
+);

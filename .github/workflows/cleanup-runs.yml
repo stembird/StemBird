@@ -1,0 +1,78 @@
+name: Cleanup old workflow runs
+
+on:
+  schedule:
+    # Daily at 02:30 UTC — after the scraper schedule's busiest hours, keeps the
+    # Actions tab tidy without touching recent runs.
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Delete runs older than this many days'
+        required: false
+        default: '1'
+        type: number
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: cleanup-workflow-runs
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    name: Delete runs older than ${{ github.event.inputs.days || '1' }} day(s)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Delete old workflow runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAYS: ${{ github.event.inputs.days || '1' }}
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY}"
+          days="${DAYS}"
+          # created_at is UTC ISO-8601 ("2026-08-13T13:43:55Z") so a lexicographic
+          # string compare is a valid date compare. GNU date is on ubuntu-latest.
+          cutoff="$(date -u -d "${days} days ago" +%Y-%m-%dT%H:%M:%SZ)"
+          echo "Deleting completed runs for ${repo} created before ${cutoff}"
+
+          page=1
+          deleted=0
+          failed=0
+          while :; do
+            # Only touch completed runs (never a run still in progress) and stop
+            # once a page contains no runs older than the cutoff (runs are
+            # returned newest-first).
+            old_ids="$(gh api "/repos/${repo}/actions/runs?per_page=100&page=${page}&status=completed" \
+              --jq ".workflow_runs[] | select(.created_at < \"${cutoff}\") | .id" 2>&1)" || {
+              echo "::error::gh api failed to list runs. Is the workflow token allowed actions:write?"
+              echo "${old_ids}"
+              exit 1
+            }
+
+            if [ -z "${old_ids}" ]; then
+              break
+            fi
+
+            while IFS= read -r run_id; do
+              [ -z "${run_id}" ] && continue
+              if gh api -X DELETE "/repos/${repo}/actions/runs/${run_id}" >/dev/null 2>&1; then
+                deleted=$((deleted + 1))
+              else
+                failed=$((failed + 1))
+                echo "::warning::Failed to delete run ${run_id}"
+              fi
+            done <<< "${old_ids}"
+
+            page=$((page + 1))
+            if [ "${page}" -gt 100 ]; then
+              echo "Reached page cap; stopping."
+              break
+            fi
+          done
+
+          echo "Deleted ${deleted} workflow run(s), ${failed} failed."

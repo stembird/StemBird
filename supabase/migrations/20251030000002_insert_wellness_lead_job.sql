@@ -1,0 +1,38 @@
+-- Insert Wellness Lead job at Teleperformance Kenya
+INSERT INTO public.jobs (
+  title,
+  company,
+  location,
+  location_town,
+  county_id,
+  description,
+  responsibilities,
+  qualifications,
+  salary_type,
+  salary_visibility,
+  apply_link,
+  industry_id,
+  job_function_id,
+  education_level_id,
+  experience_level_ref_id,
+  minimum_experience,
+  source
+) VALUES (
+  'Wellness Lead',
+  'Teleperformance Kenya',
+  'Nairobi',
+  'Westlands',
+  (SELECT id FROM public.counties WHERE name = 'Nairobi'),
+  'TP is a trusted partner to global brands, delivering integrated, human-centric experiences through advanced business solutions that optimize business processes and performance. The Wellness Lead role will ensure employee mental health, wellbeing, and resilience programs are implemented effectively and aligned with Teleperformance''s global standards.',
+  '• Implement occupational health management tools with a focus on mental health and resilience. • Lead local research on employee wellbeing and ensure employee engagement initiatives are well organized. • Develop and optimize strategies for health and wellbeing, including KPI measurability and organizational resilience. • Align site initiatives with client wellbeing programs. • Report on mental health and resiliency topics at business meetings. • Mentor and lead resiliency coaches at the Nairobi site. • Support and manage the Feel Good Program. • Create an atmosphere of collaboration between managers and the Wellbeing & Resiliency team.',
+  '3–5 years of experience in HR, Operations, or Employee Assistance Programs with a focus on wellbeing. Master''s degree in HR, Psychology, Occupational Health, or related field. Leadership experience required. Strong command of English. Experience in BPO industry and project management preferred. Strong organizational, coordination, stakeholder management, and interpersonal skills. Empathic, innovative, and able to manage multiple priorities.',
+  'Monthly',
+  'Hide',
+  'https://www.myjobmag.co.ke/jobs/teleperformance-kenya/wellness-lead',
+  (SELECT id FROM public.industries WHERE name = 'Human Resources & Recruitment'),
+  (SELECT id FROM public.job_functions WHERE name = 'Human Resources / HR'),
+  (SELECT id FROM public.education_levels WHERE name = 'Master''s Degree'),
+  (SELECT id FROM public.experience_levels WHERE name = 'Mid Level'),
+  3,
+  'Employer'
+);

@@ -1,0 +1,353 @@
+{
+  "name": "MyJobMag Kenya Job Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://www.myjobmag.co.ke/jobs",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "fetch-listing-page",
+      "name": "Fetch Job Listings Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract job URLs from listing page HTML\nconst html = $input.item.json.data;\nconst jobUrlPattern = /href=\"(\\/job\\/[^\"]+)\"/g;\nconst jobUrls = new Set();\n\nlet match;\nwhile ((match = jobUrlPattern.exec(html)) !== null) {\n  const fullUrl = 'https://www.myjobmag.co.ke' + match[1];\n  jobUrls.add(fullUrl);\n}\n\n// Convert to array of objects for n8n\nconst jobs = Array.from(jobUrls).map(url => ({\n  json: { jobUrl: url }\n}));\n\nconsole.log(`Found ${jobs.length} unique job URLs`);\nreturn jobs;"
+      },
+      "id": "extract-job-urls",
+      "name": "Extract Job URLs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "id": "split-in-batches",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.jobUrl }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "fetch-job-detail",
+      "name": "Fetch Job Detail Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "mode": "htmlExtract",
+        "sourceData": "={{ $json.data }}",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "h1.job-title, .job-header h1, [class*='title']",
+              "returnValue": "text"
+            },
+            {
+              "key": "company",
+              "cssSelector": ".company-name, [class*='company'], .employer-name",
+              "returnValue": "text"
+            },
+            {
+              "key": "location",
+              "cssSelector": ".job-location, [class*='location']",
+              "returnValue": "text"
+            },
+            {
+              "key": "description",
+              "cssSelector": ".job-description, [class*='description'], .job-details",
+              "returnValue": "html"
+            },
+            {
+              "key": "salary",
+              "cssSelector": ".salary, [class*='salary'], .compensation",
+              "returnValue": "text"
+            },
+            {
+              "key": "employmentType",
+              "cssSelector": ".employment-type, [class*='job-type']",
+              "returnValue": "text"
+            },
+            {
+              "key": "deadline",
+              "cssSelector": ".deadline, [class*='deadline'], .closing-date",
+              "returnValue": "text"
+            },
+            {
+              "key": "postedDate",
+              "cssSelector": ".posted-date, [class*='posted'], .date-posted",
+              "returnValue": "text"
+            }
+          ]
+        }
+      },
+      "id": "extract-job-data",
+      "name": "Extract Job Data",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform and clean scraped data to match Supabase schema\nconst item = $input.item.json;\nconst jobUrl = $('Fetch Job Detail Page').item.json.url;\n\n// Helper function to clean text\nfunction cleanText(text) {\n  if (!text) return null;\n  return text.trim().replace(/\\s+/g, ' ');\n}\n\n// Helper function to parse employment type\nfunction parseEmploymentType(type) {\n  if (!type) return 'FULL_TIME';\n  const typeUpper = type.toUpperCase();\n  if (typeUpper.includes('PART')) return 'PART_TIME';\n  if (typeUpper.includes('CONTRACT')) return 'CONTRACTOR';\n  if (typeUpper.includes('INTERN')) return 'INTERN';\n  if (typeUpper.includes('TEMP')) return 'TEMPORARY';\n  if (typeUpper.includes('VOLUNTEER')) return 'VOLUNTEER';\n  return 'FULL_TIME';\n}\n\n// Helper function to parse location\nfunction parseLocation(location) {\n  if (!location) return { county: null, city: null };\n  \n  const kenyanCounties = [\n    'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret',\n    'Kiambu', 'Machakos', 'Kajiado', 'Kilifi', 'Kwale'\n  ];\n  \n  let county = null;\n  let city = null;\n  \n  for (const c of kenyanCounties) {\n    if (location.includes(c)) {\n      county = c;\n      city = location;\n      break;\n    }\n  }\n  \n  return { county, city };\n}\n\n// Helper function to parse salary\nfunction parseSalary(salaryText) {\n  if (!salaryText) return { min: null, max: null, currency: 'KES', period: 'MONTH' };\n  \n  const numbers = salaryText.match(/\\d+[,\\d]*/g);\n  if (!numbers) return { min: null, max: null, currency: 'KES', period: 'MONTH' };\n  \n  const cleanNumbers = numbers.map(n => parseInt(n.replace(/,/g, '')));\n  \n  return {\n    min: cleanNumbers[0] || null,\n    max: cleanNumbers[1] || cleanNumbers[0] || null,\n    currency: salaryText.includes('USD') ? 'USD' : 'KES',\n    period: salaryText.toLowerCase().includes('annual') ? 'YEAR' : 'MONTH'\n  };\n}\n\n// Parse location\nconst locationData = parseLocation(cleanText(item.location));\n\n// Parse salary\nconst salaryData = parseSalary(cleanText(item.salary));\n\n// Parse deadline\nlet validThrough = null;\nif (item.deadline) {\n  try {\n    validThrough = new Date(item.deadline).toISOString();\n  } catch (e) {\n    // If parsing fails, set to 30 days from now\n    const futureDate = new Date();\n    futureDate.setDate(futureDate.getDate() + 30);\n    validThrough = futureDate.toISOString();\n  }\n}\n\n// Build the job object matching Supabase schema\nconst transformedJob = {\n  // Core fields\n  title: cleanText(item.title) || 'Untitled Position',\n  company: cleanText(item.company) || 'Company Name Not Available',\n  location: cleanText(item.location) || 'Kenya',\n  description: item.description || '',\n  \n  // Application fields\n  apply_link: jobUrl,\n  apply_email: null,\n  application_url: jobUrl,\n  direct_apply: false,\n  \n  // Employment details\n  employment_type: parseEmploymentType(item.employmentType),\n  job_location_type: 'ON_SITE',\n  job_location_country: 'Kenya',\n  job_location_county: locationData.county,\n  job_location_city: locationData.city,\n  \n  // Salary\n  salary: item.salary ? cleanText(item.salary) : null,\n  salary_currency: salaryData.currency,\n  salary_min: salaryData.min,\n  salary_max: salaryData.max,\n  salary_period: salaryData.period,\n  salary_visibility: 'Show',\n  \n  // Dates\n  date_posted: new Date().toISOString(),\n  valid_through: validThrough,\n  \n  // Meta fields\n  source: 'Scraper',\n  status: 'active',\n  posted_by: 'admin',\n  identifier: jobUrl,\n  \n  // Organization\n  hiring_organization_name: cleanText(item.company),\n  \n  // Tracking\n  views_count: 0,\n  applications_count: 0,\n  google_indexed: false,\n  is_featured: false\n};\n\nreturn { json: transformedJob };"
+      },
+      "id": "transform-data",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "tableId": "jobs",
+        "options": {
+          "onConflict": "identifier"
+        }
+      },
+      "id": "upsert-to-supabase",
+      "name": "Upsert to Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [1650, 300],
+      "credentials": {
+        "supabaseApi": {
+          "id": "1",
+          "name": "Supabase CareerNinja"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "seconds"
+      },
+      "id": "wait-rate-limit",
+      "name": "Wait (Rate Limiting)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1850, 300]
+    },
+    {
+      "parameters": {},
+      "id": "loop-back",
+      "name": "Loop Back to Batches",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [2050, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-domain.vercel.app/api/revalidate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "path",
+              "value": "/jobs"
+            },
+            {
+              "name": "secret",
+              "value": "={{ $env.REVALIDATE_SECRET }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "trigger-revalidation",
+      "name": "Trigger Next.js Revalidation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Summary of scraping results\nconst allItems = $input.all();\nconst successCount = allItems.filter(item => item.json.id).length;\nconst totalCount = allItems.length;\n\nconst summary = {\n  timestamp: new Date().toISOString(),\n  totalJobsProcessed: totalCount,\n  successfulInserts: successCount,\n  failedInserts: totalCount - successCount,\n  source: 'myjobmag.co.ke'\n};\n\nconsole.log('Scraping Summary:', summary);\nreturn { json: summary };"
+      },
+      "id": "generate-summary",
+      "name": "Generate Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2450, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Job Listings Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Job Listings Page": {
+      "main": [
+        [
+          {
+            "node": "Extract Job URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Job URLs": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Fetch Job Detail Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Job Detail Page": {
+      "main": [
+        [
+          {
+            "node": "Extract Job Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Job Data": {
+      "main": [
+        [
+          {
+            "node": "Transform Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Data": {
+      "main": [
+        [
+          {
+            "node": "Upsert to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert to Supabase": {
+      "main": [
+        [
+          {
+            "node": "Wait (Rate Limiting)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait (Rate Limiting)": {
+      "main": [
+        [
+          {
+            "node": "Loop Back to Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Back to Batches": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        null,
+        [
+          {
+            "node": "Trigger Next.js Revalidation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Next.js Revalidation": {
+      "main": [
+        [
+          {
+            "node": "Generate Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-12-03T00:00:00.000Z",
+  "versionId": "1"
+}

@@ -1,0 +1,15 @@
+﻿const fs = require('fs');
+const lines = [];
+lines.push("import { classicPreviewData } from './classicPreviewData';");
+lines.push("import { modernPreviewData } from './modernPreviewData';");
+lines.push("import { executivePreviewData } from './executivePreviewData';");
+lines.push("import { graduatePreviewData } from './graduatePreviewData';");
+lines.push("import { functionalPreviewData } from './functionalPreviewData';");
+lines.push("import { internshipPreviewData } from './internshipPreviewData';");
+lines.push("import { creativePreviewData } from './creativePreviewData';");
+lines.push("import { digitalProfessionalPreviewData } from './digitalProfessionalPreviewData';");
+lines.push("import { personalBrandPreviewData } from './personalBrandPreviewData';");
+lines.push("import { academicPreviewData } from './academicPreviewData';");
+lines.push("import { technicalEngineeringPreviewData } from './technicalEngineeringPreviewData';");
+lines.push("import { atsPreviewData } from './atsPreviewData';");
+lines.push('');

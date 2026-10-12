@@ -1,0 +1,5 @@
+src/pages
+src/main.tsx
+src/App.tsx
+index.html
+vite.config.ts

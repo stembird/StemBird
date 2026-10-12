@@ -1,0 +1,371 @@
+{
+  "name": "BrighterMonday Kenya Job Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Discover BrighterMonday job URLs from listing pages 1-5\nconst base = 'https://www.brightermonday.co.ke/jobs';\nconst pageUrls = [base, ...Array.from({ length: 4 }, (_, i) => `${base}?page=${i + 2}`)];\nconst headers = {\n  'User-Agent': 'Mozilla/5.0 (compatible; CareerSasaBot/1.0; +https://careersasa.co.ke)',\n  'Accept': 'text/html,application/xhtml+xml',\n};\n\nconst seen = new Set();\nfor (const url of pageUrls) {\n  const response = await this.helpers.httpRequest({\n    method: 'GET',\n    url,\n    headers,\n    timeout: 30000,\n    returnFullResponse: false,\n  });\n  const html = typeof response === 'string' ? response : String(response);\n  const pattern = /\\/listings\\/[a-z0-9-]+/gi;\n  let match;\n  while ((match = pattern.exec(html)) !== null) {\n    seen.add('https://www.brightermonday.co.ke' + match[0]);\n  }\n}\n\nconst jobs = Array.from(seen).map(jobUrl => ({ json: { jobUrl } }));\nconsole.log(`Discovered ${jobs.length} unique BrighterMonday jobs from ${pageUrls.length} pages`);\nreturn jobs;\n"
+      },
+      "id": "discover-jobs",
+      "name": "Discover Jobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "id": "split-in-batches",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.jobUrl }}",
+        "options": {
+          "timeout": 30000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": true
+            }
+          }
+        },
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "Mozilla/5.0 (compatible; CareerSasaBot/1.0; +https://careersasa.co.ke)"
+            },
+            {
+              "name": "Accept",
+              "value": "text/html,application/xhtml+xml"
+            }
+          ]
+        }
+      },
+      "id": "fetch-job-detail",
+      "name": "Fetch Job Detail Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1540,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse schema.org JobPosting JSON-LD from the detail page\nconst jobUrl = $('Split In Batches').item.json.jobUrl;\nconst html = typeof $input.item.json.data === 'string'\n  ? $input.item.json.data\n  : ($input.item.json.body || '');\n\nfunction cleanText(text) {\n  if (!text) return null;\n  return String(text).replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim() || null;\n}\n\nfunction findById(graph, id) {\n  if (!id || !Array.isArray(graph)) return null;\n  return graph.find(n => n && n['@id'] === id) || null;\n}\n\nfunction resolveRef(graph, value) {\n  if (!value) return null;\n  if (typeof value === 'string') return findById(graph, value);\n  if (value['@id'] && Object.keys(value).length === 1) return findById(graph, value['@id']) || value;\n  return value;\n}\n\nconst ldMatch = html.match(/<script[^>]*type=[\"']application\\/ld\\+json[\"'][^>]*>([\\s\\S]*?)<\\/script>/i);\nif (!ldMatch) {\n  return { json: { skip: true, reason: 'No JSON-LD', jobUrl } };\n}\n\nlet payload;\ntry {\n  payload = JSON.parse(ldMatch[1]);\n} catch (e) {\n  return { json: { skip: true, reason: 'Invalid JSON-LD', jobUrl } };\n}\n\nconst graph = Array.isArray(payload['@graph'])\n  ? payload['@graph']\n  : (Array.isArray(payload) ? payload : [payload]);\n\nconst posting = graph.find(n => n && (n['@type'] === 'JobPosting' || (Array.isArray(n['@type']) && n['@type'].includes('JobPosting'))));\nif (!posting) {\n  return { json: { skip: true, reason: 'No JobPosting', jobUrl } };\n}\n\nconst org = resolveRef(graph, posting.hiringOrganization);\nconst place = resolveRef(graph, posting.jobLocation);\nconst address = place ? (resolveRef(graph, place.address) || place.address || {}) : {};\n\nconst salary = posting.baseSalary || {};\nconst salaryValue = salary.value || {};\nconst experience = posting.experienceRequirements || {};\nconst months = typeof experience.monthsOfExperience === 'number'\n  ? experience.monthsOfExperience\n  : null;\n\nconst company = cleanText(org?.name || org?.legalName) || 'Company Name Not Available';\nconst locationParts = [\n  cleanText(address.addressLocality),\n  cleanText(address.addressRegion),\n  cleanText(address.addressCountry)\n].filter(Boolean);\nconst location = [...new Set(locationParts)].join(', ') || 'Kenya';\n\nconst employmentRaw = Array.isArray(posting.employmentType)\n  ? posting.employmentType[0]\n  : posting.employmentType;\n\nreturn {\n  json: {\n    skip: false,\n    jobUrl,\n    title: cleanText(posting.title) || 'Untitled Position',\n    company,\n    location,\n    description: posting.description || '',\n    employmentType: employmentRaw || 'FULL_TIME',\n    industry: cleanText(posting.industry),\n    occupationalCategory: cleanText(posting.occupationalCategory),\n    qualifications: cleanText(posting.qualifications),\n    datePosted: posting.datePosted || null,\n    validThrough: posting.validThrough || null,\n    salaryCurrency: salary.currency || 'KES',\n    salaryMin: salaryValue.minValue ?? salaryValue.value ?? null,\n    salaryMax: salaryValue.maxValue ?? salaryValue.value ?? null,\n    salaryPeriod: salaryValue.unitText || 'MONTH',\n    minimumExperienceYears: months != null ? Math.round(months / 12) : null,\n    directApply: Boolean(posting.directApply),\n    addressLocality: cleanText(address.addressLocality),\n    addressRegion: cleanText(address.addressRegion),\n    addressCountry: cleanText(address.addressCountry) || 'Kenya'\n  }\n};"
+      },
+      "id": "parse-jsonld",
+      "name": "Parse JobPosting JSON-LD",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform JSON-LD fields into the CareerSasa jobs schema\nconst item = $input.item.json;\nif (item.skip) {\n  console.log(`Skipping ${item.jobUrl}: ${item.reason}`);\n  return { json: { skipped: true, jobUrl: item.jobUrl, reason: item.reason } };\n}\n\nfunction parseEmploymentType(type) {\n  if (!type) return 'FULL_TIME';\n  const t = String(type).toUpperCase().replace(/[\\s-]+/g, '_');\n  if (t.includes('PART')) return 'PART_TIME';\n  if (t.includes('CONTRACT')) return 'CONTRACTOR';\n  if (t.includes('INTERN')) return 'INTERN';\n  if (t.includes('TEMP')) return 'TEMPORARY';\n  if (t.includes('VOLUNTEER')) return 'VOLUNTEER';\n  if (t.includes('FULL')) return 'FULL_TIME';\n  return 'FULL_TIME';\n}\n\nfunction toIso(value) {\n  if (!value) return null;\n  const d = new Date(value);\n  return Number.isNaN(d.getTime()) ? null : d.toISOString();\n}\n\nconst kenyanCounties = [\n  'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Kiambu', 'Machakos',\n  'Kajiado', 'Kilifi', 'Kwale', 'Uasin Gishu', 'Kisii', 'Nyeri'\n];\n\nlet county = null;\nconst haystack = `${item.addressLocality || ''} ${item.addressRegion || ''} ${item.location || ''}`;\nfor (const c of kenyanCounties) {\n  if (haystack.toLowerCase().includes(c.toLowerCase())) {\n    county = c;\n    break;\n  }\n}\n\nconst salaryMin = typeof item.salaryMin === 'number' ? item.salaryMin : null;\nconst salaryMax = typeof item.salaryMax === 'number' ? item.salaryMax : null;\nconst hasSalary = salaryMin != null || salaryMax != null;\n\n\nfunction resolveApply(jobUrl, description) {\n  const boardHosts = ['brightermonday.co.ke'];\n  const blocked = new Set([...boardHosts, 'facebook.com','twitter.com','x.com','linkedin.com','instagram.com','youtube.com','whatsapp.com','googletagmanager.com']);\n  const text = String(description || '').replace(/<[^>]+>/g, ' ');\n  const emails = [];\n  const emailRe = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}/gi;\n  let m;\n  while ((m = emailRe.exec(text)) !== null) {\n    const email = m[0].toLowerCase();\n    const domain = email.split('@')[1] || '';\n    if (email.startsWith('anonymous@') || boardHosts.some(h => domain === h || domain.endsWith('.' + h))) continue;\n    if (!emails.includes(email)) emails.push(email);\n  }\n  const urls = [];\n  const urlRe = /https?:\\/\\/[^\\s<>\"')]+/gi;\n  while ((m = urlRe.exec(text)) !== null) {\n    let url = m[0].replace(/[),.;]+$/g, '');\n    try {\n      const host = new URL(url).hostname.replace(/^www\\./,'').toLowerCase();\n      if ([...blocked].some(b => host === b || host.endsWith('.' + b))) continue;\n      if (!urls.includes(url)) urls.push(url);\n    } catch {}\n  }\n  if (urls[0]) return { application_url: urls[0], apply_link: urls[0], apply_email: emails[0] || null };\n  if (emails[0]) return { application_url: null, apply_link: null, apply_email: emails[0] };\n  return { application_url: jobUrl, apply_link: null, apply_email: null };\n}\n\nconst apply = resolveApply(item.jobUrl, item.description);\n\nconst transformedJob = {\n  title: item.title,\n  company: item.company,\n  location: item.location,\n  description: item.description || '',\n  apply_link: apply.apply_link,\n  apply_email: apply.apply_email,\n  application_url: apply.application_url,\n  direct_apply: false,\n  employment_type: parseEmploymentType(item.employmentType),\n  job_location_type: 'ON_SITE',\n  job_location_country: 'Kenya',\n  job_location_county: county,\n  job_location_city: item.addressLocality || county,\n  salary: hasSalary\n    ? `${item.salaryCurrency || 'KES'} ${salaryMin || ''}${salaryMax && salaryMax !== salaryMin ? ` - ${salaryMax}` : ''} / ${(item.salaryPeriod || 'MONTH').toLowerCase()}`\n    : null,\n  salary_currency: item.salaryCurrency || 'KES',\n  salary_min: salaryMin,\n  salary_max: salaryMax,\n  salary_period: item.salaryPeriod || 'MONTH',\n  salary_visibility: hasSalary ? 'Show' : 'Hide',\n  date_posted: toIso(item.datePosted) || new Date().toISOString(),\n  valid_through: toIso(item.validThrough),\n  source: 'Scraper',\n  status: 'active',\n  posted_by: 'admin',\n  identifier: item.jobUrl,\n  hiring_organization_name: item.company,\n  industry: item.industry,\n  experience_level: item.qualifications,\n  minimum_experience: item.minimumExperienceYears,\n  tags: [item.occupationalCategory, item.industry, 'brightermonday'].filter(Boolean).join(', '),\n  views_count: 0,\n  applications_count: 0,\n  google_indexed: false,\n  is_featured: false\n};\n\nreturn { json: transformedJob };"
+      },
+      "id": "transform-data",
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1980,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ !$json.skipped }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "skip-filter",
+      "name": "Only Upsert Valid Jobs",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "tableId": "jobs",
+        "options": {
+          "onConflict": "identifier"
+        }
+      },
+      "id": "upsert-to-supabase",
+      "name": "Upsert to Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2420,
+        220
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "1",
+          "name": "Supabase CareerNinja"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "seconds"
+      },
+      "id": "wait-rate-limit",
+      "name": "Wait (Rate Limiting)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2640,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "loop-back",
+      "name": "Loop Back to Batches",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2860,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-domain.vercel.app/api/revalidate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "path",
+              "value": "/jobs"
+            },
+            {
+              "name": "secret",
+              "value": "={{ $env.REVALIDATE_SECRET }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "trigger-revalidation",
+      "name": "Trigger Next.js Revalidation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3080,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nconst upserted = allItems.filter(item => item.json.id).length;\nconst skipped = allItems.filter(item => item.json.skipped).length;\nconst summary = {\n  timestamp: new Date().toISOString(),\n  totalItems: allItems.length,\n  successfulInserts: upserted,\n  skipped,\n  source: 'brightermonday.co.ke'\n};\nconsole.log('BrighterMonday scraping summary:', summary);\nreturn { json: summary };"
+      },
+      "id": "generate-summary",
+      "name": "Generate Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3300,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Discover Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discover Jobs": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Fetch Job Detail Page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Trigger Next.js Revalidation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Job Detail Page": {
+      "main": [
+        [
+          {
+            "node": "Parse JobPosting JSON-LD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse JobPosting JSON-LD": {
+      "main": [
+        [
+          {
+            "node": "Transform Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Data": {
+      "main": [
+        [
+          {
+            "node": "Only Upsert Valid Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Only Upsert Valid Jobs": {
+      "main": [
+        [
+          {
+            "node": "Upsert to Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait (Rate Limiting)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert to Supabase": {
+      "main": [
+        [
+          {
+            "node": "Wait (Rate Limiting)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait (Rate Limiting)": {
+      "main": [
+        [
+          {
+            "node": "Loop Back to Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Back to Batches": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Next.js Revalidation": {
+      "main": [
+        [
+          {
+            "node": "Generate Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    "scraper",
+    "brightermonday",
+    "kenya"
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-19T00:00:00.000Z",
+  "versionId": "1"
+}

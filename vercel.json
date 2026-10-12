@@ -1,0 +1,40 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/expire-jobs",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/auto-renew-jobs",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/expire-promotions",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/scrape-discover",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/scrape-process",
+      "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/cron/enrich-jobs",
+      "schedule": "30 */4 * * *"
+    },
+    {
+      "path": "/api/cron/email-automations",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/enrich-company-logos",
+      "schedule": "30 4 * * *"
+    },
+    {
+      "path": "/api/cron/social-auto-queue",
+      "schedule": "0 3,7 * * *"
+    }
+  ]
+}

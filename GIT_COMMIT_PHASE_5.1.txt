@@ -1,0 +1,99 @@
+# Git Commands for Phase 5.1: Career Tools
+
+## Files to Commit
+
+### Database Migration
+- supabase/migrations/20260307_candidate_career_tools_fixed.sql
+
+### Library
+- src/lib/careerTools.ts
+
+### Pages
+- app/dashboard/career-tools/page.tsx
+
+### Components
+- src/components/career-tools/CVBuilder.tsx
+- src/components/career-tools/CoverLetterGenerator.tsx
+- src/components/career-tools/SkillAssessments.tsx
+- src/components/career-tools/CareerPathPlanner.tsx
+- src/components/career-tools/SalaryInsights.tsx
+
+### Updated Files
+- src/components/dashboards/CandidateDashboard.tsx (added Career Tools button)
+
+### Documentation
+- PHASE_5.1_CAREER_TOOLS.md
+- CAREER_TOOLS_QUICK_REF.md
+
+### Optional (can delete or keep)
+- supabase/migrations/20260307_candidate_career_tools.sql (original with errors)
+
+## Git Commands to Run
+
+```bash
+cd careerninja
+
+# Check status
+git status
+
+# Add all Phase 5.1 files
+git add supabase/migrations/20260307_candidate_career_tools_fixed.sql
+git add src/lib/careerTools.ts
+git add app/dashboard/career-tools/
+git add src/components/career-tools/
+git add src/components/dashboards/CandidateDashboard.tsx
+git add PHASE_5.1_CAREER_TOOLS.md
+git add CAREER_TOOLS_QUICK_REF.md
+
+# Commit with descriptive message
+git commit -m "feat: Phase 5.1 - Candidate Career Tools
+
+- CV Builder with multiple versions and templates
+- Cover Letter Generator with smart placeholders
+- Skill Assessments with scoring and certificates
+- Career Path Planner with AI suggestions
+- Salary Insights with market comparison
+- Complete database schema with RLS policies
+- Comprehensive documentation
+
+Includes:
+- 10 new database tables
+- 5 major UI components
+- TypeScript library with full CRUD operations
+- Seed data for templates and sample data
+- Integration with candidate dashboard"
+
+# Push to remote
+git push origin main
+# Or if you're on a different branch:
+# git push origin your-branch-name
+```
+
+## Optional: Clean up old migration file
+
+If you want to remove the original migration file with errors:
+
+```bash
+git rm supabase/migrations/20260307_candidate_career_tools.sql
+git commit -m "chore: remove migration file with errors"
+git push
+```
+
+## Verify Commit
+
+After pushing, verify on GitHub/GitLab:
+- Check that all files are present
+- Review the commit message
+- Ensure the migration file is correct
+
+## Next Steps After Commit
+
+1. Run the migration in Supabase (if not done already)
+2. Test the Career Tools page at /dashboard/career-tools
+3. Generate TypeScript types: `npm run generate-types` or `./generate-types.bat`
+4. Test all 5 features
+5. Create a release tag (optional):
+   ```bash
+   git tag -a v5.1.0 -m "Phase 5.1: Career Tools Release"
+   git push origin v5.1.0
+   ```

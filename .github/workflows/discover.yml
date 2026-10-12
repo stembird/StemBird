@@ -1,0 +1,50 @@
+name: Scrape Discover
+
+# Schedules removed so this does not double-run with Vercel crons
+# (scrape-discover in vercel.json). Manual / admin dispatch still works.
+on:
+  workflow_dispatch:
+    inputs:
+      source_id:
+        description: 'Optional: scrape only one source (e.g. psc-pdf-adverts). Leave blank for all active.'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scrape-discover
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    name: Discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SCRAPER_USER_ID: ${{ secrets.SCRAPER_USER_ID }}
+      WORKER_DISCOVER_BUDGET_MS: '600000'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Discover job links
+        run: |
+          SOURCE_ID="${{ github.event.inputs.source_id }}"
+          if [ -n "$SOURCE_ID" ]; then
+            npm run worker:discover "$SOURCE_ID"
+          else
+            npm run worker:discover
+          fi

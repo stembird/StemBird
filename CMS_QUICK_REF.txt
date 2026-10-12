@@ -1,0 +1,61 @@
+═══════════════════════════════════════════════════════════════
+  CMS QUICK REFERENCE
+═══════════════════════════════════════════════════════════════
+
+📍 ADMIN PANEL
+  URL: /dashboard/content-editor
+
+📁 KEY FILES
+  Hook:      src/hooks/usePageContent.ts
+  Admin:     app/dashboard/content-editor/page.tsx
+  Migration: supabase/migrations/20260210_create_page_content.sql
+
+🔧 SETUP
+  1. Run migration in Supabase SQL Editor
+  2. Test: node test-cms.js
+  3. Access: /dashboard/content-editor
+
+💻 CODE USAGE
+  import { usePageContent, getContentValue } from "@/hooks/usePageContent";
+  
+  const { data } = usePageContent("home");
+  const title = getContentValue(data, "hero_title", "Default");
+  
+  <h1>{title}</h1>
+
+📄 PAGE SLUGS
+  home                    - Homepage
+  services-cv             - CV Services
+  services-linkedin       - LinkedIn Services
+  services-cover-letter   - Cover Letter Services
+
+🎯 COMMON SECTION KEYS (Homepage)
+  hero_title              - Main title
+  hero_subtitle           - Subtitle
+  stats_jobs              - Job count
+  stats_companies         - Company count
+  stats_success_rate      - Success rate %
+  cta_title               - CTA title
+  cta_subtitle            - CTA subtitle
+
+✏️ EDIT WORKFLOW
+  1. Go to /dashboard/content-editor
+  2. Select page tab
+  3. Click "Edit" on section
+  4. Change text
+  5. Click "Save"
+  6. Done! (No deployment needed)
+
+➕ ADD NEW CONTENT
+  1. Go to /dashboard/content-editor
+  2. Select page tab
+  3. Scroll to "Add New Content Section"
+  4. Fill: section_key, content_type, content_value
+  5. Click "Create"
+
+🔒 SECURITY
+  ✓ Public can read
+  ✓ Authenticated can edit
+  ✓ RLS enabled
+
+═══════════════════════════════════════════════════════════════

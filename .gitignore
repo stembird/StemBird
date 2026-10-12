@@ -38,3 +38,7 @@ out/
 .env
 .env.*
 !.env.example
+
+# Temporarily excluded until PAT has workflow scope
+.github/workflows/
+

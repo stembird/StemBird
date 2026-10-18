@@ -7,26 +7,24 @@
 
 import { fuzzyMatchOption } from "./jobParseNormalization";
 
-const HR_RECRUITMENT = "Human Resources & Recruitment";
-const GOVERNMENT = "Government & Public Administration";
-const BANKING = "Banking, Insurance & Financial Services";
-const NGO = "Charity, NGO & Non-Profit";
-const ICT = "ICT & Telecommunications";
-const EDUCATION = "Education & Training";
-const HEALTHCARE = "Healthcare, Medical & Pharmaceutical";
-const AGRICULTURE = "Agriculture & Agribusiness";
+const HR_RECRUITMENT = "Consulting & Professional Services";
+const GOVERNMENT = "Government & Public Sector";
+const BANKING = "Banking, Finance & Insurance";
+const NGO = "NGOs, Development & International Organisations";
+const ICT = "Information Technology & Software";
+const EDUCATION = "Universities & Higher Education";
+const HEALTHCARE = "Healthcare, Hospitals & Medical Laboratories";
+const AGRICULTURE = "Agriculture, Agribusiness & Agricultural Technology";
 const CONSULTING = "Consulting & Professional Services";
-const ENVIRONMENT = "Environment & Natural Resources";
-const LOGISTICS = "Logistics & Transportation";
-const MANUFACTURING = "Manufacturing & Warehousing";
-const ENERGY = "Energy, Utilities & Waste Management";
-const REAL_ESTATE = "Real Estate & Property Management";
-const BUILDING = "Building, Construction & Real Estate";
-const LEGAL = "Legal Services";
-const TOURISM = "Tourism, Travel & Leisure";
-const SECURITY = "Security & Defence";
-const RETAIL = "Retail, Wholesale, E-commerce & FMCG";
-const FINTECH = "Financial Technology (FinTech)";
+const ENVIRONMENT = "Environmental Services & Conservation";
+const LOGISTICS = "Logistics, Supply Chain & Distribution";
+const MANUFACTURING = "Manufacturing & Industrial Production";
+const ENERGY = "Energy, Power & Renewable Energy";
+const REAL_ESTATE = "Real Estate & Facilities Management";
+const BUILDING = "Construction, Infrastructure & Built Environment";
+const LEGAL = "Consulting & Professional Services";
+const RETAIL = "Consumer Goods & Retail";
+const FINTECH = "Banking, Finance & Insurance";
 
 /** Exact / identity-style overrides for well-known Kenyan employers. */
 export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
@@ -43,8 +41,8 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
   acumen: NGO,
   "acumen academy": NGO,
   "genesis analytics": CONSULTING,
-  "digital divide data": "Business Process Outsourcing (BPO)",
-  ddd: "Business Process Outsourcing (BPO)",
+  "digital divide data": CONSULTING,
+  ddd: CONSULTING,
   "salix data africa": ICT,
   salix: ICT,
   "powergen renewable energy": ENERGY,
@@ -285,12 +283,6 @@ export function inferCompanyIndustry(
   }
   if (/\b(law firm|advocates|legal)\b/.test(key)) {
     return matchAllowed(LEGAL, allowedIndustries);
-  }
-  if (/\b(hotel|tourism|travel|safari|resort)\b/.test(key)) {
-    return matchAllowed(TOURISM, allowedIndustries);
-  }
-  if (/\b(security|defence|defense|guards)\b/.test(key)) {
-    return matchAllowed(SECURITY, allowedIndustries);
   }
   if (/\b(retail|supermarket|fmcg|wholesale|ecommerce|e commerce)\b/.test(key)) {
     return matchAllowed(RETAIL, allowedIndustries);

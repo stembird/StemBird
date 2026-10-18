@@ -63,21 +63,21 @@ assert.equal(
   'healthcare',
 )
 assert.equal(
-  getModelForJob('Safety Officer', 'Bamburi Cement', 'Health & Safety'),
+  getModelForJob('Safety Officer', 'Bamburi Cement', 'Health, Safety & Process Risk Management'),
   'health-safety',
-  'Health & Safety is not a nurse',
+  'HSE function is not a nurse',
 )
 assert.equal(
-  getModelForJob('HSE Manager', 'Base Titanium', 'Health & Safety'),
+  getModelForJob('HSE Manager', 'Base Titanium', 'Health, Safety & Process Risk Management'),
   'health-safety',
 )
 
 assert.equal(
-  getModelForJob('Software Engineer', 'Safaricom', 'IT & Software'),
+  getModelForJob('Software Engineer', 'Safaricom', 'Software Development & Engineering'),
   'technology',
 )
 assert.equal(
-  getModelForJob('Data Analyst', 'Equity Bank Nairobi', 'Data, Analytics & AI'),
+  getModelForJob('Data Analyst', 'Equity Bank Nairobi', 'Data Science, Analytics & Artificial Intelligence'),
   'technology',
   'Nairobi / AI function must not be confused by substring ai',
 )
@@ -112,7 +112,7 @@ assert.equal(
   'finance',
 )
 assert.equal(
-  getModelForJob('High School Teacher', 'Kenya High School', 'Education & Training'),
+  getModelForJob('High School Teacher', 'Kenya High School', 'STEM Education, Teaching & Curriculum Development'),
   'education',
 )
 assert.equal(
@@ -145,11 +145,11 @@ assert.equal(
   'sales',
 )
 assert.equal(
-  getModelForJob('Environmental Officer', 'NEMA', 'Environment, Energy & Natural Resources'),
+  getModelForJob('Environmental Officer', 'NEMA', 'Environmental Science & Management'),
   'environment',
 )
 assert.equal(
-  getModelForJob('Fibre Technician', 'Safaricom', 'Telecommunications'),
+  getModelForJob('Fibre Technician', 'Safaricom', 'Networking & Telecommunications'),
   'telecommunications',
 )
 

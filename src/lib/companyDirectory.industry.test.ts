@@ -12,45 +12,46 @@ function assert(condition: unknown, message: string) {
 }
 
 const industries = [
-  "Banking, Insurance & Financial Services",
-  "Building, Construction & Real Estate",
-  "Charity, NGO & Non-Profit",
-  "Education & Training",
-  "Government & Public Administration",
-  "Healthcare, Medical & Pharmaceutical",
-  "Human Resources & Recruitment",
-  "ICT & Telecommunications",
-  "Logistics & Transportation",
-  "Manufacturing & Warehousing",
-  "Retail, Wholesale, E-commerce & FMCG",
+  "Banking, Finance & Insurance",
+  "Construction, Infrastructure & Built Environment",
+  "NGOs, Development & International Organisations",
+  "Technical & Vocational Education and Training (TVET)",
+  "Government & Public Sector",
+  "Healthcare, Hospitals & Medical Laboratories",
+  "Pharmaceuticals & Biotechnology",
+  "Information Technology & Software",
+  "Logistics, Supply Chain & Distribution",
+  "Manufacturing & Industrial Production",
+  "Paper, Pulp & Packaging",
+  "Consumer Goods & Retail",
 ];
 
 assert(
   resolveIndustryLabel("Governmental", industries) ===
-    "Government & Public Administration",
+    "Government & Public Sector",
   "governmental alias"
 );
 assert(
   resolveIndustryLabel("Pharmaceuticals", industries) ===
-    "Healthcare, Medical & Pharmaceutical",
+    "Pharmaceuticals & Biotechnology",
   "pharmaceuticals alias"
 );
 assert(
   resolveIndustryLabel("NGO/Non-Profit", industries) ===
-    "Charity, NGO & Non-Profit",
+    "NGOs, Development & International Organisations",
   "ngo alias"
 );
 assert(
-  resolveIndustryLabel("Education & Training", industries) ===
-    "Education & Training",
+  resolveIndustryLabel("Technical & Vocational Education and Training (TVET)", industries) ===
+    "Technical & Vocational Education and Training (TVET)",
   "exact industry"
 );
 
 assert(
   resolveDirectoryCompanyIndustry(
-    { name: "Acme Ltd", website: null, industry: "Education & Training" },
+    { name: "Acme Ltd", website: null, industry: "Technical & Vocational Education and Training (TVET)" },
     industries
-  ) === "Education & Training",
+  ) === "Technical & Vocational Education and Training (TVET)",
   "stored industry wins"
 );
 
@@ -62,7 +63,7 @@ assert(
       industry: null,
     },
     industries
-  ) === "Government & Public Administration",
+  ) === "Government & Public Sector",
   "infer government commission"
 );
 
@@ -74,7 +75,7 @@ assert(
       industry: null,
     },
     industries
-  ) === "Healthcare, Medical & Pharmaceutical",
+  ) === "Healthcare, Hospitals & Medical Laboratories",
   "infer nursing council as healthcare"
 );
 
@@ -82,8 +83,8 @@ assert(
   resolveDirectoryCompanyIndustry(
     { name: "Unknown Co", website: null, industry: null },
     industries,
-    "ICT & Telecommunications"
-  ) === "ICT & Telecommunications",
+    "Information Technology & Software"
+  ) === "Information Technology & Software",
   "modal job industry fallback"
 );
 
@@ -91,13 +92,13 @@ assert(
   resolveDirectoryCompanyIndustry(
     { name: "Unknown Co", website: null, industry: "Paper Milling" },
     industries
-  ) === "Manufacturing & Warehousing",
+  ) === "Paper, Pulp & Packaging",
   "alias unmatched stored industry"
 );
 
 assert(
-  industryToSlug("Healthcare, Medical & Pharmaceutical") ===
-    "healthcare-medical-and-pharmaceutical",
+  industryToSlug("Healthcare, Hospitals & Medical Laboratories") ===
+    "healthcare-hospitals-and-medical-laboratories",
   "slug"
 );
 

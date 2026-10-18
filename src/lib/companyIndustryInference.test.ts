@@ -11,71 +11,71 @@ function assert(condition: unknown, message: string) {
 }
 
 assert(
-  inferCompanyIndustry("Corporate Staffing") === "Human Resources & Recruitment",
+  inferCompanyIndustry("Corporate Staffing") === "Consulting & Professional Services",
   "corporate staffing"
 );
 assert(
   inferCompanyIndustry("Career Options Africa Ltd") ===
-    "Human Resources & Recruitment",
+    "Consulting & Professional Services",
   "career options"
 );
 assert(
   inferCompanyIndustry("Career Directions Limited (CDL)") ===
-    "Human Resources & Recruitment",
+    "Consulting & Professional Services",
   "cdl"
 );
 assert(
   inferCompanyIndustry("Trans Nzoia County Public Service Board") ===
-    "Government & Public Administration",
+    "Government & Public Sector",
   "trans nzoia"
 );
 assert(
   inferCompanyIndustry("Public Service Commission Kenya (PSCK)") ===
-    "Government & Public Administration",
+    "Government & Public Sector",
   "psck"
 );
 assert(
   inferCompanyIndustry("Nakuru County Government") ===
-    "Government & Public Administration",
+    "Government & Public Sector",
   "nakuru"
 );
 assert(
   inferCompanyIndustry("HCS Affiliates Group") ===
-    "Human Resources & Recruitment",
+    "Consulting & Professional Services",
   "hcs"
 );
 assert(
   inferCompanyIndustry("Equity Bank") ===
-    "Banking, Insurance & Financial Services",
+    "Banking, Finance & Insurance",
   "equity"
 );
 assert(
   inferCompanyIndustry("Baringo County Government", "https://baringo.go.ke") ===
-    "Government & Public Administration",
+    "Government & Public Sector",
   "baringo go.ke"
 );
 assert(
   inferCompanyIndustry("Aga Khan University Hospital") ===
-    "Healthcare, Medical & Pharmaceutical",
+    "Healthcare, Hospitals & Medical Laboratories",
   "aga khan hospital not education"
 );
 assert(
   inferCompanyIndustry("Central Bank of Kenya (CBK)", "https://www.centralbank.go.ke") ===
-    "Banking, Insurance & Financial Services",
+    "Banking, Finance & Insurance",
   "central bank"
 );
 assert(
-  inferCompanyIndustry("Catholic Relief Services") === "Charity, NGO & Non-Profit",
+  inferCompanyIndustry("Catholic Relief Services") === "NGOs, Development & International Organisations",
   "crs ngo"
 );
 assert(
   inferCompanyIndustry("Judicial Service Commission") ===
-    "Government & Public Administration",
+    "Government & Public Sector",
   "judicial service commission"
 );
 assert(
   inferCompanyIndustry("Nursing Council of Kenya NCK") ===
-    "Healthcare, Medical & Pharmaceutical",
+    "Healthcare, Hospitals & Medical Laboratories",
   "nursing council"
 );
 

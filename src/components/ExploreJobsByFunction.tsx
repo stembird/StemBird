@@ -67,12 +67,12 @@ const DONUT_COLORS = [
 ];
 
 const FUNCTION_COLORS: Record<string, string> = {
-  Sales: "hsl(210 89% 40%)",
-  "Education & Training": "hsl(199 89% 48%)",
-  "Engineering & Technology": "hsl(25 95% 53%)",
-  "IT & Software": "hsl(245 65% 55%)",
-  "Accounting, Auditing & Finance": "hsl(174 72% 40%)",
-  "Healthcare & Medical": "hsl(142 76% 36%)",
+  "Software Development & Engineering": "hsl(210 89% 40%)",
+  "Mechanical Engineering": "hsl(199 89% 48%)",
+  "Industrial & Manufacturing Engineering": "hsl(25 95% 53%)",
+  "Data Science, Analytics & Artificial Intelligence": "hsl(245 65% 55%)",
+  "Research & Development (R&D)": "hsl(174 72% 40%)",
+  "Laboratory Operations & Testing": "hsl(142 76% 36%)",
 };
 const OTHERS_COLOR = "hsl(220 14% 64%)";
 

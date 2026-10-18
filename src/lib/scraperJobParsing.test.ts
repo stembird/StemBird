@@ -52,83 +52,76 @@ assert.equal(sr.education_level, "Master's")
 assert.equal(sr.minimum_experience, 5)
 
 const industries = [
-  'ICT & Telecommunications',
-  'Energy, Utilities & Waste Management',
-  'Banking, Insurance & Financial Services',
+  'Information Technology & Software',
+  'Energy, Power & Renewable Energy',
+  'Banking, Finance & Insurance',
 ]
 assert.equal(
   matchIndustryName('Information Technology And Services', industries),
-  'ICT & Telecommunications'
+  'Information Technology & Software'
 )
 assert.notEqual(
   matchIndustryName('Information Technology And Services', industries),
-  'Banking, Insurance & Financial Services'
+  'Banking, Finance & Insurance'
 )
 
 const functions = [
-  'Engineering & Technology',
-  'Sales',
-  'Legal Services',
-  'Building & Architecture',
-  'Real Estate & Construction',
-  'Health & Safety',
-  'Accounting, Auditing & Finance',
-  'IT & Software',
-  'Human Resources & Recruitment',
-  'Community & Social Services',
-  'Admin & Office',
+  'Mechanical Engineering',
+  'Technical Sales & Business Development',
+  'Regulatory Affairs & Compliance',
+  'Civil & Structural Engineering',
+  'Health, Safety & Process Risk Management',
+  'Mathematics, Statistics & Actuarial Science',
+  'Software Development & Engineering',
+  'Technical Project Management & Operations',
+  'IT Infrastructure, Systems & Support',
+  'Cybersecurity',
 ]
-assert.equal(inferJobFunctionFromTitle('Material Engineer', functions), 'Engineering & Technology')
-assert.equal(inferJobFunctionFromTitle('Sales Representative - Fahari Link', functions), 'Sales')
-assert.equal(inferJobFunctionFromTitle('Project Architect, Kiswishi City', functions), 'Building & Architecture')
-assert.equal(inferJobFunctionFromTitle('Senior HSE Officer', functions), 'Health & Safety')
-assert.equal(inferJobFunctionFromTitle('Legal Assistant', functions, 'Legal Department'), 'Legal Services')
-assert.equal(inferJobFunctionFromTitle('Executive Assistant', functions), 'Admin & Office')
+assert.equal(inferJobFunctionFromTitle('Material Engineer', functions), 'Mechanical Engineering')
+assert.equal(inferJobFunctionFromTitle('Sales Representative - Fahari Link', functions), 'Technical Sales & Business Development')
+assert.equal(inferJobFunctionFromTitle('Project Architect, Kiswishi City', functions), 'Civil & Structural Engineering')
+assert.equal(inferJobFunctionFromTitle('Senior HSE Officer', functions), 'Health, Safety & Process Risk Management')
+assert.equal(inferJobFunctionFromTitle('Legal Assistant', functions, 'Legal Department'), 'Regulatory Affairs & Compliance')
 assert.equal(
   matchJobFunctionName('Legal Department', functions),
-  'Legal Services'
+  'Regulatory Affairs & Compliance'
 )
 
 const moreFunctions = [
   ...functions,
-  'Driver & Transport Services',
-  'Food Services & Catering',
-  'Creative & Design',
-  'Quality Control & Assurance',
-  'Research, Teaching & Training',
-  'Retail, Fashion & FMCG',
-  'Accounting, Auditing & Finance',
-  'Management & Business Development',
-  'Customer Service & Support',
+  'Research & Development (R&D)',
+  'Quality Assurance & Quality Management',
+  'Quality Control (QC)',
+  'Data Science, Analytics & Artificial Intelligence',
+  'Laboratory Operations & Testing',
+  'Technical Support & Field Service',
+  'Networking & Telecommunications',
+  'STEM Education, Teaching & Curriculum Development',
 ]
-assert.equal(inferJobFunctionFromTitle('Truck Driver', moreFunctions), 'Driver & Transport Services')
-assert.equal(inferJobFunctionFromTitle('Sous Chef', moreFunctions), 'Food Services & Catering')
-assert.equal(inferJobFunctionFromTitle('Graphic Designer', moreFunctions), 'Creative & Design')
-assert.equal(inferJobFunctionFromTitle('QA Analyst', moreFunctions), 'Quality Control & Assurance')
-assert.equal(inferJobFunctionFromTitle('M&E Officer', moreFunctions), 'Research, Teaching & Training')
-assert.equal(inferJobFunctionFromTitle('Bank Teller', moreFunctions), 'Retail, Fashion & FMCG')
+assert.equal(inferJobFunctionFromTitle('QA Analyst', moreFunctions), 'Quality Assurance & Quality Management')
+assert.equal(inferJobFunctionFromTitle('M&E Officer', moreFunctions), 'Research & Development (R&D)')
 assert.equal(
-  inferJobFunctionFromTitle('Information Risk Manager', moreFunctions),
-  'IT & Software'
+  inferJobFunctionFromTitle('Information Security Officer', moreFunctions),
+  'Cybersecurity'
 )
 assert.equal(
   inferJobFunctionFromTitle('Applications Specialist - Customer Experience Systems', moreFunctions),
-  'IT & Software'
+  'IT Infrastructure, Systems & Support'
 )
 
 const industryList = [
-  'Building, Construction & Real Estate',
-  'Real Estate & Property Management',
-  'Charity, NGO & Non-Profit',
-  'ICT & Telecommunications',
+  'Construction, Infrastructure & Built Environment',
+  'Real Estate & Facilities Management',
+  'NGOs, Development & International Organisations',
+  'Information Technology & Software',
 ]
 assert.equal(
   inferCompanyIndustry('Tatu City', 'https://tatucity.com', industryList),
-  'Building, Construction & Real Estate'
+  'Construction, Infrastructure & Built Environment'
 )
 assert.equal(
   inferCompanyIndustry('Inkomoko', 'https://inkomoko.com', industryList),
-  'Charity, NGO & Non-Profit'
+  'NGOs, Development & International Organisations'
 )
 
 // Greenhouse-style: entity-escaped HTML must be decoded before split
@@ -158,8 +151,8 @@ const tatuParsed = await parseScrapedJobContent(
   },
   { industryNames: industryList, jobFunctionNames: functions, attachCareerTips: false }
 )
-assert.equal(tatuParsed.industry, 'Building, Construction & Real Estate')
-assert.equal(tatuParsed.job_function, 'Community & Social Services')
+assert.equal(tatuParsed.industry, 'Construction, Infrastructure & Built Environment')
+assert.equal(tatuParsed.job_function, 'Technical Project Management & Operations')
 
 // Full manual-parse merge must retain enrichment fields (study, apply, tips, types)
 const baseFallback = parseScrapedJobFallback({
@@ -181,8 +174,8 @@ const merged = mergeManualParseResult(baseFallback, {
   job_location_country: 'Kenya',
   job_location_county: 'Nairobi',
   job_location_city: 'Nairobi',
-  industry: 'Manufacturing & Warehousing',
-  industries: ['Manufacturing & Warehousing'],
+  industry: 'Manufacturing & Industrial Production',
+  industries: ['Manufacturing & Industrial Production'],
   education_level_name: "Bachelor's Degree",
   area_of_study: 'Science',
   field_of_study: 'Industrial Chemistry',
@@ -195,8 +188,8 @@ const merged = mergeManualParseResult(baseFallback, {
   tags: 'qa, chemistry, iso',
   additional_info:
     '<p><strong>How to Apply:</strong> Email CV</p><h3>Tips:</h3><p>1. Highlight lab experience</p>',
-  job_function: 'Quality Control & Assurance',
-  job_functions: ['Quality Control & Assurance'],
+  job_function: 'Quality Control (QC)',
+  job_functions: ['Quality Control (QC)'],
   additional_locations: [{ county: 'Mombasa', city: 'Mombasa' }],
 })
 assert.equal(merged.area_of_study, 'Science')

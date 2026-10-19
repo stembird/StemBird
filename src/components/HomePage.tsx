@@ -83,12 +83,12 @@ export default function HomePage({
   const { data: content } = usePageContent("home");
 
   const heroTitle = getContentValue(content, "hero_title", "Stop Searching. Start Getting Hired.");
-  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. StemBird changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
+  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. StemBird changes that. We match your STEM skills (engineering, labs, tech, data and research) directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
   const statsJobsTarget = Math.max(0, activeJobsCount);
   const statsCompaniesTarget = Math.max(0, companiesCount);
   const statsSuccessRateTarget = parseInt(getContentValue(content, "stats_success_rate", "90"));
-  const ctaTitle = getContentValue(content, "cta_title", "Your Next Interview Is 60 Seconds Away");
-  const ctaSubtitle = getContentValue(content, "cta_subtitle", "StemBird matches your skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on other job boards. Join free today.");
+  const ctaTitle = getContentValue(content, "cta_title", "Your Next STEM Interview Is 60 Seconds Away");
+  const ctaSubtitle = getContentValue(content, "cta_subtitle", "StemBird matches your technical skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on generic job boards. Join free today.");
 
   const companiesPlugin = useRef(
     Autoplay({ delay: 3500, stopOnInteraction: true })
@@ -186,7 +186,7 @@ export default function HomePage({
         <div className="container relative z-10 mx-auto py-12 md:py-16 px-4">
           <div className="max-w-2xl animate-fade-in md:mx-auto md:text-center">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sky-200 mb-3 font-semibold drop-shadow-[0_1px_6px_rgba(0,0,0,0.55)]">
-              StemBird · Kenya
+              StemBird · STEM Careers in Kenya
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-[3.25rem] font-bold mb-4 text-[#0A66C2] leading-[1.1] drop-shadow-[0_1px_10px_rgba(255,255,255,0.75)]">
               {heroTitle}
@@ -279,7 +279,7 @@ export default function HomePage({
                 Top Companies Hiring Now
               </h2>
               <p className={SECTION_SUBCOPY_CLASS}>
-                Employers with the most open roles — explore profiles and apply
+                STEM employers with the most open roles — explore profiles and apply
               </p>
             </div>
 
@@ -324,11 +324,12 @@ export default function HomePage({
         <div className="container mx-auto">
           <div className={SECTION_HEADER_WRAP_CLASS}>
             <h2 className={SECTION_HEADING_CLASS}>
-              Why 95% of Our Users Land Interviews Within 3 Months
+              Why 95% of Our STEM Talent Lands Interviews Within 3 Months
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              Most job boards dump listings and leave you to figure it out. StemBird is
-              different. We actively match you to employers using AI, not just keywords.
+              Generic job boards dump every listing and leave you to figure it out. StemBird is
+              built for science, technology, engineering and math professionals — we actively match
+              your technical skills to hiring employers using AI, not just keywords.
             </p>
           </div>
 
@@ -336,12 +337,12 @@ export default function HomePage({
             <div>
               <div className="space-y-3">
                 {[
-                  "Smart AI matching that connects your skills to jobs you'll actually get, not just jobs that exist",
-                  "Real-time alerts: be among the first to apply when new roles drop in your inbox",
-                  "Free career tools worth KES 10,000+: CV builder, cover letter generator & LinkedIn optimizer",
-                  "1,070+ verified jobs from 103+ companies across every county in Kenya",
+                  "Smart AI matching that connects your technical skills to STEM roles you'll actually get — not just jobs that exist",
+                  "Real-time alerts: be among the first to apply when new engineering, lab, tech, data and research roles drop",
+                  "Free career tools worth KES 10,000+: CV builder, cover letter generator & LinkedIn optimizer tuned for STEM professionals",
+                  "Verified STEM jobs from Kenya's labs, engineering firms, tech teams, manufacturers and research institutions",
                   "Zero spam, zero ghost listings. Every job is verified and actively hiring",
-                  "Trusted by Kenyan professionals, built by Kenyans, for Kenya's job market",
+                  "Trusted by Kenyan scientists, engineers and technologists — built for Kenya's STEM job market",
                   "Our users report 3x more interview callbacks compared to applying on generic job boards",
                   "100% free to join, search, and apply. No hidden fees, no catch",
                 ].map((benefit, idx) => (
@@ -368,7 +369,7 @@ export default function HomePage({
               <div className="absolute inset-0 bg-gradient-secondary opacity-10 rounded-3xl blur-3xl" />
               <img
                 src="/assets/team-collaboration.jpg"
-                alt="Kenyan Professionals Collaborating"
+                alt="Kenyan STEM Professionals Collaborating"
                 className="relative rounded-3xl shadow-2xl w-full h-[420px] md:h-[520px] object-cover"
               />
             </div>
@@ -384,8 +385,8 @@ export default function HomePage({
               From &quot;No Callbacks&quot; to &quot;When Can You Start?&quot;
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              Real Kenyans. Real results. Here&apos;s what happens when your CV meets the right
-              platform.
+              Real Kenyan STEM professionals. Real results. Here&apos;s what happens when your
+              technical CV meets the right platform.
             </p>
           </div>
 
@@ -396,21 +397,21 @@ export default function HomePage({
                 role: "Software Developer at Safaricom",
                 image: "/assets/testimonial-1.jpg",
                 quote:
-                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on StemBird, I had 3 interviews. The AI matching actually works. It connected me to roles I would never have found myself.",
+                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on StemBird, I had 3 interviews. The AI matching actually works. It connected me to engineering roles I would never have found myself.",
               },
               {
                 name: "Grace Wanjiru",
-                role: "Marketing Manager at KCB",
+                role: "Laboratory Scientist at a pharmaceutical manufacturer",
                 image: "/assets/testimonial-2.jpg",
                 quote:
-                  "I was stuck in a dead-end role for 2 years. StemBird's job alerts put a marketing manager position in my inbox that I wasn't even searching for. I applied the same day and got the offer.",
+                  "I was stuck in a routine QA role for 2 years. StemBird's job alerts put a lab scientist position in my inbox that I wasn't even searching for. My technical skills were a perfect match — I applied the same day and got the offer.",
               },
               {
                 name: "Brian Ochieng",
                 role: "Data Analyst at Equity Bank",
                 image: "/assets/testimonial-3.jpg",
                 quote:
-                  "The free CV builder alone was worth signing up for. But what surprised me was getting 3 interview invitations in my first month. StemBird shows you jobs that actually match your skills.",
+                  "The free CV builder alone was worth signing up for — it finally framed my analytics projects the way employers read them. Then I got 3 interview invitations in my first month. StemBird shows you jobs that actually match your technical skills.",
               },
             ].map((testimonial, idx) => (
               <Card
@@ -546,8 +547,8 @@ export default function HomePage({
               Your Career, Transformed
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              From fresh graduates to senior executives, StemBird has helped thousands of
-              Kenyans level up.
+              From fresh graduates to senior engineers and scientists, StemBird has helped thousands
+              of Kenyan STEM professionals level up.
             </p>
           </div>
 
@@ -562,19 +563,19 @@ export default function HomePage({
               </div>
               <CardContent className="p-5">
                 <h3 className="text-2xl font-semibold mb-3">
-                  From Graduate to Senior Manager in 3 Years
+                  From Graduate to Senior Engineer in 3 Years
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  &quot;I started as a fresh graduate with no connections. StemBird matched me
-                  to my first role, then my second, then my third. In 3 years, I went from intern
-                  to Senior Manager at NCBA Bank. Every opportunity was the right next step.&quot;
+                  &quot;I started as a fresh civil engineering graduate with no connections. StemBird matched
+                  me to my first site role, then my second, then my third. In 3 years, I went from intern
+                  to Senior Engineer at a national infrastructure firm. Every opportunity was the right next step.&quot;
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-primary" />
                   <div>
                     <div className="font-semibold">Sarah Njeri</div>
                     <div className="text-sm text-muted-foreground">
-                      Senior Manager, NCBA Bank
+                      Senior Civil Engineer, infrastructure firm
                     </div>
                   </div>
                 </div>
@@ -591,13 +592,12 @@ export default function HomePage({
               </div>
               <CardContent className="p-5">
                 <h3 className="text-2xl font-semibold mb-3">
-                  Career Change Without Starting Over
+                  Career Change Into Tech Without Starting Over
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  &quot;I spent 6 years in finance and wanted to move into tech, but every job
-                  board made me feel like I had to start from scratch. StemBird&apos;s matching
-                  found tech roles that valued my finance background. I&apos;m now a Tech Lead at
-                  Andela Kenya.&quot;
+                  &quot;I spent 6 years in mechanical engineering and wanted to move into software, but every job
+                  board made me feel like I had to start from scratch. StemBird&apos;s matching found tech roles
+                  that valued my engineering background. I&apos;m now a Tech Lead at Andela Kenya.&quot;
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-secondary" />

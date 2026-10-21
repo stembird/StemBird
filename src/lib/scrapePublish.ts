@@ -219,17 +219,24 @@ export async function publishScrapedJob(
       }
     }
 
-    // Subject focus gate (biology/chemistry only). See scrapeSubjectFilter.ts.
+    // Subject focus gate (STEM only) — deep decision reading description +
+    // qualifications, so a non-STEM title with a STEM requirement is kept.
+    // See scrapeSubjectFilter.ts.
     if (
-      !matchesSubjectFocus([
-        normalized.title,
-        parsed.field_of_study,
-        parsed.area_of_study,
-        parsed.job_function,
-        ...(parsed.job_functions || []),
-        parsed.tags || normalized.tags,
-        parsed.required_qualifications || normalized.required_qualifications,
-      ])
+      !matchesSubjectFocus(
+        [
+          normalized.title,
+          parsed.field_of_study,
+          parsed.area_of_study,
+          parsed.job_function,
+          ...(parsed.job_functions || []),
+          parsed.tags || normalized.tags,
+          parsed.required_qualifications || normalized.required_qualifications,
+          parsed.responsibilities || normalized.responsibilities,
+        ],
+        // Description is low-signal: only counts with a study/qualification cue.
+        parsed.description || normalized.description
+      )
     ) {
       await supabase.from('scraped_job_sources').upsert(
         {

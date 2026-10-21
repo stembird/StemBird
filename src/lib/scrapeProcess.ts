@@ -665,27 +665,36 @@ export async function runScrapeProcessOne(
       }
     }
 
-    // Subject focus gate: StemBird currently publishes only biology/chemistry
-    // roles. Off-topic listings are recorded as skipped (so discover won't
-    // re-queue the URL). Tune via STEMBIRD_SUBJECT_TERMS / disable via
+    // Subject focus gate: StemBird publishes STEM roles only. This is the
+    // intelligent, deep decision — it reads the description and qualifications,
+    // so a non-STEM title with a STEM requirement (e.g. "Sales Rep" needing a
+    // Pharmacy degree) is correctly KEPT. Discovery does not pre-filter (accuracy
+    // wins) unless STEMBIRD_SUBJECT_DISCOVER_FILTER=true. Off-topic listings are
+    // recorded as skipped (so discover won't re-queue the URL). Tune the stem
+    // list via STEMBIRD_SUBJECT_TERMS / disable via
     // STEMBIRD_SUBJECT_FILTER_ENABLED=false — see scrapeSubjectFilter.ts.
     if (
-      !matchesSubjectFocus([
-        normalized.title,
-        parsed.field_of_study,
-        parsed.area_of_study,
-        parsed.job_function,
-        ...(parsed.job_functions || []),
-        parsed.tags || normalized.tags,
-        parsed.required_qualifications || normalized.required_qualifications,
-      ])
+      !matchesSubjectFocus(
+        [
+          normalized.title,
+          parsed.field_of_study,
+          parsed.area_of_study,
+          parsed.job_function,
+          ...(parsed.job_functions || []),
+          parsed.tags || normalized.tags,
+          parsed.required_qualifications || normalized.required_qualifications,
+          parsed.responsibilities,
+        ],
+        // Description is low-signal: only counts with a study/qualification cue.
+        parsed.description || normalized.description
+      )
     ) {
       await supabase
         .from('scrape_queue')
         .update({
           status: 'done',
           processed_at: new Date().toISOString(),
-          error_message: 'Skipped: outside biology/chemistry focus',
+          error_message: 'Skipped: outside STEM focus',
         })
         .eq('id', queueItem.id)
 
@@ -705,7 +714,7 @@ export async function runScrapeProcessOne(
       )
 
       return {
-        message: 'Off-topic job skipped (not biology/chemistry)',
+        message: 'Off-topic job skipped (not STEM)',
         processed: 1,
         off_topic: true,
         job_url: queueItem.job_url,

@@ -18,6 +18,7 @@ import {
 import { discoverFuzuJobs, FuzuSourceConfig } from './fuzu-adapter'
 import { discoverMyJobMagJobs, MyJobMagSourceConfig } from './myjobmag-adapter'
 import { normalizeJobUrl } from './scraperDeadline'
+import { filterDiscoveredByTitle } from './scrapeSubjectFilter'
 import { reclaimStuckScrapeQueueItems, STALE_PROCESSING_MS } from './scrapeQueueStats'
 
 export interface DiscoverSourceResult {
@@ -26,6 +27,8 @@ export interface DiscoverSourceResult {
   queued: number
   /** URLs seen on the board that were already in scrape_queue or scraped_job_sources */
   already_known: number
+  /** Listing titles with no STEM signal — never queued (saves fetch + AI parse) */
+  skipped_off_topic: number
   error: string | null
 }
 
@@ -226,6 +229,7 @@ export async function runScrapeDiscover(
       found: 0,
       queued: 0,
       already_known: 0,
+      skipped_off_topic: 0,
       error: null,
     }
 
@@ -301,6 +305,36 @@ export async function runScrapeDiscover(
       } else {
         const html = await fetchHtml(source.base_url)
         discovered = extractJobLinks(html, source.base_url, source.selectors as ScraperSelectors)
+      }
+
+      // STEM title pre-filter: off-topic listing titles never enter
+      // scrape_queue, so process spends zero fetches / zero AI tokens on
+      // them. Jobs with no listing title are kept — the publish-time gate
+      // on full parsed fields decides those.
+      const titleFilter = filterDiscoveredByTitle(discovered)
+      sourceResult.skipped_off_topic = titleFilter.skippedUrls.length
+      discovered = titleFilter.kept
+
+      // Record title-skipped URLs as skipped so they count as "known" on the
+      // next run (MyJobMag stopAfterKnownPages works; no repeated filtering).
+      if (titleFilter.skippedUrls.length > 0) {
+        const skippedRows = [...new Set(titleFilter.skippedUrls.map(u => normalizeJobUrl(u)))].map(
+          url => ({
+            source_id: source.source_id,
+            job_url: url,
+            job_id: null,
+            status: 'skipped',
+            raw_data: { skip_reason: 'off_topic_title' },
+          })
+        )
+        const { error: skipError } = await supabase
+          .from('scraped_job_sources')
+          .upsert(skippedRows, { onConflict: 'job_url' })
+        // Bookkeeping only — never fail the run because skips weren't recorded.
+        if (skipError)
+          console.warn(
+            `[discover] Failed to record off-topic skips for ${source.source_id}: ${skipError.message}`
+          )
       }
 
       sourceResult.found = discovered.length

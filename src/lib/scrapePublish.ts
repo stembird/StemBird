@@ -219,9 +219,11 @@ export async function publishScrapedJob(
       }
     }
 
-    // Subject focus gate (STEM only) — deep decision reading description +
-    // qualifications, so a non-STEM title with a STEM requirement is kept.
-    // See scrapeSubjectFilter.ts.
+    // Subject focus gate (STEM only) — three tiers (see scrapeSubjectFilter.ts):
+    // high-signal structured fields count a stem alone; qualifications /
+    // responsibilities / description only promote when a study cue names a
+    // hard STEM degree, so a non-STEM title with e.g. a Pharmacy requirement
+    // is kept while "business research" prose is not.
     if (
       !matchesSubjectFocus(
         [
@@ -231,11 +233,14 @@ export async function publishScrapedJob(
           parsed.job_function,
           ...(parsed.job_functions || []),
           parsed.tags || normalized.tags,
+        ],
+        // Body copy: low-signal, study-cue + hard-degree guard applies.
+        parsed.description || normalized.description,
+        // Prose fields: qualifications/responsibilities — guarded tier.
+        [
           parsed.required_qualifications || normalized.required_qualifications,
           parsed.responsibilities || normalized.responsibilities,
-        ],
-        // Description is low-signal: only counts with a study/qualification cue.
-        parsed.description || normalized.description
+        ]
       )
     ) {
       await supabase.from('scraped_job_sources').upsert(

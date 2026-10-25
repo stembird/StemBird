@@ -103,19 +103,20 @@ assert.equal(scrapeQueueRowIsKnownToDiscover('done'), true)
 
 // ── STEM subject filter (deep publish gate + optional discover cost gate) ──
 
-// HIGH-signal fields (title, quals, field of study...) count on a stem alone.
+// PROSE tier (qualifications): a study cue + a HARD STEM degree promotes even
+// when the title is ambiguous; a non-STEM degree does not.
 assert.equal(
-  matchesSubjectFocus(['Production Manager', 'BSc degree in Chemistry']),
+  matchesSubjectFocus(['Production Manager'], null, ['BSc degree in Chemistry']),
   true,
   'production manager WITH chemistry qualification is STEM'
 )
 assert.equal(
-  matchesSubjectFocus(['Production Manager', 'Degree in Film and Media Studies']),
+  matchesSubjectFocus(['Production Manager'], null, ['Degree in Film and Media Studies']),
   false,
   'production manager WITH film/media qualification is not STEM'
 )
 
-// LOW-signal description: a STEM word only counts next to a study cue.
+// BODY tier (description): a hard STEM degree buried in body copy promotes.
 // Your exact scenario — sales/marketing title, degree buried in body copy.
 assert.equal(
   matchesSubjectFocus(
@@ -132,6 +133,16 @@ assert.equal(
   ),
   true,
   'marketer: biology degree in description is STEM'
+)
+// Same rescue when the degree sits in the qualifications PROSE field.
+assert.equal(
+  matchesSubjectFocus(
+    ['Sales Representative'],
+    null,
+    ['Bachelor of Pharmacy (PharmD) or equivalent']
+  ),
+  true,
+  'sales rep: pharmacy degree in qualifications prose is STEM'
 )
 
 // FALSE POSITIVES the guard must block: STEM words with no study context.
@@ -152,6 +163,63 @@ assert.equal(
   'cue and STEM word in different clauses do not promote'
 )
 
+// ── Regressions: the holes that let non-STEM jobs through ──
+
+// Loose business-ese in prose fields ("technical", "health") must not promote.
+assert.equal(
+  matchesSubjectFocus(
+    ['Finance Manager'],
+    null,
+    ['Support the technical aspects of budgeting systems', 'Manage health portfolio accounts']
+  ),
+  false,
+  'technical/health in responsibilities prose are NOT STEM'
+)
+// Business degrees named in qualifications must not promote a finance role.
+assert.equal(
+  matchesSubjectFocus(
+    ['Financial Analyst'],
+    'Bachelor degree in Economics or Business Administration. Strong analytical skills.'
+  ),
+  false,
+  'economics/business degree with loose stems is NOT STEM'
+)
+// Title-dominant veto: confident non-STEM title + AI taxonomy tagging the
+// job into a STEM-only function ("Technical Sales…") must NOT auto-pass.
+assert.equal(
+  matchesSubjectFocus(
+    ['Sales Executive'],
+    null,
+    ['Technical Sales & Business Development']
+  ),
+  false,
+  'insurance sales tagged Technical Sales function is NOT STEM'
+)
+// "market research" prose no longer matches (bare 'research' stem removed).
+assert.equal(
+  matchesSubjectFocus(
+    ['Research Manager'],
+    'Lead market research and consumer insight programmes.'
+  ),
+  false,
+  'market research manager is NOT STEM'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Human Resource Officer'],
+    null,
+    ['Degree in Human Resources; conduct research and development activities']
+  ),
+  false,
+  'HR role with R&D duty prose is NOT STEM'
+)
+// STEM research titles still pass via the explicit research compounds.
+assert.equal(
+  matchesSubjectFocus(['Field Research Officer']),
+  true,
+  'field research officer is STEM'
+)
+
 // Clear STEM titles pass on title alone.
 assert.equal(matchesSubjectFocus(['Laboratory Technician']), true, 'lab tech is STEM')
 assert.equal(matchesSubjectFocus(['Software Developer']), true, 'dev is STEM')
@@ -159,9 +227,21 @@ assert.equal(matchesSubjectFocus(['Civil Engineer']), true, 'civil eng is STEM')
 assert.equal(matchesSubjectFocus(['Data Analyst']), true, 'data analyst is STEM')
 
 // Confidently non-STEM roles with no STEM signal anywhere fail.
-assert.equal(matchesSubjectFocus(['Accountant', 'CPA required']), false, 'accountant is not STEM')
-assert.equal(matchesSubjectFocus(['Sales Executive', 'KPIs, targets']), false, 'sales is not STEM')
-assert.equal(matchesSubjectFocus(['Driver', 'Valid class E license']), false, 'driver is not STEM')
+assert.equal(
+  matchesSubjectFocus(['Accountant'], null, ['CPA required']),
+  false,
+  'accountant is not STEM'
+)
+assert.equal(
+  matchesSubjectFocus(['Sales Executive'], null, ['KPIs, targets']),
+  false,
+  'sales is not STEM'
+)
+assert.equal(
+  matchesSubjectFocus(['Driver'], null, ['Valid class E license']),
+  false,
+  'driver is not STEM'
+)
 
 // "Data entry" must NOT match the two-word data stems.
 assert.equal(matchesSubjectFocus(['Data Entry Clerk']), false, 'data entry is not STEM')

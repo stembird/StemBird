@@ -15,9 +15,17 @@
  *     cheap title-based skipping of confident non-STEM roles (trades accuracy
  *     for AI cost).
  *   - at PUBLISH time on full parsed fields (matchesSubjectFocus) — the
- *     intelligent decision. Reads title, field/area of study, job function,
- *     tags, qualifications AND description, so "Production Manager" /
- *     "Sales Rep" is judged by its real requirements, not its title.
+ *     intelligent decision. Three confidence tiers:
+ *       HIGH  : title, field/area of study, job function, tags — a STEM stem
+ *               alone counts.
+ *       PROSE : required_qualifications, responsibilities — AI-restated free
+ *               text; a stem only counts next to a study cue AND a hard-STEM
+ *               degree/discipline (so business-ese like "supports technical
+ *               systems" or "market research" no longer passes).
+ *       BODY  : description — same guarded treatment as PROSE.
+ *     A confident non-STEM title ("Sales Executive") can therefore only be
+ *     rescued by an explicit hard-STEM study requirement ("degree in
+ *     Pharmacy"), never by a loose stem lurking in prose fields.
  *
  * CONFIG (no code edits needed to widen/narrow later):
  *   - STEMBIRD_SUBJECT_FILTER_ENABLED      "true" (default) | "false" to disable
@@ -54,7 +62,9 @@ const DEFAULT_SUBJECT_STEMS = [
   'clinical research',
   'quality control',
   'quality assurance',
-  'analytical', // analytical chemist / analytical lab
+  // 'analytical' removed: fires on business-ese ("analytical skills",
+  // "analytical mindset") in prose fields. Analytical chemist/lab still pass
+  // via 'chemis'/'laborator'.
   'lab', // \blab\b only
   'qc', // \bQC\b only
   'qa', // \bQA\b only
@@ -64,10 +74,11 @@ const DEFAULT_SUBJECT_STEMS = [
   'nursing', // nursing officer (avoids matching inside random words)
   'dental',
   'nutrition',
-  'diet', // dietitian, diet (word-boundary safe enough as substring "diet")
+  'dietitian', // was bare 'diet' — substring of 'study of diet' noise; titles say "Dietitian"
   'veterinar',
   'epidemiolog',
   'public health',
+  'clinical',
   // ── Engineering ──
   'engineer', // engineer, engineering (any discipline)
   'mechanic', // mechanical engineer/technician
@@ -121,8 +132,18 @@ const DEFAULT_SUBJECT_STEMS = [
   'conservation',
   // ── Research / general STEM ──
   'scientist',
-  'research', // research officer/assistant (STEM orgs dominate this title in KEnya boards)
-  'researcher',
+  // Bare 'research' removed: "market research", "user research", "research
+  // and development" prose fires on sales/finance/HR jobs. Match the STEM
+  // title/role compounds explicitly instead.
+  'research officer',
+  'research assistant',
+  'research associate',
+  'research scientist',
+  'research fellow',
+  'research intern',
+  'scientific research',
+  'research programme',
+  'research program',
   'stem',
   'technical',
 ]
@@ -268,6 +289,67 @@ function isConfidentlyNonStem(title: string): boolean {
 }
 
 /**
+ * Hard STEM degrees/disciplines. ONLY these can rescue a job whose title is
+ * confidently non-STEM (e.g. "Sales Representative" requiring a Pharmacy
+ * degree). Deliberately excludes loose business-English stems like
+ * 'technical', 'research', 'analytical', 'health' — a "degree in Business
+ * Research" or "degree in Marketing" must NOT promote a sales job to STEM.
+ */
+const HARD_DEGREE_STEMS = [
+  'biolog',
+  'biochem',
+  'chemis',
+  'chemical',
+  'microbio',
+  'biotech',
+  'botan',
+  'zoolog',
+  'pharmac',
+  'laborator',
+  'clinical',
+  'medic',
+  'nursing',
+  'dental',
+  'nutrition',
+  'dietetic',
+  'veterinar',
+  'epidemiolog',
+  'public health',
+  'engineer',
+  'mechanic',
+  'electron',
+  'electrical',
+  'telecomm',
+  'software',
+  'computer',
+  'information technology',
+  'cyber',
+  'informatics',
+  'data scien',
+  'data analy',
+  'data engine',
+  'machine learning',
+  'artificial intelligence',
+  'physic',
+  'mathemat',
+  'statistic',
+  'actuar',
+  'geolog',
+  'geospatial',
+  'astronom',
+  'forensic',
+  'agricultur',
+  'agronom',
+  'livestock',
+  'fisher',
+  'environment',
+  'meteorolog',
+  'climate',
+  'conservation',
+  'scientist',
+]
+
+/**
  * Cues that indicate a STEM word in free-text is a genuine study/qualification
  * requirement (not an incidental mention like "computer literacy" or "strong
  * analytical skills"). Paired with a stem in the SAME clause to promote a job.
@@ -294,13 +376,26 @@ function splitClauses(text: string): string[] {
 }
 
 /**
- * True when the description contains a STEM stem tied to a study/qualification
- * cue within the same clause. Guards against false positives where STEM words
- * appear only incidentally in body copy.
+ * Stronger guard for PROSE/BODY tiers (qualifications, responsibilities,
+ * description): a clause must pair a study cue with a HARD STEM degree stem
+ * (HARD_DEGREE_STEMS), not just any stem. This blocks the classic false
+ * positives — "degree in Business Research", "technical sales experience",
+ * "manage customer health accounts" — while still catching "BSc Pharmacy".
  */
-function matchesDescriptionStudyContext(description: string): boolean {
-  return splitClauses(description).some(
-    clause => STUDY_CUE_RE.test(clause) && containsStem(clause)
+function matchesHardStudyContext(texts: Array<string | null | undefined>): boolean {
+  const joined = texts
+    .filter((v): v is string => typeof v === 'string' && v.length > 0)
+    .join(' \n ')
+  if (!joined.trim()) return false
+  const lower = joined.toLowerCase()
+  return splitClauses(lower).some(
+    clause =>
+      STUDY_CUE_RE.test(clause) &&
+      HARD_DEGREE_STEMS.some(stem =>
+        WORD_BOUNDARY_TERMS.has(stem)
+          ? new RegExp(`\\b${escapeRe(stem)}\\b`, 'i').test(clause)
+          : clause.includes(stem)
+      )
   )
 }
 
@@ -308,33 +403,55 @@ function matchesDescriptionStudyContext(description: string): boolean {
  * Returns true when the job should be PUBLISHED (i.e. it matches the subject
  * focus, or the filter is disabled). Returns false to SKIP as off-topic.
  *
- * Two confidence tiers:
- *   - `fields` (title, field/area of study, job function, tags, qualifications,
- *     responsibilities) are HIGH-signal: a STEM stem anywhere in them counts.
- *   - `description` (free body copy) is LOW-signal: it only counts when a STEM
- *     stem appears in the same clause as a study/qualification cue, so a generic
- *     "sales rep with computer skills" isn't mis-tagged STEM while "sales rep —
- *     degree in Pharmacy" is correctly kept.
+ * Three confidence tiers:
+ *   - `fields` (title, field/area of study, job function, tags) are HIGH
+ *     signal: a STEM stem anywhere in them counts.
+ *   - `proseFields` (required_qualifications, responsibilities) are
+ *     AI-restated free text: a stem only counts when a study cue AND a hard
+ *     STEM degree stem sit in the same clause.
+ *   - `description` (raw body copy): same guarded treatment as proseFields.
+ *
+ * Title dominance: when the title is confidently non-STEM ("Sales
+ * Executive"), a high-signal stem that appears ONLY in non-title fields
+ * (e.g. the AI taxonomy tagging job_function "Technical Sales & Business
+ * Development") cannot rescue it — the title itself must carry the stem, or
+ * prose/description must name a hard STEM degree ("degree in Pharmacy").
  */
 export function matchesSubjectFocus(
   fields: Array<string | null | undefined>,
-  description?: string | null
+  description?: string | null,
+  proseFields?: Array<string | null | undefined>
 ): boolean {
   if (!isFilterEnabled()) return true
 
-  const highSignal = fields
-    .filter((v): v is string => typeof v === 'string' && v.length > 0)
-    .join(' \n ')
-    .toLowerCase()
+  const values = fields.filter((v): v is string => typeof v === 'string' && v.length > 0)
+  const title = (values[0] || '').trim()
+  const hasTitle = title.length > 0
+
+  const highSignal = values.join(' \n ').toLowerCase()
   const desc = (description || '').trim()
+  const prose = (proseFields || []).filter((v): v is string => typeof v === 'string' && v.length > 0)
 
-  // High-signal match wins outright.
-  if (highSignal.trim() && containsStem(highSignal)) return true
+  // ── HIGH-signal tier ──
+  if (hasTitle && containsStem(title)) return true
 
-  // Low-signal description only promotes when tied to a study/qualification cue.
-  if (desc && matchesDescriptionStudyContext(desc)) return true
+  if (highSignal.trim() && containsStem(highSignal)) {
+    // A confident non-STEM title vetoes rescue by loose stems in other
+    // fields ("Sales Executive" + job_function "Technical Sales…"). Unless
+    // the title itself carries a STEM word ("Sales Engineer" — checked
+    // above), non-title high-signal fields only pass when they contain a
+    // study-qualified HARD degree requirement.
+    if (!isConfidentlyNonStem(title)) return true
+    if (matchesHardStudyContext([...values.slice(1), ...prose, desc])) return true
+    return false
+  }
 
-  const hasAnySignal = highSignal.trim().length > 0 || desc.length > 0
+  // ── PROSE / BODY tiers: stem must sit in the same clause as a study cue
+  //    AND be a hard STEM degree discipline. ──
+  if (matchesHardStudyContext([...prose, desc])) return true
+
+  const hasAnySignal =
+    highSignal.trim().length > 0 || desc.length > 0 || prose.length > 0
   // No signal at all -> keep, so we never silently drop everything when parsing
   // degraded. Err on the side of publishing.
   if (!hasAnySignal) return true

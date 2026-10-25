@@ -666,13 +666,15 @@ export async function runScrapeProcessOne(
     }
 
     // Subject focus gate: StemBird publishes STEM roles only. This is the
-    // intelligent, deep decision — it reads the description and qualifications,
-    // so a non-STEM title with a STEM requirement (e.g. "Sales Rep" needing a
-    // Pharmacy degree) is correctly KEPT. Discovery does not pre-filter (accuracy
-    // wins) unless STEMBIRD_SUBJECT_DISCOVER_FILTER=true. Off-topic listings are
-    // recorded as skipped (so discover won't re-queue the URL). Tune the stem
-    // list via STEMBIRD_SUBJECT_TERMS / disable via
-    // STEMBIRD_SUBJECT_FILTER_ENABLED=false — see scrapeSubjectFilter.ts.
+    // intelligent, deep decision. Three tiers (see scrapeSubjectFilter.ts):
+    // title/field-of-study/job-function/tags are high-signal; qualifications
+    // and responsibilities are AI-restated prose that only count when a study
+    // cue names a hard STEM degree ("BSc Pharmacy" keeps a "Sales Rep";
+    // "degree in Business Research" does not). Discovery does not pre-filter
+    // (accuracy wins) unless STEMBIRD_SUBJECT_DISCOVER_FILTER=true. Off-topic
+    // listings are recorded as skipped (so discover won't re-queue the URL).
+    // Tune the stem list via STEMBIRD_SUBJECT_TERMS / disable via
+    // STEMBIRD_SUBJECT_FILTER_ENABLED=false.
     if (
       !matchesSubjectFocus(
         [
@@ -682,11 +684,14 @@ export async function runScrapeProcessOne(
           parsed.job_function,
           ...(parsed.job_functions || []),
           parsed.tags || normalized.tags,
+        ],
+        // Body copy: low-signal, study-cue + hard-degree guard applies.
+        parsed.description || normalized.description,
+        // Prose fields: qualifications/responsibilities — guarded tier.
+        [
           parsed.required_qualifications || normalized.required_qualifications,
           parsed.responsibilities,
-        ],
-        // Description is low-signal: only counts with a study/qualification cue.
-        parsed.description || normalized.description
+        ]
       )
     ) {
       await supabase

@@ -7,6 +7,8 @@ import {
   extractApplicationDeadline,
   resolveScrapedDeadline,
   expiresAtFromValidThrough,
+  isStalePosting,
+  MAX_POSTING_AGE_DAYS,
 } from './scraperDeadline'
 
 assert.equal(parseDeadlineDate('2026-08-01'), '2026-08-01')
@@ -61,6 +63,21 @@ const fromPublishedBug = resolveScrapedDeadline('2025-05-08T10:00:00.000Z', now)
 assert.equal(fromPublishedBug.action, 'skip_expired')
 
 assert.equal(expiresAtFromValidThrough('2026-08-17'), '2026-08-17T23:59:59.999Z')
+
+// --- Posting-age cap (never publish roles older than MAX_POSTING_AGE_DAYS) ---
+const auditNow = new Date('2026-09-01T12:00:00Z')
+// cutoff = 2026-09-01 minus 60d = 2026-07-03
+assert.equal(MAX_POSTING_AGE_DAYS, 60)
+assert.equal(isStalePosting('2026-07-02', 60, auditNow), true, '61 days old is stale')
+assert.equal(isStalePosting('2026-07-03', 60, auditNow), false, 'exactly 60 days is kept')
+assert.equal(isStalePosting('2026-08-15', 60, auditNow), false, 'recent is kept')
+assert.equal(isStalePosting(null, 60, auditNow), false, 'null date is kept')
+assert.equal(isStalePosting(undefined, 60, auditNow), false, 'missing date is kept')
+assert.equal(isStalePosting('not-a-date', 60, auditNow), false, 'unparseable is kept')
+// ISO datetime from a board JSON-LD still counts
+assert.equal(isStalePosting('2026-05-01T09:00:00Z', 60, auditNow), true, 'old ISO datetime is stale')
+// default maxAgeDays = MAX_POSTING_AGE_DAYS
+assert.equal(isStalePosting('2026-05-01', 60, auditNow), true)
 
 assert.equal(
   normalizeJobUrl('https://Apply.Workable.com/tatucity/j/ABC123/?utm_source=x'),

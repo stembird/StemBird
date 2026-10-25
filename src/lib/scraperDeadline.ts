@@ -190,6 +190,30 @@ export function resolveScrapedDeadline(
   return { action: 'use', validThrough: parsed, source: 'explicit' }
 }
 
+/**
+ * Hard posting-age cap. StemBird never publishes a role the employer posted
+ * more than this many days ago, even when it states no (or a future) deadline.
+ */
+export const MAX_POSTING_AGE_DAYS = 60
+
+/**
+ * True when a job was posted more than `maxAgeDays` ago. Missing or
+ * unparseable posting dates are NOT treated as stale (the caller keeps them),
+ * so this only rejects roles whose source actually reports an old date.
+ */
+export function isStalePosting(
+  datePosted: string | null | undefined,
+  maxAgeDays = MAX_POSTING_AGE_DAYS,
+  now = new Date()
+): boolean {
+  const day = parseDeadlineDate(datePosted)
+  if (!day) return false
+  const cutoff = new Date(now.getTime() - maxAgeDays * 86_400_000)
+    .toISOString()
+    .split('T')[0]
+  return day < cutoff
+}
+
 /** expires_at timestamptz at end of the valid_through day (UTC). */
 export function expiresAtFromValidThrough(validThrough: string): string {
   const day = parseDeadlineDate(validThrough) || validThrough.slice(0, 10)

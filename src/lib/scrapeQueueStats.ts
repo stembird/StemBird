@@ -174,6 +174,9 @@ export function isOtherDoneMessage(message: string | null | undefined): boolean 
   return (
     m.includes('duplicate') ||
     m.includes('expired') ||
+    m.includes('stale') ||
+    m.includes('older than') ||
+    m.includes('closed') ||
     m.startsWith('reclaimed')
   )
 }

@@ -70,6 +70,8 @@ import { limitTags } from '@/lib/jobParseNormalization'
 import {
   expiresAtFromValidThrough,
   isGenericApplicationUrl,
+  isStalePosting,
+  MAX_POSTING_AGE_DAYS,
   normalizeJobUrl,
   resolveScrapedDeadline,
 } from '@/lib/scraperDeadline'
@@ -602,6 +604,46 @@ export async function runScrapeProcessOne(
           : existingByUrl
             ? 'job_url'
             : 'application_url',
+      }
+    }
+
+    // Hard posting-age cap: never publish a role posted more than
+    // MAX_POSTING_AGE_DAYS days ago, regardless of any stated deadline. Runs
+    // before the AI parse so stale roles cost nothing. Missing/unparseable
+    // posting dates are kept (isStalePosting returns false).
+    if (isStalePosting(normalized.date_posted)) {
+      await supabase
+        .from('scrape_queue')
+        .update({
+          status: 'done',
+          processed_at: new Date().toISOString(),
+          error_message: `Skipped: posted older than ${MAX_POSTING_AGE_DAYS} days (${normalized.date_posted})`,
+        })
+        .eq('id', queueItem.id)
+
+      await supabase.from('scraped_job_sources').upsert(
+        {
+          source_id: source.source_id,
+          job_url: canonicalUrl,
+          content_hash: contentHash,
+          job_id: null,
+          status: 'skipped',
+          raw_data: {
+            ...(typeof rawData === 'object' && rawData ? rawData : {}),
+            skip_reason: 'stale',
+            date_posted: normalized.date_posted,
+          },
+        },
+        { onConflict: 'job_url' }
+      )
+
+      return {
+        message: 'Stale job skipped (posted over 60 days ago)',
+        processed: 1,
+        stale: true,
+        date_posted: normalized.date_posted,
+        job_url: queueItem.job_url,
+        title: normalized.title,
       }
     }
 

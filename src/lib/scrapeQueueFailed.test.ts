@@ -39,6 +39,9 @@ assert.equal(rowMatchesDoneBucket(null, 'published'), true)
 assert.equal(rowMatchesDoneBucket('Duplicate already published', 'published'), false)
 assert.equal(rowMatchesDoneBucket('Duplicate already published', 'other'), true)
 assert.equal(rowMatchesDoneBucket('Skipped: job expired on 2026-10-01', 'other'), true)
+assert.equal(rowMatchesDoneBucket('Skipped: posted older than 60 days (2026-05-01)', 'other'), true)
+assert.equal(rowMatchesDoneBucket('Skipped: posted older than 60 days (2026-05-01)', 'published'), false)
+assert.equal(rowMatchesDoneBucket('Skipped: source role closed', 'other'), true)
 assert.equal(rowMatchesDoneBucket(null, 'other'), false)
 
 {

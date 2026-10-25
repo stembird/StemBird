@@ -9,6 +9,8 @@ import { limitTags } from './jobParseNormalization'
 import {
   expiresAtFromValidThrough,
   isGenericApplicationUrl,
+  isStalePosting,
+  MAX_POSTING_AGE_DAYS,
   normalizeJobUrl,
   resolveScrapedDeadline,
 } from './scraperDeadline'
@@ -216,6 +218,32 @@ export async function publishScrapedJob(
         status: 'expired',
         title: normalized.title,
         valid_through: deadline.validThrough,
+      }
+    }
+
+    // Hard posting-age cap: never publish a role posted more than
+    // MAX_POSTING_AGE_DAYS days ago, regardless of any stated deadline.
+    // Missing/unparseable posting dates are kept (isStalePosting false).
+    if (isStalePosting(normalized.date_posted)) {
+      await supabase.from('scraped_job_sources').upsert(
+        {
+          source_id: sourceId,
+          job_url: canonicalUrl,
+          content_hash: contentHash,
+          job_id: null,
+          status: 'skipped',
+          raw_data: {
+            ...(typeof rawData === 'object' && rawData ? (rawData as object) : {}),
+            skip_reason: 'stale',
+            date_posted: normalized.date_posted,
+            max_age_days: MAX_POSTING_AGE_DAYS,
+          },
+        },
+        { onConflict: 'job_url' }
+      )
+      return {
+        status: 'skipped',
+        title: normalized.title,
       }
     }
 

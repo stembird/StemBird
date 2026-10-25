@@ -62,6 +62,8 @@ assert.equal(isNonStemSkipMessage(null), false)
 assert.equal(isOtherDoneMessage('Duplicate job skipped'), true)
 assert.equal(isOtherDoneMessage('Skipped: job expired on 2026-10-01T00:00:00Z'), true)
 assert.equal(isOtherDoneMessage('Reclaimed from stuck processing'), true)
+assert.equal(isOtherDoneMessage('Skipped: posted older than 60 days (2026-05-01)'), true)
+assert.equal(isOtherDoneMessage('Skipped: source role closed'), true)
 assert.equal(isOtherDoneMessage(null), false)
 assert.equal(isOtherDoneMessage('Skipped: outside STEM focus'), false)
 

@@ -26,7 +26,14 @@ function isNonStemSkip(message: string | null | undefined): boolean {
 function isOtherDone(message: string | null | undefined): boolean {
   if (message == null) return false
   const m = message.toLowerCase()
-  return m.includes('duplicate') || m.includes('expired') || m.startsWith('reclaimed')
+  return (
+    m.includes('duplicate') ||
+    m.includes('expired') ||
+    m.includes('stale') ||
+    m.includes('older than') ||
+    m.includes('closed') ||
+    m.startsWith('reclaimed')
+  )
 }
 
 /** In-memory filter mirroring the PostgREST bucket predicates. */

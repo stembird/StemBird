@@ -6,7 +6,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js'
 import { fetchHtml, extractJobDetails, normalizeJob, ScraperSelectors, datePostedForInsert } from '@/lib/scraper'
-import { matchesSubjectFocus } from '@/lib/scrapeSubjectFilter'
+import { matchesSubjectFocus, SKIPPED_NON_STEM_MESSAGE } from '@/lib/scrapeSubjectFilter'
 import {
   fetchWorkableJobDetails,
   normalizeWorkableJob,
@@ -699,7 +699,7 @@ export async function runScrapeProcessOne(
         .update({
           status: 'done',
           processed_at: new Date().toISOString(),
-          error_message: 'Skipped: outside STEM focus',
+          error_message: SKIPPED_NON_STEM_MESSAGE,
         })
         .eq('id', queueItem.id)
 

@@ -25,7 +25,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ExternalLink, Loader2, RotateCcw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-export type QueueDialogStatus = "pending" | "processing" | "failed";
+export type QueueDialogStatus = "pending" | "processing" | "failed" | "published" | "non_stem";
 
 export interface QueueScrapeJob {
   id: string;
@@ -38,7 +38,10 @@ export interface QueueScrapeJob {
   attempts: number;
   queued_at: string | null;
   processed_at: string | null;
-  status?: QueueDialogStatus;
+  status?: string;
+  /** Present for the published view (join against scraped_job_sources). */
+  job_slug?: string | null;
+  job_id?: string | null;
 }
 
 interface QueueListResponse {
@@ -46,7 +49,7 @@ interface QueueListResponse {
   total: number;
   limit: number;
   offset: number;
-  status?: QueueDialogStatus;
+  status?: string;
   error?: string;
 }
 
@@ -119,11 +122,40 @@ const COPY: Record<
         : `Requeued ${n} job(s) as pending — use Process queue to run them`,
     deleteToast: (n) => (n === 0 ? "No failed jobs were deleted" : `Deleted ${n} failed job(s)`),
   },
+  published: {
+    title: "Published scrape jobs",
+    description: "Queue rows that completed by publishing a job. View the live listing or the original source.",
+    empty: "No published jobs in the scrape queue yet.",
+    loading: "Loading published jobs…",
+    notesLabel: "Published",
+    requeueLabel: "",
+    requeueAllLabel: "",
+    requeueToast: () => "",
+    deleteToast: (n) => (n === 0 ? "No published rows were deleted" : `Deleted ${n} published queue row(s) — the jobs themselves stay live`),
+  },
+  non_stem: {
+    title: "Screened out — non-STEM",
+    description: "Processed jobs the STEM gate rejected (marked done with 'outside STEM focus'). Review them here if you suspect the filter missed something.",
+    empty: "No jobs have been screened out as non-STEM.",
+    loading: "Loading screened-out jobs…",
+    notesLabel: "Reason",
+    requeueLabel: "",
+    requeueAllLabel: "",
+    requeueToast: () => "",
+    deleteToast: (n) => (n === 0 ? "No screened-out rows were deleted" : `Deleted ${n} screened-out queue row(s)`),
+  },
 };
+
+/** Done-derived views are read-only apart from deleting the queue row. */
+function isDoneView(status: QueueDialogStatus): boolean {
+  return status === "published" || status === "non_stem";
+}
 
 function statusNoun(status: QueueDialogStatus): string {
   if (status === "pending") return "pending";
   if (status === "processing") return "processing";
+  if (status === "published") return "published";
+  if (status === "non_stem") return "screened-out";
   return "failed";
 }
 
@@ -136,7 +168,10 @@ export function ScrapeQueueJobsDialog({
   onChanged,
 }: Props) {
   const copy = COPY[status];
-  const canRequeue = status !== "pending";
+  const doneView = isDoneView(status);
+  const canRequeue = !doneView && status !== "pending";
+  const apiStatus = status === "published" || status === "non_stem" ? "done" : status;
+  const apiBucket = status === "published" ? "published" : status === "non_stem" ? "non_stem" : undefined;
   const [items, setItems] = useState<QueueScrapeJob[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -159,10 +194,11 @@ export function ScrapeQueueJobsDialog({
       if (!session) throw new Error("Not authenticated");
 
       const params = new URLSearchParams({
-        status,
+        status: apiStatus,
         limit: String(PAGE_SIZE),
         offset: String(nextOffset),
       });
+      if (apiBucket) params.set("bucket", apiBucket);
       if (sourceId) params.set("source_id", sourceId);
 
       const response = await fetch(`/api/admin/scraper-sources/queue?${params}`, {
@@ -180,7 +216,7 @@ export function ScrapeQueueJobsDialog({
     } finally {
       setLoading(false);
     }
-  }, [sourceId, status]);
+  }, [sourceId, status, apiStatus, apiBucket]);
 
   useEffect(() => {
     if (!open) return;
@@ -201,7 +237,7 @@ export function ScrapeQueueJobsDialog({
           Authorization: `Bearer ${session.access_token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ action, status, ...scope }),
+        body: JSON.stringify({ action, status: apiStatus, ...scope }),
       });
       const body = await response.json();
       if (!response.ok) throw new Error(body.error || `${action} failed`);
@@ -236,6 +272,9 @@ export function ScrapeQueueJobsDialog({
   const whenLabel = (item: QueueScrapeJob) => {
     if (status === "failed" && item.processed_at) {
       return `Failed ${new Date(item.processed_at).toLocaleString()}`;
+    }
+    if (doneView && item.processed_at) {
+      return `Processed ${new Date(item.processed_at).toLocaleString()}`;
     }
     if (item.queued_at) return `Queued ${new Date(item.queued_at).toLocaleString()}`;
     return "";
@@ -344,16 +383,29 @@ export function ScrapeQueueJobsDialog({
                         {item.location && (
                           <div className="text-xs text-muted-foreground truncate">{item.location}</div>
                         )}
-                        <a
-                          href={item.job_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline inline-flex items-center gap-1 truncate max-w-full"
-                          title={item.job_url}
-                        >
-                          Open listing
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
+                        {status === "published" && item.job_slug ? (
+                          <a
+                            href={`/jobs/${item.job_slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline inline-flex items-center gap-1 truncate max-w-full"
+                            title="Open the published StemBird job"
+                          >
+                            View job
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        ) : (
+                          <a
+                            href={item.job_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline inline-flex items-center gap-1 truncate max-w-full"
+                            title={item.job_url}
+                          >
+                            Open listing
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
                       </TableCell>
                       <TableCell className="text-sm">
                         <div>{item.source_name || item.source_id}</div>

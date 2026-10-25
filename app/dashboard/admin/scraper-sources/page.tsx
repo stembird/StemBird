@@ -38,6 +38,12 @@ interface QueueStats {
   processing: number;
   done: number;
   failed: number;
+  /** Real published jobs (scraped_job_sources status=published with live job_id). */
+  published?: number;
+  /** Done rows the STEM gate screened out. */
+  skipped_non_stem?: number;
+  /** Done rows that were duplicates/expiries, neither published nor STEM-skipped. */
+  other_done?: number;
 }
 
 interface ScraperSource {
@@ -494,7 +500,7 @@ export default function AdminScraperSourcesPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <StatCard label="Active sources" value={data?.active_count ?? 0} />
         <StatCard
           label="Queue pending"
@@ -518,7 +524,19 @@ export default function AdminScraperSourcesPage() {
               : undefined
           }
         />
-        <StatCard label="Published (done)" value={data?.totals.done ?? 0} />
+        <StatCard
+          label="Published"
+          value={data?.totals.published ?? 0}
+          emphasize={data?.totals.published ? "success" : undefined}
+          hint="Click to list published jobs"
+          onClick={() => setQueueDialog({ status: "published" })}
+        />
+        <StatCard
+          label="Non-STEM screened"
+          value={data?.totals.skipped_non_stem ?? 0}
+          hint="Click to review STEM-gate rejections"
+          onClick={() => setQueueDialog({ status: "non_stem" })}
+        />
         <StatCard
           label="Failed"
           value={data?.totals.failed ?? 0}
@@ -629,7 +647,50 @@ export default function AdminScraperSourcesPage() {
                                     Processing: {stats.processing} — review
                                   </button>
                                 )}
-                                <div><span className="text-muted-foreground">Done:</span> {stats.done}</div>
+                                <div>
+                                  <span className="text-muted-foreground">Published:</span>{" "}
+                                  {stats.published ? (
+                                    <button
+                                      type="button"
+                                      className="text-emerald-600 hover:underline"
+                                      onClick={() =>
+                                        setQueueDialog({
+                                          status: "published",
+                                          sourceId: source.source_id,
+                                          sourceName: source.name,
+                                        })
+                                      }
+                                    >
+                                      {stats.published} — view
+                                    </button>
+                                  ) : (
+                                    0
+                                  )}
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground">Non-STEM:</span>{" "}
+                                  {stats.skipped_non_stem ? (
+                                    <button
+                                      type="button"
+                                      className="text-muted-foreground hover:underline"
+                                      onClick={() =>
+                                        setQueueDialog({
+                                          status: "non_stem",
+                                          sourceId: source.source_id,
+                                          sourceName: source.name,
+                                        })
+                                      }
+                                    >
+                                      {stats.skipped_non_stem} — view
+                                    </button>
+                                  ) : (
+                                    0
+                                  )}
+                                </div>
+                                <div className="text-muted-foreground/80">
+                                  Done: {stats.done}
+                                  {stats.other_done ? ` · ${stats.other_done} dup/expired` : ""}
+                                </div>
                                 {stats.failed > 0 && (
                                   <button
                                     type="button"
@@ -764,22 +825,26 @@ function StatCard({
   label: string;
   value: number;
   onClick?: () => void;
-  emphasize?: "primary" | "warning" | "destructive";
+  emphasize?: "primary" | "warning" | "destructive" | "success";
   hint?: string;
 }) {
   const interactive = typeof onClick === "function";
   const hoverClass =
     emphasize === "warning"
       ? "hover:border-amber-500/40 hover:bg-amber-500/5"
-      : emphasize === "primary"
-        ? "hover:border-primary/40 hover:bg-primary/5"
-        : "hover:border-destructive/40 hover:bg-destructive/5";
+      : emphasize === "destructive"
+        ? "hover:border-destructive/40 hover:bg-destructive/5"
+        : emphasize === "success"
+          ? "hover:border-emerald-500/40 hover:bg-emerald-500/5"
+          : "hover:border-primary/40 hover:bg-primary/5";
   const valueClass =
     emphasize === "destructive" && value > 0
       ? "text-destructive"
       : emphasize === "warning" && value > 0
         ? "text-amber-600"
-        : "";
+        : emphasize === "success" && value > 0
+          ? "text-emerald-600"
+          : "";
   return (
     <Card
       className={

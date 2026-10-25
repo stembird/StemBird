@@ -148,14 +148,38 @@ export interface QueueStatusCounts {
   processing: number
   done: number
   failed: number
+  /** `done` rows the STEM gate screened out (error_message contains "outside STEM"). */
+  skipped_non_stem: number
+  /** `done` rows that were neither published nor STEM-skipped (duplicates, expiries, reclaims). */
+  other_done: number
 }
 
 export function emptyQueueStats(): QueueStatusCounts {
-  return { pending: 0, processing: 0, done: 0, failed: 0 }
+  return { pending: 0, processing: 0, done: 0, failed: 0, skipped_non_stem: 0, other_done: 0 }
+}
+
+/**
+ * A `done` queue row means "processed", not "published": duplicates, expired
+ * adverts and STEM-screened rejects are all marked done too. Bucket them by
+ * error_message so the admin UI can show the real outcomes. Legacy pre-check
+ * skips ("Skipped: pre-check outside STEM…") land in the same non-STEM bucket.
+ */
+export function isNonStemSkipMessage(message: string | null | undefined): boolean {
+  return typeof message === 'string' && message.toLowerCase().includes('outside stem')
+}
+
+export function isOtherDoneMessage(message: string | null | undefined): boolean {
+  if (message == null) return false
+  const m = message.toLowerCase()
+  return (
+    m.includes('duplicate') ||
+    m.includes('expired') ||
+    m.startsWith('reclaimed')
+  )
 }
 
 export function aggregateQueueStats(
-  rows: Array<{ source_id: string; status: string }>
+  rows: Array<{ source_id: string; status: string; error_message?: string | null }>
 ): Record<string, QueueStatusCounts> {
   const map: Record<string, QueueStatusCounts> = {}
 
@@ -164,8 +188,11 @@ export function aggregateQueueStats(
     const bucket = map[row.source_id]
     if (row.status === 'pending') bucket.pending++
     else if (row.status === 'processing') bucket.processing++
-    else if (row.status === 'done') bucket.done++
-    else if (row.status === 'failed') bucket.failed++
+    else if (row.status === 'done') {
+      bucket.done++
+      if (isNonStemSkipMessage(row.error_message)) bucket.skipped_non_stem++
+      else if (isOtherDoneMessage(row.error_message)) bucket.other_done++
+    } else if (row.status === 'failed') bucket.failed++
   }
 
   return map
@@ -179,15 +206,15 @@ export function aggregateQueueStats(
 export async function fetchAllQueueStatusRows(
   supabase: SupabaseClient,
   pageSize: number = 1000
-): Promise<Array<{ source_id: string; status: string }>> {
-  const all: Array<{ source_id: string; status: string }> = []
+): Promise<Array<{ source_id: string; status: string; error_message: string | null }>> {
+  const all: Array<{ source_id: string; status: string; error_message: string | null }> = []
   let from = 0
 
   for (;;) {
     const to = from + pageSize - 1
     const { data, error } = await supabase
       .from('scrape_queue')
-      .select('source_id, status')
+      .select('source_id, status, error_message')
       .order('queued_at', { ascending: true })
       .range(from, to)
 
@@ -211,8 +238,41 @@ export function sumQueueStats(
       acc.processing += stats.processing
       acc.done += stats.done
       acc.failed += stats.failed
+      acc.skipped_non_stem += stats.skipped_non_stem
+      acc.other_done += stats.other_done
       return acc
     },
     emptyQueueStats()
   )
+}
+
+/**
+ * Page through scraped_job_sources to count genuinely published jobs per
+ * source (status='published' with a live job_id). This is the trustworthy
+ * "Published" number — a `done` queue row alone does not mean published.
+ */
+export async function fetchPublishedCountsBySource(
+  supabase: SupabaseClient,
+  pageSize: number = 1000
+): Promise<Record<string, number>> {
+  const counts: Record<string, number> = {}
+  let from = 0
+
+  for (;;) {
+    const to = from + pageSize - 1
+    const { data, error } = await supabase
+      .from('scraped_job_sources')
+      .select('source_id')
+      .eq('status', 'published')
+      .not('job_id', 'is', null)
+      .range(from, to)
+
+    if (error) throw error
+    if (!data || data.length === 0) break
+    for (const row of data) counts[row.source_id] = (counts[row.source_id] || 0) + 1
+    if (data.length < pageSize) break
+    from += pageSize
+  }
+
+  return counts
 }

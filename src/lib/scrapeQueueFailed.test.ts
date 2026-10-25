@@ -7,8 +7,10 @@ import {
   parseFailedQueueAction,
   parseFailedQueueListOptions,
   parseFailedQueueScope,
+  parseQueueDoneBucket,
   parseQueueManageStatus,
   requeuePatchForStatus,
+  rowMatchesDoneBucket,
 } from './scrapeQueueFailed'
 
 assert.equal(isUuid('3b0d261c-86a2-4383-89f0-9162c1c10662'), true)
@@ -17,7 +19,27 @@ assert.equal(isUuid('not-a-uuid'), false)
 assert.equal(parseQueueManageStatus('pending'), 'pending')
 assert.equal(parseQueueManageStatus('processing'), 'processing')
 assert.equal(parseQueueManageStatus('failed'), 'failed')
-assert.equal('error' in parseQueueManageStatus('done'), true)
+assert.equal(parseQueueManageStatus('done'), 'done')
+assert.equal(
+  typeof parseQueueManageStatus('archived') === 'object' && 'error' in parseQueueManageStatus('archived'),
+  true
+)
+
+assert.equal(parseQueueDoneBucket(null), 'published')
+assert.equal(parseQueueDoneBucket('non_stem'), 'non_stem')
+assert.equal(
+  typeof parseQueueDoneBucket('bogus') === 'object' && 'error' in parseQueueDoneBucket('bogus'),
+  true
+)
+
+// Done-bucket classification mirrors scrapeQueueStats.
+assert.equal(rowMatchesDoneBucket('Skipped: outside STEM focus', 'non_stem'), true)
+assert.equal(rowMatchesDoneBucket('Skipped: pre-check outside STEM (HTML board)', 'non_stem'), true)
+assert.equal(rowMatchesDoneBucket(null, 'published'), true)
+assert.equal(rowMatchesDoneBucket('Duplicate already published', 'published'), false)
+assert.equal(rowMatchesDoneBucket('Duplicate already published', 'other'), true)
+assert.equal(rowMatchesDoneBucket('Skipped: job expired on 2026-10-01', 'other'), true)
+assert.equal(rowMatchesDoneBucket(null, 'other'), false)
 
 {
   const parsed = parseFailedQueueScope({
@@ -48,25 +70,50 @@ assert.equal('error' in parseFailedQueueAction('archive'), true)
   const parsed = parseFailedQueueListOptions(
     new URLSearchParams('source_id=fuzu-kenya&limit=200&offset=10')
   )
-  assert.deepEqual(parsed, { status: 'failed', sourceId: 'fuzu-kenya', limit: 100, offset: 10 })
+  assert.deepEqual(parsed, {
+    status: 'failed',
+    bucket: 'published',
+    sourceId: 'fuzu-kenya',
+    limit: 100,
+    offset: 10,
+  })
 }
 {
   const parsed = parseFailedQueueListOptions(
     new URLSearchParams('status=pending&limit=25')
   )
-  assert.deepEqual(parsed, { status: 'pending', sourceId: undefined, limit: 25, offset: 0 })
+  assert.deepEqual(parsed, {
+    status: 'pending',
+    bucket: 'published',
+    sourceId: undefined,
+    limit: 25,
+    offset: 0,
+  })
+}
+{
+  const parsed = parseFailedQueueListOptions(
+    new URLSearchParams('status=done&bucket=non_stem')
+  )
+  assert.deepEqual(parsed, {
+    status: 'done',
+    bucket: 'non_stem',
+    sourceId: undefined,
+    limit: 50,
+    offset: 0,
+  })
 }
 assert.equal(
   'error' in parseFailedQueueListOptions(new URLSearchParams(''), { requireStatus: true }),
   true
 )
-assert.equal('error' in parseFailedQueueListOptions(new URLSearchParams('status=done')), true)
+assert.equal('error' in parseFailedQueueListOptions(new URLSearchParams('status=done&bucket=bogus')), true)
 assert.equal('error' in parseFailedQueueListOptions(new URLSearchParams('limit=-1')), true)
 assert.equal('error' in parseFailedQueueListOptions(new URLSearchParams('source_id=bad id')), true)
 
 assert.equal(requeuePatchForStatus('pending').ok === false, true)
 assert.equal(requeuePatchForStatus('processing').ok === true, true)
 assert.equal(requeuePatchForStatus('failed').ok === true, true)
+assert.equal(requeuePatchForStatus('done').ok === false, true)
 {
   const processing = requeuePatchForStatus('processing')
   assert.equal(processing.ok, true)
@@ -116,6 +163,8 @@ assert.deepEqual(
     queued_at: '2026-08-01T00:00:00.000Z',
     processed_at: '2026-08-02T00:00:00.000Z',
     status: 'pending',
+    job_slug: null,
+    job_id: null,
   }
 )
 

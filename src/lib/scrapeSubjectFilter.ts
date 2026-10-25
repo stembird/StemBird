@@ -46,6 +46,13 @@
  * passes; country gating is a separate concern.
  */
 
+/**
+ * Queue error_message stamped when the deep gate rejects a job. Admin UI
+ * buckets `done` rows by this message (published vs non-STEM screened) —
+ * keep in sync with scrapeQueueStats bucketing.
+ */
+export const SKIPPED_NON_STEM_MESSAGE = 'Skipped: outside STEM focus'
+
 const DEFAULT_SUBJECT_STEMS = [
   // ── Life sciences / lab (original focus) ──
   'biolog', // biology, biologist, biology teacher, molecular biology

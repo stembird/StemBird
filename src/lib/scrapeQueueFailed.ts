@@ -8,8 +8,38 @@ const MAX_PAGE_SIZE = 100
 const DEFAULT_PAGE_SIZE = 50
 const WRITE_PAGE_SIZE = 500
 
-export const QUEUE_MANAGE_STATUSES = ['pending', 'processing', 'failed'] as const
+export const QUEUE_MANAGE_STATUSES = ['pending', 'processing', 'failed', 'done'] as const
 export type QueueManageStatus = (typeof QUEUE_MANAGE_STATUSES)[number]
+
+/**
+ * Sub-filters for `done` rows — "done" alone means "processed", not
+ * "published". The admin UI lists real published jobs and STEM-screened
+ * rejects separately.
+ */
+export const QUEUE_DONE_BUCKETS = ['published', 'non_stem', 'other', 'all'] as const
+export type QueueDoneBucket = (typeof QUEUE_DONE_BUCKETS)[number]
+
+function isNonStemSkip(message: string | null | undefined): boolean {
+  return typeof message === 'string' && message.toLowerCase().includes('outside stem')
+}
+
+function isOtherDone(message: string | null | undefined): boolean {
+  if (message == null) return false
+  const m = message.toLowerCase()
+  return m.includes('duplicate') || m.includes('expired') || m.startsWith('reclaimed')
+}
+
+/** In-memory filter mirroring the PostgREST bucket predicates. */
+export function rowMatchesDoneBucket(
+  error_message: string | null | undefined,
+  bucket: QueueDoneBucket
+): boolean {
+  if (bucket === 'all') return true
+  if (bucket === 'non_stem') return isNonStemSkip(error_message)
+  if (bucket === 'other') return !isNonStemSkip(error_message) && isOtherDone(error_message)
+  // 'published': no skip marker at all (or admin-requeue notes on done rows)
+  return !isNonStemSkip(error_message) && !isOtherDone(error_message)
+}
 
 export interface FailedQueueItem {
   id: string
@@ -22,7 +52,10 @@ export interface FailedQueueItem {
   attempts: number
   queued_at: string | null
   processed_at: string | null
-  status: QueueManageStatus
+  status: string
+  /** Populated on the published bucket via scraped_job_sources → jobs join. */
+  job_slug?: string | null
+  job_id?: string | null
 }
 
 export type FailedQueueScope =
@@ -34,6 +67,7 @@ export type FailedQueueAction = 'retry' | 'requeue' | 'delete'
 
 export interface FailedQueueListOptions {
   status?: QueueManageStatus
+  bucket?: QueueDoneBucket
   sourceId?: string
   limit?: number
   offset?: number
@@ -64,6 +98,52 @@ type FailedQueueRow = {
   processed_at: string | null
   partial_data: unknown
   scraper_sources?: { name?: string | null } | { name?: string | null }[] | null
+  published_ref?: {
+    job_id?: string | null
+    status?: string | null
+    jobs?: { job_slug?: string | null } | { job_slug?: string | null }[] | null
+  } | null
+}
+
+/**
+ * scrape_queue has no FK to scraped_job_sources, so PostgREST cannot embed.
+ * For the published bucket, backfill job links with a second keyed query
+ * (both tables have job_url UNIQUE).
+ */
+async function attachPublishedRefs(
+  supabase: SupabaseClient,
+  rows: FailedQueueRow[]
+): Promise<FailedQueueRow[]> {
+  if (rows.length === 0) return rows
+  const urls = rows.map(r => r.job_url)
+  const refs = new Map<
+    string,
+    {
+      job_id: string | null
+      status: string
+      jobs: { job_slug?: string | null } | { job_slug?: string | null }[] | null
+    }
+  >()
+  for (let i = 0; i < urls.length; i += 100) {
+    const chunk = urls.slice(i, i + 100)
+    const { data, error } = await supabase
+      .from('scraped_job_sources')
+      .select('job_url, job_id, status, jobs ( job_slug )')
+      .eq('status', 'published')
+      .in('job_url', chunk)
+    if (error) throw error
+    for (const row of data || []) {
+      refs.set(row.job_url, {
+        job_id: (row.job_id as string | null) ?? null,
+        status: row.status as string,
+        jobs: (row.jobs as
+          | { job_slug?: string | null }
+          | { job_slug?: string | null }[]
+          | null) ?? null,
+      })
+    }
+  }
+  return rows.map(row => ({ ...row, published_ref: refs.get(row.job_url) ?? null }))
 }
 
 export function isUuid(value: string): boolean {
@@ -74,7 +154,15 @@ export function parseQueueManageStatus(value: unknown): QueueManageStatus | { er
   if (typeof value === 'string' && (QUEUE_MANAGE_STATUSES as readonly string[]).includes(value)) {
     return value as QueueManageStatus
   }
-  return { error: 'status must be pending, processing, or failed' }
+  return { error: 'status must be pending, processing, done, or failed' }
+}
+
+export function parseQueueDoneBucket(value: unknown): QueueDoneBucket | { error: string } {
+  if (value == null || value === '') return 'published'
+  if (typeof value === 'string' && (QUEUE_DONE_BUCKETS as readonly string[]).includes(value)) {
+    return value as QueueDoneBucket
+  }
+  return { error: 'bucket must be published, non_stem, other, or all' }
 }
 
 export function parseFailedQueueScope(body: unknown): FailedQueueScope | { error: string } {
@@ -122,10 +210,13 @@ export function parseFailedQueueListOptions(
   } else if (defaults.status) {
     status = defaults.status
   } else if (defaults.requireStatus) {
-    return { error: 'status must be pending, processing, or failed' }
+    return { error: 'status must be pending, processing, done, or failed' }
   } else {
     status = 'failed'
   }
+
+  const bucketParsed = parseQueueDoneBucket(searchParams.get('bucket'))
+  if (typeof bucketParsed === 'object') return bucketParsed
 
   const sourceId = searchParams.get('source_id')?.trim() || undefined
   if (sourceId && !SOURCE_ID_RE.test(sourceId)) {
@@ -142,6 +233,7 @@ export function parseFailedQueueListOptions(
 
   return {
     status,
+    bucket: bucketParsed,
     sourceId,
     limit: Math.min(Math.floor(limit), MAX_PAGE_SIZE),
     offset: Math.floor(offset),
@@ -182,6 +274,9 @@ export function requeuePatchForStatus(status: QueueManageStatus): RequeuePatchRe
   if (status === 'pending') {
     return { ok: false, error: 'Pending jobs are already queued' }
   }
+  if (status === 'done') {
+    return { ok: false, error: 'Done jobs cannot be requeued — delete or run Discover again' }
+  }
   if (status === 'processing') {
     return {
       ok: true,
@@ -212,15 +307,30 @@ function sourceNameFromJoin(
   return typeof name === 'string' && name.trim() ? name : null
 }
 
-function rowStatus(row: FailedQueueRow, fallback: QueueManageStatus): QueueManageStatus {
+function rowStatus(row: FailedQueueRow, fallback: QueueManageStatus): string {
   const parsed = parseQueueManageStatus(row.status)
   return typeof parsed === 'string' ? parsed : fallback
+}
+
+function publishedRefFromJoin(
+  joined: FailedQueueRow['published_ref']
+): { job_id: string | null; job_slug: string | null; status: string } | null {
+  if (!joined) return null
+  const row = Array.isArray(joined) ? joined[0] : joined
+  if (!row || row.status !== 'published') return null
+  const jobs = Array.isArray(row.jobs) ? row.jobs[0] : row.jobs
+  return {
+    job_id: row.job_id ?? null,
+    job_slug: jobs?.job_slug ?? null,
+    status: row.status,
+  }
 }
 
 export function mapFailedQueueRow(
   row: FailedQueueRow,
   fallbackStatus: QueueManageStatus = 'failed'
 ): FailedQueueItem {
+  const publishedRef = publishedRefFromJoin(row.published_ref)
   return {
     id: row.id,
     source_id: row.source_id,
@@ -233,6 +343,8 @@ export function mapFailedQueueRow(
     queued_at: row.queued_at,
     processed_at: row.processed_at,
     status: rowStatus(row, fallbackStatus),
+    job_slug: publishedRef?.job_slug ?? null,
+    job_id: publishedRef?.job_id ?? null,
   }
 }
 
@@ -244,6 +356,7 @@ export async function listFailedQueueItems(
   options: FailedQueueListOptions = {}
 ): Promise<FailedQueueListResult> {
   const status = options.status ?? 'failed'
+  const bucket = options.bucket ?? 'published'
   const limit = options.limit ?? DEFAULT_PAGE_SIZE
   const offset = options.offset ?? 0
 
@@ -252,7 +365,19 @@ export async function listFailedQueueItems(
     .select(QUEUE_SELECT, { count: 'exact' })
     .eq('status', status)
 
-  if (status === 'failed') {
+  if (status === 'done') {
+    // Coarse PostgREST pre-filter; exact bucket classification happens
+    // in-memory below via rowMatchesDoneBucket (mirrors scrapeQueueStats).
+    if (bucket === 'non_stem') {
+      query = query.ilike('error_message', '%outside STEM%')
+    } else if (bucket === 'published') {
+      query = query.or('error_message.is.null,error_message.eq.""')
+    } else if (bucket === 'other') {
+      query = query.not('error_message', 'is', null)
+    }
+  }
+
+  if (status === 'failed' || status === 'done') {
     query = query
       .order('processed_at', { ascending: false })
       .order('queued_at', { ascending: false })
@@ -271,8 +396,19 @@ export async function listFailedQueueItems(
   const { data, error, count } = await query
   if (error) throw error
 
+  let rows = (data || []) as unknown as FailedQueueRow[]
+  // PostgREST cannot express the full classifier, so re-filter the page for
+  // the two buckets whose predicates are coarse ('other' matches any non-null
+  // message, 'published' any null/empty one).
+  if (status === 'done' && (bucket === 'other' || bucket === 'published')) {
+    rows = rows.filter(row => rowMatchesDoneBucket(row.error_message, bucket))
+  }
+  if (status === 'done' && bucket === 'published') {
+    rows = await attachPublishedRefs(supabase, rows)
+  }
+
   return {
-    items: ((data || []) as FailedQueueRow[]).map(row => mapFailedQueueRow(row, status)),
+    items: rows.map(row => mapFailedQueueRow(row, status)),
     total: count ?? 0,
     limit,
     offset,

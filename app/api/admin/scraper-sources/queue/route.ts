@@ -14,7 +14,8 @@ export const runtime = 'nodejs'
 /**
  * GET /api/admin/scraper-sources/queue
  * Admin-only: list scrape_queue items by status for review.
- * Query: status=pending|processing|failed, source_id?, limit?, offset?
+ * Query: status=pending|processing|done|failed, bucket=published|non_stem|other|all
+ *        (only for status=done), source_id?, limit?, offset?
  */
 export async function GET(request: NextRequest) {
   const auth = await requireAdmin(request)
@@ -42,7 +43,8 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/admin/scraper-sources/queue
  * Admin-only: requeue (to pending) or delete queue items of one status.
- * Body: { status, action: 'retry' | 'requeue' | 'delete', ids?: string[], source_id?: string, all?: true }
+ * Done rows may only be deleted. Body: { status, action: 'retry' | 'requeue' | 'delete',
+ * ids?: string[], source_id?: string, all?: true }
  */
 export async function POST(request: NextRequest) {
   const auth = await requireAdmin(request)
@@ -64,6 +66,12 @@ export async function POST(request: NextRequest) {
 
     if ((action === 'retry' || action === 'requeue') && status === 'pending') {
       return NextResponse.json({ error: 'Pending jobs are already queued' }, { status: 400 })
+    }
+    if ((action === 'retry' || action === 'requeue') && status === 'done') {
+      return NextResponse.json(
+        { error: 'Done jobs cannot be requeued — delete or run Discover again' },
+        { status: 400 }
+      )
     }
 
     const scope = parseFailedQueueScope(body)

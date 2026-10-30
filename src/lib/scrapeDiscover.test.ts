@@ -243,6 +243,52 @@ assert.equal(
   'driver is not STEM'
 )
 
+// ── Management / operations / business titles: veto requires a hard degree ──
+// User rule: "Business Continuity Management Analyst" / "Assistant Operations
+// Manager" are NOT STEM unless responsibilities & REQUIREMENTS demand a STEM
+// discipline. An AI-tagged STEM job_function or a loose "technical" duty alone
+// is no longer enough — the title veto forces a hard degree beside a study cue.
+assert.equal(
+  matchesSubjectFocus(
+    ['Business Continuity Management Analyst', 'Data Science, Analytics & Artificial Intelligence'],
+    'Coordinate stakeholders and maintain continuity plans.'
+  ),
+  false,
+  'business continuity analyst is NOT STEM from a tagged job_function alone'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Assistant Operations Manager'],
+    null,
+    ['Manage daily operations; strong technical coordination skills']
+  ),
+  false,
+  'assistant operations manager is NOT STEM from a loose "technical" duty'
+)
+// A hard STEM degree requirement rescues either title, veto notwithstanding.
+assert.equal(
+  matchesSubjectFocus(
+    ['Business Continuity Management Analyst', 'Data Science, Analytics & Artificial Intelligence'],
+    'Required: Bachelor of Science in Computer Science or Information Technology.'
+  ),
+  true,
+  'business continuity analyst WITH a CS/IT degree IS STEM'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Assistant Operations Manager'],
+    'Qualification: Degree in Mechanical Engineering.'
+  ),
+  true,
+  'assistant operations manager WITH a mechanical engineering degree IS STEM'
+)
+// A genuinely STEM title still wins on the title stem (positive beats veto).
+assert.equal(
+  matchesSubjectFocus(['Network Operations Engineer']),
+  true,
+  'network operations engineer is STEM (title stem beats the veto)'
+)
+
 // "Data entry" must NOT match the two-word data stems.
 assert.equal(matchesSubjectFocus(['Data Entry Clerk']), false, 'data entry is not STEM')
 

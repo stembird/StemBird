@@ -71,7 +71,7 @@ import {
   expiresAtFromValidThrough,
   isGenericApplicationUrl,
   isStalePosting,
-  MAX_POSTING_AGE_DAYS,
+  maxPostingAgeDays,
   normalizeJobUrl,
   resolveScrapedDeadline,
 } from '@/lib/scraperDeadline'
@@ -607,17 +607,18 @@ export async function runScrapeProcessOne(
       }
     }
 
-    // Hard posting-age cap: never publish a role posted more than
-    // MAX_POSTING_AGE_DAYS days ago, regardless of any stated deadline. Runs
-    // before the AI parse so stale roles cost nothing. Missing/unparseable
-    // posting dates are kept (isStalePosting returns false).
-    if (isStalePosting(normalized.date_posted)) {
+    // Freshness cap: never publish a role posted more than maxPostingAgeDays()
+    // ago (default 7 days), regardless of any stated deadline. Runs before the
+    // AI parse so stale roles cost nothing. Missing/unparseable posting dates
+    // are kept (isStalePosting returns false).
+    const postingAgeCap = maxPostingAgeDays()
+    if (isStalePosting(normalized.date_posted, postingAgeCap)) {
       await supabase
         .from('scrape_queue')
         .update({
           status: 'done',
           processed_at: new Date().toISOString(),
-          error_message: `Skipped: posted older than ${MAX_POSTING_AGE_DAYS} days (${normalized.date_posted})`,
+          error_message: `Skipped: posted older than ${postingAgeCap} days (${normalized.date_posted})`,
         })
         .eq('id', queueItem.id)
 
@@ -632,13 +633,14 @@ export async function runScrapeProcessOne(
             ...(typeof rawData === 'object' && rawData ? rawData : {}),
             skip_reason: 'stale',
             date_posted: normalized.date_posted,
+            max_age_days: postingAgeCap,
           },
         },
         { onConflict: 'job_url' }
       )
 
       return {
-        message: 'Stale job skipped (posted over 60 days ago)',
+        message: `Stale job skipped (posted over ${postingAgeCap} days ago)`,
         processed: 1,
         stale: true,
         date_posted: normalized.date_posted,

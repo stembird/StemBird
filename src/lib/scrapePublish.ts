@@ -10,7 +10,7 @@ import {
   expiresAtFromValidThrough,
   isGenericApplicationUrl,
   isStalePosting,
-  MAX_POSTING_AGE_DAYS,
+  maxPostingAgeDays,
   normalizeJobUrl,
   resolveScrapedDeadline,
 } from './scraperDeadline'
@@ -221,10 +221,11 @@ export async function publishScrapedJob(
       }
     }
 
-    // Hard posting-age cap: never publish a role posted more than
-    // MAX_POSTING_AGE_DAYS days ago, regardless of any stated deadline.
+    // Freshness cap: never publish a role posted more than maxPostingAgeDays()
+    // ago (default 7 days), regardless of any stated deadline.
     // Missing/unparseable posting dates are kept (isStalePosting false).
-    if (isStalePosting(normalized.date_posted)) {
+    const postingAgeCap = maxPostingAgeDays()
+    if (isStalePosting(normalized.date_posted, postingAgeCap)) {
       await supabase.from('scraped_job_sources').upsert(
         {
           source_id: sourceId,
@@ -236,7 +237,7 @@ export async function publishScrapedJob(
             ...(typeof rawData === 'object' && rawData ? (rawData as object) : {}),
             skip_reason: 'stale',
             date_posted: normalized.date_posted,
-            max_age_days: MAX_POSTING_AGE_DAYS,
+            max_age_days: postingAgeCap,
           },
         },
         { onConflict: 'job_url' }

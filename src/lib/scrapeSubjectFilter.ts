@@ -159,12 +159,21 @@ const DEFAULT_SUBJECT_STEMS = [
 const WORD_BOUNDARY_TERMS = new Set(['lab', 'qc', 'qa', 'gis', 'stem'])
 
 /**
- * Title stems that are CONFIDENTLY non-STEM. Used only at discovery as a cheap
- * cost cut on obvious off-topic roles (these never reach the AI parse). Kept
- * deliberately narrow: when a title is ambiguous (e.g. "Production Manager",
- * "Officer", "Technician") it is QUEUED so the deep gate can read its
- * qualifications instead. A positive STEM signal always wins over these
- * (e.g. "Sales Engineer" keeps via "engineer", not dropped by "sales").
+ * Title stems that are CONFIDENTLY non-STEM. Two jobs:
+ *   1. Discovery (cheap cost cut) — obvious off-topic roles never reach the AI.
+ *   2. Publish gate title veto — a title matched here can ONLY be rescued by a
+ *      HARD STEM degree named next to a study cue in responsibilities /
+ *      qualifications / description (see matchesSubjectFocus). This encodes the
+ *      rule that generic management / operations / business / administrative
+ *      roles ("Business Continuity Management Analyst", "Assistant Operations
+ *      Manager") are NOT STEM unless the requirements actually demand a STEM
+ *      discipline — an AI-tagged job_function or a source skills string alone
+ *      is no longer enough.
+ * A positive STEM word in the title always wins first ("Sales Engineer",
+ * "Laboratory Operations Manager", "Network Operations Engineer" stay STEM), so
+ * these entries only gate titles that carry no STEM word of their own. Kept
+ * deliberately clear of genuinely ambiguous trade titles still rescued by their
+ * degree requirement.
  */
 const NEGATIVE_TITLE_STEMS = [
   'sales',
@@ -172,6 +181,33 @@ const NEGATIVE_TITLE_STEMS = [
   'advertis',
   'brand',
   'public relations',
+  // ── Generic business / management / operations (publish-gate title veto) ──
+  // Roles whose title is pure management/operations/business carry no STEM
+  // signal on their face; require an explicit STEM degree to publish.
+  'operations',
+  'business continuity',
+  'continuity',
+  'business analyst',
+  'business development',
+  'management analyst',
+  'project management',
+  'project manager',
+  'general management',
+  'assistant manager',
+  'deputy manager',
+  'administration',
+  'administrative',
+  'office manager',
+  'team leader',
+  'unit manager',
+  'center manager',
+  'centre manager',
+  'branch manager',
+  'regional manager',
+  'country manager',
+  'cluster manager',
+  'store manager',
+  'outlet manager',
   'driver',
   'chauffeur',
   'cleaner',
@@ -187,6 +223,7 @@ const NEGATIVE_TITLE_STEMS = [
   'audit',
   'tax',
   'receptionist',
+  'reception',
   'secretary',
   'personal assistant',
   'administrative assistant',

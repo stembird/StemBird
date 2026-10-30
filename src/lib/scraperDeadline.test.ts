@@ -9,6 +9,7 @@ import {
   expiresAtFromValidThrough,
   isStalePosting,
   MAX_POSTING_AGE_DAYS,
+  maxPostingAgeDays,
 } from './scraperDeadline'
 
 assert.equal(parseDeadlineDate('2026-08-01'), '2026-08-01')
@@ -64,20 +65,26 @@ assert.equal(fromPublishedBug.action, 'skip_expired')
 
 assert.equal(expiresAtFromValidThrough('2026-08-17'), '2026-08-17T23:59:59.999Z')
 
-// --- Posting-age cap (never publish roles older than MAX_POSTING_AGE_DAYS) ---
+// --- Posting-age cap (only publish roles posted within MAX_POSTING_AGE_DAYS) ---
 const auditNow = new Date('2026-09-01T12:00:00Z')
-// cutoff = 2026-09-01 minus 60d = 2026-07-03
-assert.equal(MAX_POSTING_AGE_DAYS, 60)
-assert.equal(isStalePosting('2026-07-02', 60, auditNow), true, '61 days old is stale')
-assert.equal(isStalePosting('2026-07-03', 60, auditNow), false, 'exactly 60 days is kept')
-assert.equal(isStalePosting('2026-08-15', 60, auditNow), false, 'recent is kept')
-assert.equal(isStalePosting(null, 60, auditNow), false, 'null date is kept')
-assert.equal(isStalePosting(undefined, 60, auditNow), false, 'missing date is kept')
-assert.equal(isStalePosting('not-a-date', 60, auditNow), false, 'unparseable is kept')
+// Freshness default is 7 days: cutoff = 2026-09-01 minus 7d = 2026-08-25
+assert.equal(MAX_POSTING_AGE_DAYS, 7)
+assert.equal(isStalePosting('2026-08-24', 7, auditNow), true, '8 days old is stale')
+assert.equal(isStalePosting('2026-08-25', 7, auditNow), false, 'exactly 7 days is kept')
+assert.equal(isStalePosting('2026-08-31', 7, auditNow), false, 'recent is kept')
+assert.equal(isStalePosting(null, 7, auditNow), false, 'null date is kept')
+assert.equal(isStalePosting(undefined, 7, auditNow), false, 'missing date is kept')
+assert.equal(isStalePosting('not-a-date', 7, auditNow), false, 'unparseable is kept')
 // ISO datetime from a board JSON-LD still counts
-assert.equal(isStalePosting('2026-05-01T09:00:00Z', 60, auditNow), true, 'old ISO datetime is stale')
-// default maxAgeDays = MAX_POSTING_AGE_DAYS
-assert.equal(isStalePosting('2026-05-01', 60, auditNow), true)
+assert.equal(isStalePosting('2026-08-20T09:00:00Z', 7, auditNow), true, 'old ISO datetime is stale')
+// default maxAgeDays resolves to the constant when no env override is set
+assert.equal(maxPostingAgeDays(), 7, 'default cap is 7 days')
+assert.equal(isStalePosting('2026-08-10', undefined, new Date(auditNow)), true)
+// STEMBIRD_MAX_POSTING_AGE_DAYS overrides the cap without a code change
+process.env.STEMBIRD_MAX_POSTING_AGE_DAYS = '14'
+assert.equal(maxPostingAgeDays(), 14, 'env override loosens cap to 14 days')
+assert.equal(isStalePosting('2026-08-20', maxPostingAgeDays(), auditNow), false, '14-day window keeps a 12-day-old job')
+delete process.env.STEMBIRD_MAX_POSTING_AGE_DAYS
 
 assert.equal(
   normalizeJobUrl('https://Apply.Workable.com/tatucity/j/ABC123/?utm_source=x'),

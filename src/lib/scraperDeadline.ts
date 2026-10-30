@@ -191,10 +191,20 @@ export function resolveScrapedDeadline(
 }
 
 /**
- * Hard posting-age cap. StemBird never publishes a role the employer posted
- * more than this many days ago, even when it states no (or a future) deadline.
+ * Freshness cap. StemBird lists RECENTLY advertised roles only: a job the
+ * employer posted more than this many days ago is never published, even when
+ * it states no (or a future) deadline. Override without a code change via
+ * STEMBIRD_MAX_POSTING_AGE_DAYS (e.g. "3" to tighten, "14" to loosen).
  */
-export const MAX_POSTING_AGE_DAYS = 60
+export const MAX_POSTING_AGE_DAYS = 7
+
+/** Effective posting-age cap (env override wins when a sane number). */
+export function maxPostingAgeDays(): number {
+  const raw = (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } })
+    .process?.env?.STEMBIRD_MAX_POSTING_AGE_DAYS
+  const n = Number((raw || '').trim())
+  return Number.isFinite(n) && n >= 1 ? Math.floor(n) : MAX_POSTING_AGE_DAYS
+}
 
 /**
  * True when a job was posted more than `maxAgeDays` ago. Missing or
@@ -203,7 +213,7 @@ export const MAX_POSTING_AGE_DAYS = 60
  */
 export function isStalePosting(
   datePosted: string | null | undefined,
-  maxAgeDays = MAX_POSTING_AGE_DAYS,
+  maxAgeDays = maxPostingAgeDays(),
   now = new Date()
 ): boolean {
   const day = parseDeadlineDate(datePosted)

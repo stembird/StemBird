@@ -28,7 +28,6 @@
  */
 
 import {
-  ACTIVE_JOB_FUNCTION_NAMES,
   CHEMISTRY_CORE_FUNCTION_NAMES,
 } from '@/lib/chemistryLens.taxonomy';
 
@@ -40,7 +39,6 @@ export const SKIPPED_NON_CHEMISTRY_MESSAGE = 'Skipped: outside chemistry focus'
 
 // ─── T1 — chemistry-core functions (from taxonomy) ─────────────────────────
 const CHEM_CORE_SET = new Set(CHEMISTRY_CORE_FUNCTION_NAMES.map((n) => n.toLowerCase()))
-const ALL_FUNCTION_SET = new Set(ACTIVE_JOB_FUNCTION_NAMES.map((n) => n.toLowerCase()))
 
 // ─── T2 — chemistry-family degree stems ────────────────────────────────────
 // Only these count for the qualification rescue. They deliberately exclude
@@ -278,11 +276,13 @@ export function evaluateChemistryRelevance(input: ChemistryGateInput): Chemistry
     }
   }
 
-  // Non-vetoed: publish when at least one test passes OR when we have a valid
-  // Chemistry Lens function assignment (any of the 29 active functions).
-  const hasTaxonomyFit = functions.some((f) => ALL_FUNCTION_SET.has(f))
+  // Non-vetoed: publish when at least one content test fires.
+  // T1 (chemistry-core function) publishes on its own.
+  // Non-core active functions (Technical Sales, Applications, Procurement,
+  // Teaching, etc.) require corroborating content evidence (T2/T3/T4)
+  // because post-migration the tag alone may be a legacy remap artifact.
   const publish =
-    chemCoreHit || degreeHit || dutyHit || tradeHit || hasTaxonomyFit
+    chemCoreHit || degreeHit || dutyHit || tradeHit
 
   return {
     publish,
@@ -291,8 +291,8 @@ export function evaluateChemistryRelevance(input: ChemistryGateInput): Chemistry
     reason: publish
       ? testsPassed.length
         ? `passed ${testsPassed.join(', ')}`
-        : 'accepted via active Chemistry Lens function tag'
-      : 'no chemistry test fired and no valid Chemistry Lens function tag',
+        : 'T1 chemistry-core function'
+      : 'no chemistry evidence (T1-T4 all negative)',
   }
 }
 

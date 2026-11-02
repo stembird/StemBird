@@ -11,22 +11,30 @@ import {
   SKIPPED_NON_CHEMISTRY_MESSAGE,
 } from './chemistryRelevance'
 
-// ── T1 — chemistry-core function tag publishes on its own ────────────────────
+// ── T1 — chemistry-core function tag, corroborated by title or prose ────────
 assert.equal(
   matchesChemistryFocus({
     title: 'QC Analyst',
     jobFunctions: ['Quality Control (QC)'],
   }),
   true,
-  'T1 — QC function is chemistry-core, publishes even without prose'
+  'T1 + chem-plausible title (QC) publishes'
 )
 assert.equal(
   matchesChemistryFocus({
-    title: 'Officer',
+    title: 'Analytical Officer',
     jobFunctions: ['Analytical & Instrumental Chemistry'],
   }),
   true,
-  'T1 — analytical chemistry function publishes'
+  'T1 + chem-plausible title (Analytical) publishes'
+)
+assert.equal(
+  matchesChemistryFocus({
+    title: 'IT Support Associate',
+    jobFunctions: ['Laboratory Information Systems (LIMS) & Informatics'],
+  }),
+  false,
+  'T1 with mismatched title and no prose corroboration is a stale tag → reject'
 )
 
 // ── T2 — chemistry-family degree requirement in qualifications ───────────────
@@ -56,6 +64,24 @@ assert.equal(
   }),
   true,
   'T3 — HPLC/titration phrases publish'
+)
+assert.equal(
+  matchesChemistryFocus({
+    title: 'Quality Officer',
+    description:
+      '<p>Conduct raw material testing, batch analysis, and finished product testing per ISO 17025.</p>',
+  }),
+  true,
+  'T3 — chemist-plausible duties (raw material/batch/product testing) publish without naming any instrument'
+)
+assert.equal(
+  matchesChemistryFocus({
+    title: 'Quality Assurance Officer',
+    requiredQualifications:
+      '<p>Degree in Food Science, Nutrition, or related field.</p>',
+  }),
+  true,
+  'T2 — "or related field" phrasing on Food Science/Nutrition admits chemists'
 )
 
 // ── T4 — commercial chemistry (instrument sales + chem-literacy) ────────────

@@ -394,10 +394,10 @@ export default function HomePage({
             {[
               {
                 name: "David Kamau",
-                role: "Software Developer at Safaricom",
+                role: "Quality Control Analyst at a Nairobi beverage manufacturer",
                 image: "/assets/testimonial-1.jpg",
                 quote:
-                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on ChemistryLens, I had 3 interviews. The AI matching actually works. It connected me to engineering roles I would never have found myself.",
+                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on ChemistryLens, I had 3 interviews. The AI matching actually works. It connected me to QC and lab roles I would never have found myself.",
               },
               {
                 name: "Grace Wanjiru",
@@ -408,10 +408,10 @@ export default function HomePage({
               },
               {
                 name: "Brian Ochieng",
-                role: "Data Analyst at Equity Bank",
+                role: "Analytical Chemist at an environmental testing laboratory",
                 image: "/assets/testimonial-3.jpg",
                 quote:
-                  "The free CV builder alone was worth signing up for — it finally framed my analytics projects the way employers read them. Then I got 3 interview invitations in my first month. ChemistryLens shows you jobs that actually match your technical skills.",
+                  "The free CV builder alone was worth signing up for — it finally framed my HPLC, GC-MS and method-validation work the way hiring managers read them. Then I got 3 interview invitations in my first month. ChemistryLens shows you jobs that actually match your technical skills.",
               },
             ].map((testimonial, idx) => (
               <Card
@@ -563,19 +563,19 @@ export default function HomePage({
               </div>
               <CardContent className="p-5">
                 <h3 className="text-2xl font-semibold mb-3">
-                  From Graduate to Senior Engineer in 3 Years
+                  From Graduate to Senior Analytical Chemist in 3 Years
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  &quot;I started as a fresh civil engineering graduate with no connections. ChemistryLens matched
-                  me to my first site role, then my second, then my third. In 3 years, I went from intern
-                  to Senior Engineer at a national infrastructure firm. Every opportunity was the right next step.&quot;
+                  &quot;I started as a fresh chemistry graduate with no connections. ChemistryLens matched
+                  me to my first lab role, then my second, then my third. In 3 years, I went from intern
+                  to Senior Analytical Chemist at a national testing laboratory. Every opportunity was the right next step.&quot;
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-primary" />
                   <div>
                     <div className="font-semibold">Sarah Njeri</div>
                     <div className="text-sm text-muted-foreground">
-                      Senior Civil Engineer, infrastructure firm
+                      Senior Analytical Chemist, national testing lab
                     </div>
                   </div>
                 </div>
@@ -592,19 +592,19 @@ export default function HomePage({
               </div>
               <CardContent className="p-5">
                 <h3 className="text-2xl font-semibold mb-3">
-                  Career Change Into Tech Without Starting Over
+                  Career Change Into Formulation Chemistry Without Starting Over
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  &quot;I spent 6 years in mechanical engineering and wanted to move into software, but every job
-                  board made me feel like I had to start from scratch. ChemistryLens&apos;s matching found tech roles
-                  that valued my engineering background. I&apos;m now a Tech Lead at Andela Kenya.&quot;
+                  &quot;I spent 6 years in industrial process chemistry and wanted to move into formulation, but every job
+                  board made me feel like I had to start from scratch. ChemistryLens&apos;s matching found formulation roles
+                  that valued my process and analytical background. I&apos;m now a Senior Formulation Chemist at a personal-care manufacturer.&quot;
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-secondary" />
                   <div>
                     <div className="font-semibold">Michael Otieno</div>
                     <div className="text-sm text-muted-foreground">
-                      Tech Lead, Andela Kenya
+                      Senior Formulation Chemist, personal-care manufacturer
                     </div>
                   </div>
                 </div>

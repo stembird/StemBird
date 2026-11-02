@@ -520,7 +520,7 @@ export default function CVTemplatePreview({ templateName, showDescription = fals
               <div className="font-semibold text-[6px] text-gray-900 border-b border-gray-200 pb-0.5 mb-0.5">Extracurricular Activities</div>
               <div className="space-y-0.5 text-[4.8px]">
                 <div>• Member • Engineering Students Association (2020-2023)</div>
-                <div>• Volunteer • Community STEM Mentorship Program</div>
+                <div>• Volunteer • Community Chemistry Mentorship Program</div>
                 <div>• Participant • National Engineering Innovation Competition 2022</div>
               </div>
             </div>

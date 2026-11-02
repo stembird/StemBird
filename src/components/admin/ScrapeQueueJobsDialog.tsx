@@ -134,9 +134,9 @@ const COPY: Record<
     deleteToast: (n) => (n === 0 ? "No published rows were deleted" : `Deleted ${n} published queue row(s) — the jobs themselves stay live`),
   },
   non_stem: {
-    title: "Screened out — non-STEM",
-    description: "Processed jobs the STEM gate rejected (marked done with 'outside STEM focus'). Review them here if you suspect the filter missed something.",
-    empty: "No jobs have been screened out as non-STEM.",
+    title: "Screened out — non-chemistry",
+    description: "Processed jobs the chemistry gate rejected (marked done with 'outside chemistry focus'). Review them here if you suspect the filter missed something.",
+    empty: "No jobs have been screened out as non-chemistry.",
     loading: "Loading screened-out jobs…",
     notesLabel: "Reason",
     requeueLabel: "",

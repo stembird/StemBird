@@ -40,9 +40,9 @@ interface QueueStats {
   failed: number;
   /** Real published jobs (scraped_job_sources status=published with live job_id). */
   published?: number;
-  /** Done rows the STEM gate screened out. */
+  /** Done rows the chemistry gate screened out. */
   skipped_non_stem?: number;
-  /** Done rows that were duplicates/expiries, neither published nor STEM-skipped. */
+  /** Done rows that were duplicates/expiries, neither published nor chemistry-skipped. */
   other_done?: number;
 }
 
@@ -532,9 +532,9 @@ export default function AdminScraperSourcesPage() {
           onClick={() => setQueueDialog({ status: "published" })}
         />
         <StatCard
-          label="Non-STEM screened"
+          label="Non-chemistry screened"
           value={data?.totals.skipped_non_stem ?? 0}
-          hint="Click to review STEM-gate rejections"
+          hint="Click to review chemistry-gate rejections"
           onClick={() => setQueueDialog({ status: "non_stem" })}
         />
         <StatCard
@@ -668,7 +668,7 @@ export default function AdminScraperSourcesPage() {
                                   )}
                                 </div>
                                 <div>
-                                  <span className="text-muted-foreground">Non-STEM:</span>{" "}
+                                  <span className="text-muted-foreground">Non-chemistry:</span>{" "}
                                   {stats.skipped_non_stem ? (
                                     <button
                                       type="button"

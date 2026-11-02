@@ -45,7 +45,7 @@ interface JobFormData {
   additional_locations: Array<{ county: string; city: string }>;
   direct_apply: boolean;
   application_url: string;
-  // STEM/Health/Architecture Fields
+  // Chemistry/Health/Architecture Fields
   industry: string;
   industries: string[];
   education_level_id: string;
@@ -109,7 +109,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
       additional_locations: [],
       direct_apply: true,
       application_url: "",
-      // STEM/Health/Architecture Fields
+      // Chemistry/Health/Architecture Fields
       industry: "",
       industries: [],
       education_level_id: "none",
@@ -589,7 +589,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         direct_apply: existingJob.direct_apply ?? true,
         application_url: existingJob.application_url || "",
         
-        // STEM/Health/Architecture Fields
+        // Chemistry/Health/Architecture Fields
         industry: existingJob.industry || "",
         industries: (existingJob as any).industries?.length > 0
           ? (existingJob as any).industries
@@ -770,7 +770,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         direct_apply: data.direct_apply,
         application_url: data.application_url || null,
 
-        // STEM/Health/Architecture Fields
+        // Chemistry/Health/Architecture Fields
         industry: normalizedIndustries[0] || null,
         industries: normalizedIndustries.length > 0 ? normalizedIndustries : null,
         industry_ids: industryIds.length > 0 ? industryIds : null,

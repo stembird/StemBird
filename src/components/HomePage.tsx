@@ -83,11 +83,11 @@ export default function HomePage({
   const { data: content } = usePageContent("home");
 
   const heroTitle = getContentValue(content, "hero_title", "Stop Searching. Start Getting Hired.");
-  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. ChemistryLens changes that. We match your STEM skills (engineering, labs, tech, data and research) directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
+  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. ChemistryLens changes that. We match your chemistry skills (analytical labs, QC/QA, formulation, process engineering and industrial testing) directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
   const statsJobsTarget = Math.max(0, activeJobsCount);
   const statsCompaniesTarget = Math.max(0, companiesCount);
   const statsSuccessRateTarget = parseInt(getContentValue(content, "stats_success_rate", "90"));
-  const ctaTitle = getContentValue(content, "cta_title", "Your Next STEM Interview Is 60 Seconds Away");
+  const ctaTitle = getContentValue(content, "cta_title", "Your Next Chemistry Career Interview Is 60 Seconds Away");
   const ctaSubtitle = getContentValue(content, "cta_subtitle", "ChemistryLens matches your technical skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on generic job boards. Join free today.");
 
   const companiesPlugin = useRef(
@@ -186,7 +186,7 @@ export default function HomePage({
         <div className="container relative z-10 mx-auto py-12 md:py-16 px-4">
           <div className="max-w-2xl animate-fade-in md:mx-auto md:text-center">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sky-200 mb-3 font-semibold drop-shadow-[0_1px_6px_rgba(0,0,0,0.55)]">
-              ChemistryLens · STEM Careers in Kenya
+              ChemistryLens · Chemistry Careers in Kenya
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-[3.25rem] font-bold mb-4 text-[#0A66C2] leading-[1.1] drop-shadow-[0_1px_10px_rgba(255,255,255,0.75)]">
               {heroTitle}
@@ -279,7 +279,7 @@ export default function HomePage({
                 Top Companies Hiring Now
               </h2>
               <p className={SECTION_SUBCOPY_CLASS}>
-                STEM employers with the most open roles — explore profiles and apply
+                Chemistry employers with the most open roles — explore profiles and apply
               </p>
             </div>
 
@@ -324,12 +324,12 @@ export default function HomePage({
         <div className="container mx-auto">
           <div className={SECTION_HEADER_WRAP_CLASS}>
             <h2 className={SECTION_HEADING_CLASS}>
-              Why 95% of Our STEM Talent Lands Interviews Within 3 Months
+              Why 95% of Our Chemistry Talent Lands Interviews Within 3 Months
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
               Generic job boards dump every listing and leave you to figure it out. ChemistryLens is
-              built for science, technology, engineering and math professionals — we actively match
-              your technical skills to hiring employers using AI, not just keywords.
+              built for chemists, laboratory scientists, quality professionals and process engineers —
+              we actively match your technical skills to hiring employers using AI, not just keywords.
             </p>
           </div>
 
@@ -337,12 +337,12 @@ export default function HomePage({
             <div>
               <div className="space-y-3">
                 {[
-                  "Smart AI matching that connects your technical skills to STEM roles you'll actually get — not just jobs that exist",
-                  "Real-time alerts: be among the first to apply when new engineering, lab, tech, data and research roles drop",
-                  "Free career tools worth KES 10,000+: CV builder, cover letter generator & LinkedIn optimizer tuned for STEM professionals",
-                  "Verified STEM jobs from Kenya's labs, engineering firms, tech teams, manufacturers and research institutions",
+                  "Smart AI matching that connects your technical skills to chemistry roles you'll actually get — not just jobs that exist",
+                  "Real-time alerts: be among the first to apply when new analytical, QC/QA, formulation, process and lab roles drop",
+                  "Free career tools worth KES 10,000+: CV builder, cover letter generator & LinkedIn optimizer tuned for chemistry professionals",
+                  "Verified chemistry jobs from Kenya's labs, chemical manufacturers, beverage and pharma plants, refineries and research institutions",
                   "Zero spam, zero ghost listings. Every job is verified and actively hiring",
-                  "Trusted by Kenyan scientists, engineers and technologists — built for Kenya's STEM job market",
+                  "Trusted by Kenyan chemists, laboratory scientists and process engineers — built for Kenya's chemistry job market",
                   "Our users report 3x more interview callbacks compared to applying on generic job boards",
                   "100% free to join, search, and apply. No hidden fees, no catch",
                 ].map((benefit, idx) => (
@@ -369,7 +369,7 @@ export default function HomePage({
               <div className="absolute inset-0 bg-gradient-secondary opacity-10 rounded-3xl blur-3xl" />
               <img
                 src="/assets/team-collaboration.jpg"
-                alt="Kenyan STEM Professionals Collaborating"
+                alt="Kenyan Chemistry Professionals Collaborating"
                 className="relative rounded-3xl shadow-2xl w-full h-[420px] md:h-[520px] object-cover"
               />
             </div>
@@ -385,7 +385,7 @@ export default function HomePage({
               From &quot;No Callbacks&quot; to &quot;When Can You Start?&quot;
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              Real Kenyan STEM professionals. Real results. Here&apos;s what happens when your
+              Real Kenyan chemistry professionals. Real results. Here&apos;s what happens when your
               technical CV meets the right platform.
             </p>
           </div>
@@ -547,8 +547,8 @@ export default function HomePage({
               Your Career, Transformed
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              From fresh graduates to senior engineers and scientists, ChemistryLens has helped thousands
-              of Kenyan STEM professionals level up.
+              From fresh graduates to senior chemists and laboratory directors, ChemistryLens has helped thousands
+              of Kenyan chemistry professionals level up.
             </p>
           </div>
 

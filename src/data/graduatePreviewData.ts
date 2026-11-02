@@ -53,6 +53,6 @@ export const graduatePreviewData = {
   ],
   activities: [
     "Member – Engineering Students Association",
-    "Volunteer – Community STEM Mentorship Program"
+    "Volunteer – Community Chemistry Mentorship Program"
   ]
 };

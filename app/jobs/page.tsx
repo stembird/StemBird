@@ -18,6 +18,10 @@ import {
   type JobCardRow,
 } from "@/lib/jobCardSelect";
 import { isMissingListingKindColumnError } from "@/lib/listingKind";
+import {
+  ACTIVE_INDUSTRY_NAMES,
+  ACTIVE_JOB_FUNCTION_NAMES,
+} from "@/lib/chemistryLens.taxonomy";
 
 interface SearchFilters {
   searchTerm: string;
@@ -33,99 +37,10 @@ interface SearchFilters {
   sortBy: string;
 }
 
-// Static data for dropdowns (STEM taxonomy — must match industries/job_functions lookup tables)
-const JOB_FUNCTIONS = [
-  { name: "Research & Development (R&D)" },
-  { name: "Analytical Chemistry" },
-  { name: "Laboratory Operations & Testing" },
-  { name: "Quality Control (QC)" },
-  { name: "Quality Assurance & Quality Management" },
-  { name: "Regulatory Affairs & Compliance" },
-  { name: "Product Development & Formulation" },
-  { name: "Microbiology & Biotechnology" },
-  { name: "Clinical Research & Trials" },
-  { name: "Materials Science & Engineering" },
-  { name: "Food Science & Technology" },
-  { name: "Environmental Science & Management" },
-  { name: "Geology, Geoscience & Mineral Exploration" },
-  { name: "Agricultural Science & Technology" },
-  { name: "Public Health Science & Epidemiology" },
-  { name: "Biostatistics & Bioinformatics" },
-  { name: "Scientific Data Management" },
-  { name: "Chemical & Process Engineering" },
-  { name: "Industrial & Manufacturing Engineering" },
-  { name: "Mechanical Engineering" },
-  { name: "Electrical & Electronics Engineering" },
-  { name: "Civil & Structural Engineering" },
-  { name: "Biomedical Engineering" },
-  { name: "Robotics, Mechatronics & Automation" },
-  { name: "Instrumentation, Control & Metrology" },
-  { name: "Maintenance & Reliability Engineering" },
-  { name: "Production & Manufacturing Operations" },
-  { name: "Process Optimisation & Production Planning" },
-  { name: "Health, Safety & Process Risk Management" },
-  { name: "Energy Systems & Renewable Energy" },
-  { name: "Water & Wastewater Engineering" },
-  { name: "Mining & Mineral Processing" },
-  { name: "Surveying & Geospatial Science" },
-  { name: "Software Development & Engineering" },
-  { name: "IT Infrastructure, Systems & Support" },
-  { name: "Cybersecurity" },
-  { name: "Cloud Computing & DevOps" },
-  { name: "Data Science, Analytics & Artificial Intelligence" },
-  { name: "Networking & Telecommunications" },
-  { name: "Mathematics, Statistics & Actuarial Science" },
-  { name: "Operations Research & Optimisation" },
-  { name: "Technical Support & Field Service" },
-  { name: "Technical Sales & Business Development" },
-  { name: "Technical Procurement & Supply Chain" },
-  { name: "Technical Project Management & Operations" },
-  { name: "STEM Education, Teaching & Curriculum Development" },
-  { name: "Technical Training, Academic Research & Science Communication" }
-];
-
-const INDUSTRIES = [
-  { name: "Agriculture, Agribusiness & Agricultural Technology" },
-  { name: "Food & Beverage Manufacturing" },
-  { name: "Chemicals, Paints, Polymers & Industrial Materials" },
-  { name: "Pharmaceuticals & Biotechnology" },
-  { name: "Healthcare, Hospitals & Medical Laboratories" },
-  { name: "Manufacturing & Industrial Production" },
-  { name: "Paper, Pulp & Packaging" },
-  { name: "Plastics, Rubber & Composites" },
-  { name: "Oil, Gas & Petrochemicals" },
-  { name: "Energy, Power & Renewable Energy" },
-  { name: "Water, Wastewater & Water Treatment" },
-  { name: "Environmental Services & Conservation" },
-  { name: "Mining, Geology & Mineral Processing" },
-  { name: "Construction, Infrastructure & Built Environment" },
-  { name: "Electrical & Electronics Manufacturing" },
-  { name: "Automotive & Transport Equipment" },
-  { name: "Aerospace & Defence" },
-  { name: "Information Technology & Software" },
-  { name: "Telecommunications & Networking" },
-  { name: "Data, Artificial Intelligence & Analytics" },
-  { name: "Banking, Finance & Insurance" },
-  { name: "Consulting & Professional Services" },
-  { name: "Scientific Research & Development" },
-  { name: "Testing, Inspection, Certification & Calibration" },
-  { name: "Schools & Secondary Education" },
-  { name: "Universities & Higher Education" },
-  { name: "Technical & Vocational Education and Training (TVET)" },
-  { name: "STEM Training & Professional Development" },
-  { name: "Educational Technology (EdTech)" },
-  { name: "Government & Public Sector" },
-  { name: "NGOs, Development & International Organisations" },
-  { name: "Logistics, Supply Chain & Distribution" },
-  { name: "Consumer Goods & Retail" },
-  { name: "Textiles, Apparel & Leather Manufacturing" },
-  { name: "Life Sciences & Biomedical Research" },
-  { name: "Laboratories & Scientific Services" },
-  { name: "Aviation & Aerospace Services" },
-  { name: "Real Estate & Facilities Management" },
-  { name: "Telecommunications Infrastructure" },
-  { name: "Waste Management & Recycling" }
-];
+// Dropdowns are sourced directly from the Chemistry Lens taxonomy so they
+// stay in sync with the industries/job_functions lookup tables in Supabase.
+const JOB_FUNCTIONS = ACTIVE_JOB_FUNCTION_NAMES.map((name) => ({ name }));
+const INDUSTRIES = ACTIVE_INDUSTRY_NAMES.map((name) => ({ name }));
 
 const COUNTIES = KENYA_COUNTIES;
 

@@ -14,7 +14,7 @@ export const runtime = 'nodejs'
  * GET /api/admin/scraper-sources
  * Admin-only: list scraper sources with queue stats.
  * `published` counts come from scraped_job_sources (real published jobs),
- * not from `done` queue rows which also include STEM-skipped and duplicate rows.
+ * not from `done` queue rows which also include chemistry-skipped and duplicate rows.
  */
 export async function GET(request: NextRequest) {
   try {

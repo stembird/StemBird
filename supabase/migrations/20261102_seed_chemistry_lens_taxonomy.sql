@@ -119,9 +119,10 @@ ON CONFLICT (name) DO NOTHING;
 --    on the next pass.
 -- ============================================================================
 
-CREATE TEMP TABLE industry_remap ON COMMIT DROP AS
-SELECT * FROM (VALUES
-  -- Direct renames
+-- jobs.industry (single text) — use inline VALUES as a CTE
+UPDATE public.jobs j
+SET industry = r.new_name
+FROM (VALUES
   ('Food & Beverage Manufacturing',                     'Food, Beverage & Brewery Laboratories'),
   ('Plastics, Rubber & Composites',                     'Polymers, Plastics & Rubber'),
   ('Oil, Gas & Petrochemicals',                         'Petrochemicals, Refining & Fuels'),
@@ -132,15 +133,11 @@ SELECT * FROM (VALUES
   ('Manufacturing & Industrial Production',             'Chemicals-Driven Manufacturing & Industrial Production'),
   ('Testing, Inspection, Certification & Calibration',  'Testing, Inspection, Certification & Calibration'),
   ('Waste Management & Recycling',                      'Waste Management & Recycling'),
-
-  -- Splits → most general target (AI re-enrich refines)
   ('Chemicals, Paints, Polymers & Industrial Materials','Industrial & Basic Chemicals'),
   ('Pharmaceuticals & Biotechnology',                   'Pharmaceuticals & Drug Manufacturing'),
   ('Water, Wastewater & Water Treatment',               'Water Supply & Treatment'),
   ('Mining, Geology & Mineral Processing',              'Mining, Geology & Assay Laboratories'),
   ('Laboratories & Scientific Services',                'Laboratory & Scientific Supply Services'),
-
-  -- Merges
   ('Life Sciences & Biomedical Research',               'Biotechnology & Life Sciences'),
   ('Universities & Higher Education',                   'Education & Training — Universities, TVET & Professional'),
   ('Technical & Vocational Education and Training (TVET)','Education & Training — Universities, TVET & Professional'),
@@ -148,12 +145,8 @@ SELECT * FROM (VALUES
   ('Schools & Secondary Education',                     'Education & Training — Schools'),
   ('Consulting & Professional Services',                'Chemical & Process Engineering Consultancy'),
   ('Government & Public Sector',                        'Regulatory, Standards & Public Health Authorities'),
-
-  -- Reserved-for-later (target row is inactive in code but present in DB)
   ('Construction, Infrastructure & Built Environment',  'Building & Construction Materials Chemistry'),
   ('NGOs, Development & International Organisations',   'Development Organisations & NGO Laboratory Programmes'),
-
-  -- Explicit NULL (retired industries — the AI re-enrich will re-tag)
   ('Agriculture, Agribusiness & Agricultural Technology', NULL),
   ('Paper, Pulp & Packaging',                             NULL),
   ('Electrical & Electronics Manufacturing',              NULL),
@@ -170,11 +163,107 @@ SELECT * FROM (VALUES
   ('Logistics, Supply Chain & Distribution',              NULL),
   ('Real Estate & Facilities Management',                 NULL),
   ('Consumer Goods & Retail',                             NULL)
-) AS m(old_name, new_name);
+) AS m(old_name, new_name) r
+WHERE j.industry = r.old_name;
 
-CREATE TEMP TABLE function_remap ON COMMIT DROP AS
-SELECT * FROM (VALUES
-  -- Renames / direct targets
+-- jobs.industries (text array) — replace mapped elements, de-dupe, drop NULLs
+UPDATE public.jobs j
+SET industries = (
+  SELECT COALESCE(array_agg(DISTINCT m.new_name), '{}')
+  FROM unnest(j.industries) AS elem
+  JOIN (VALUES
+    ('Food & Beverage Manufacturing',                     'Food, Beverage & Brewery Laboratories'),
+    ('Plastics, Rubber & Composites',                     'Polymers, Plastics & Rubber'),
+    ('Oil, Gas & Petrochemicals',                         'Petrochemicals, Refining & Fuels'),
+    ('Energy, Power & Renewable Energy',                  'Energy, Power & Utilities'),
+    ('Environmental Services & Conservation',             'Environmental Consulting, EIA & Air Quality'),
+    ('Scientific Research & Development',                 'Scientific Research & R&D Institutions'),
+    ('Healthcare, Hospitals & Medical Laboratories',      'Clinical Chemistry & Medical Laboratory Services'),
+    ('Manufacturing & Industrial Production',             'Chemicals-Driven Manufacturing & Industrial Production'),
+    ('Chemicals, Paints, Polymers & Industrial Materials','Industrial & Basic Chemicals'),
+    ('Pharmaceuticals & Biotechnology',                   'Pharmaceuticals & Drug Manufacturing'),
+    ('Water, Wastewater & Water Treatment',               'Water Supply & Treatment'),
+    ('Mining, Geology & Mineral Processing',              'Mining, Geology & Assay Laboratories'),
+    ('Laboratories & Scientific Services',                'Laboratory & Scientific Supply Services'),
+    ('Life Sciences & Biomedical Research',               'Biotechnology & Life Sciences'),
+    ('Universities & Higher Education',                   'Education & Training — Universities, TVET & Professional'),
+    ('Technical & Vocational Education and Training (TVET)','Education & Training — Universities, TVET & Professional'),
+    ('STEM Training & Professional Development',          'Education & Training — Universities, TVET & Professional'),
+    ('Schools & Secondary Education',                     'Education & Training — Schools'),
+    ('Consulting & Professional Services',                'Chemical & Process Engineering Consultancy'),
+    ('Government & Public Sector',                        'Regulatory, Standards & Public Health Authorities'),
+    ('Construction, Infrastructure & Built Environment',  'Building & Construction Materials Chemistry'),
+    ('NGOs, Development & International Organisations',   'Development Organisations & NGO Laboratory Programmes'),
+    ('Agriculture, Agribusiness & Agricultural Technology', NULL),
+    ('Paper, Pulp & Packaging',                             NULL),
+    ('Electrical & Electronics Manufacturing',              NULL),
+    ('Automotive & Transport Equipment',                    NULL),
+    ('Aerospace & Defence',                                 NULL),
+    ('Aviation & Aerospace Services',                       NULL),
+    ('Textiles, Apparel & Leather Manufacturing',           NULL),
+    ('Information Technology & Software',                   NULL),
+    ('Telecommunications & Networking',                     NULL),
+    ('Telecommunications Infrastructure',                   NULL),
+    ('Data, Artificial Intelligence & Analytics',           NULL),
+    ('Banking, Finance & Insurance',                        NULL),
+    ('Educational Technology (EdTech)',                     NULL),
+    ('Logistics, Supply Chain & Distribution',              NULL),
+    ('Real Estate & Facilities Management',                 NULL),
+    ('Consumer Goods & Retail',                             NULL)
+  ) AS m(old_name, new_name) ON m.old_name = elem
+  WHERE m.new_name IS NOT NULL
+)
+WHERE j.industries IS NOT NULL AND array_length(j.industries, 1) > 0;
+
+-- companies.industry
+UPDATE public.companies c
+SET industry = r.new_name
+FROM (VALUES
+  ('Food & Beverage Manufacturing',                     'Food, Beverage & Brewery Laboratories'),
+  ('Plastics, Rubber & Composites',                     'Polymers, Plastics & Rubber'),
+  ('Oil, Gas & Petrochemicals',                         'Petrochemicals, Refining & Fuels'),
+  ('Energy, Power & Renewable Energy',                  'Energy, Power & Utilities'),
+  ('Environmental Services & Conservation',             'Environmental Consulting, EIA & Air Quality'),
+  ('Scientific Research & Development',                 'Scientific Research & R&D Institutions'),
+  ('Healthcare, Hospitals & Medical Laboratories',      'Clinical Chemistry & Medical Laboratory Services'),
+  ('Manufacturing & Industrial Production',             'Chemicals-Driven Manufacturing & Industrial Production'),
+  ('Chemicals, Paints, Polymers & Industrial Materials','Industrial & Basic Chemicals'),
+  ('Pharmaceuticals & Biotechnology',                   'Pharmaceuticals & Drug Manufacturing'),
+  ('Water, Wastewater & Water Treatment',               'Water Supply & Treatment'),
+  ('Mining, Geology & Mineral Processing',              'Mining, Geology & Assay Laboratories'),
+  ('Laboratories & Scientific Services',                'Laboratory & Scientific Supply Services'),
+  ('Life Sciences & Biomedical Research',               'Biotechnology & Life Sciences'),
+  ('Universities & Higher Education',                   'Education & Training — Universities, TVET & Professional'),
+  ('Technical & Vocational Education and Training (TVET)','Education & Training — Universities, TVET & Professional'),
+  ('STEM Training & Professional Development',          'Education & Training — Universities, TVET & Professional'),
+  ('Schools & Secondary Education',                     'Education & Training — Schools'),
+  ('Consulting & Professional Services',                'Chemical & Process Engineering Consultancy'),
+  ('Government & Public Sector',                        'Regulatory, Standards & Public Health Authorities'),
+  ('Construction, Infrastructure & Built Environment',  'Building & Construction Materials Chemistry'),
+  ('NGOs, Development & International Organisations',   'Development Organisations & NGO Laboratory Programmes'),
+  ('Agriculture, Agribusiness & Agricultural Technology', NULL),
+  ('Paper, Pulp & Packaging',                             NULL),
+  ('Electrical & Electronics Manufacturing',              NULL),
+  ('Automotive & Transport Equipment',                    NULL),
+  ('Aerospace & Defence',                                 NULL),
+  ('Aviation & Aerospace Services',                       NULL),
+  ('Textiles, Apparel & Leather Manufacturing',           NULL),
+  ('Information Technology & Software',                   NULL),
+  ('Telecommunications & Networking',                     NULL),
+  ('Telecommunications Infrastructure',                   NULL),
+  ('Data, Artificial Intelligence & Analytics',           NULL),
+  ('Banking, Finance & Insurance',                        NULL),
+  ('Educational Technology (EdTech)',                     NULL),
+  ('Logistics, Supply Chain & Distribution',              NULL),
+  ('Real Estate & Facilities Management',                 NULL),
+  ('Consumer Goods & Retail',                             NULL)
+) AS m(old_name, new_name) r
+WHERE c.industry = r.old_name;
+
+-- jobs.job_function (single text)
+UPDATE public.jobs j
+SET job_function = r.new_name
+FROM (VALUES
   ('Analytical Chemistry',                              'Analytical & Instrumental Chemistry'),
   ('Laboratory Operations & Testing',                   'Laboratory Operations & Management'),
   ('Product Development & Formulation',                 'Formulation & Product Development'),
@@ -182,7 +271,6 @@ SELECT * FROM (VALUES
   ('Materials Science & Engineering',                   'Materials & Polymer Science'),
   ('Food Science & Technology',                         'Formulation & Product Development'),
   ('Scientific Data Management',                        'Laboratory Information Systems (LIMS) & Informatics'),
-  ('Chemical & Process Engineering',                    'Chemical & Process Engineering'),
   ('Industrial & Manufacturing Engineering',            'Process Operations & Plant Optimisation'),
   ('Production & Manufacturing Operations',             'Production & Plant Operations Management'),
   ('Process Optimisation & Production Planning',        'Process Operations & Plant Optimisation'),
@@ -207,17 +295,9 @@ SELECT * FROM (VALUES
   ('Environmental Science & Management',                'HSE & Process Safety'),
   ('Public Health Science & Epidemiology',              'Forensic & Toxicology Analysis'),
   ('IT Infrastructure, Systems & Support',              'Laboratory Information Systems (LIMS) & Informatics'),
-
-  -- Kept-as-is (name unchanged)
-  ('Research & Development (R&D)',                      'Research & Development (R&D)'),
-  ('Quality Control (QC)',                              'Quality Control (QC)'),
   ('Quality Assurance & Quality Management',            'Quality Assurance & QMS'),
-  ('Regulatory Affairs & Compliance',                   'Regulatory Affairs & Compliance'),
   ('Clinical Research & Trials',                        'Clinical Research & Trials (Chemistry-Relevant)'),
-  ('Maintenance & Reliability Engineering',             'Maintenance & Reliability Engineering'),
   ('Technical Sales & Business Development',            'Technical Sales & Business Development (Chemistry)'),
-
-  -- Retired functions → NULL (drop the tag)
   ('Agricultural Science & Technology',                 NULL),
   ('Civil & Structural Engineering',                    NULL),
   ('Biomedical Engineering',                            NULL),
@@ -226,43 +306,59 @@ SELECT * FROM (VALUES
   ('Cybersecurity',                                     NULL),
   ('Cloud Computing & DevOps',                          NULL),
   ('Networking & Telecommunications',                   NULL)
-) AS m(old_name, new_name);
-
--- jobs.industry (single text) — NULL where the industry is retired
-UPDATE public.jobs j
-SET industry = r.new_name
-FROM industry_remap r
-WHERE j.industry = r.old_name;
-
--- jobs.industries (text array) — replace mapped elements and de-dupe (drops NULLs)
-UPDATE public.jobs j
-SET industries = (
-  SELECT COALESCE(array_agg(DISTINCT r.new_name), '{}')
-  FROM unnest(j.industries) AS elem
-  JOIN industry_remap r ON r.old_name = elem
-  WHERE r.new_name IS NOT NULL
-)
-WHERE j.industries IS NOT NULL AND array_length(j.industries, 1) > 0;
-
--- companies.industry
-UPDATE public.companies c
-SET industry = r.new_name
-FROM industry_remap r
-WHERE c.industry = r.old_name;
-
--- jobs.job_function (single text)
-UPDATE public.jobs j
-SET job_function = r.new_name
-FROM function_remap r
+) AS m(old_name, new_name) r
 WHERE j.job_function = r.old_name;
 
 -- jobs.job_functions (text array)
 UPDATE public.jobs j
 SET job_functions = (
-  SELECT COALESCE(array_agg(DISTINCT r.new_name), '{}')
+  SELECT COALESCE(array_agg(DISTINCT m.new_name), '{}')
   FROM unnest(j.job_functions) AS elem
-  JOIN function_remap r ON r.old_name = elem
-  WHERE r.new_name IS NOT NULL
+  JOIN (VALUES
+    ('Analytical Chemistry',                              'Analytical & Instrumental Chemistry'),
+    ('Laboratory Operations & Testing',                   'Laboratory Operations & Management'),
+    ('Product Development & Formulation',                 'Formulation & Product Development'),
+    ('Microbiology & Biotechnology',                      'Microbiology & Molecular Analysis (Product/Quality)'),
+    ('Materials Science & Engineering',                   'Materials & Polymer Science'),
+    ('Food Science & Technology',                         'Formulation & Product Development'),
+    ('Scientific Data Management',                        'Laboratory Information Systems (LIMS) & Informatics'),
+    ('Industrial & Manufacturing Engineering',            'Process Operations & Plant Optimisation'),
+    ('Production & Manufacturing Operations',             'Production & Plant Operations Management'),
+    ('Process Optimisation & Production Planning',        'Process Operations & Plant Optimisation'),
+    ('Health, Safety & Process Risk Management',          'HSE & Process Safety'),
+    ('Energy Systems & Renewable Energy',                 'Energy & Utilities Process'),
+    ('Water & Wastewater Engineering',                    'Water & Wastewater Treatment Operations'),
+    ('Mining & Mineral Processing',                       'Mining, Assay & Mineral Processing'),
+    ('Geology, Geoscience & Mineral Exploration',         'Mining, Assay & Mineral Processing'),
+    ('Instrumentation, Control & Metrology',              'Instrumentation & Control'),
+    ('Technical Support & Field Service',                 'Applications, Technical Support & Field Service'),
+    ('Technical Procurement & Supply Chain',              'Procurement, Warehousing & Supply Chain (Lab/Chemical)'),
+    ('Technical Project Management & Operations',         'Technical Project Management'),
+    ('STEM Education, Teaching & Curriculum Development', 'Chemistry Teaching, Training & Science Communication'),
+    ('Technical Training, Academic Research & Science Communication','Chemistry Teaching, Training & Science Communication'),
+    ('Biostatistics & Bioinformatics',                    'Chemometrics, Data Science & Statistics for Lab Systems'),
+    ('Data Science, Analytics & Artificial Intelligence', 'Chemometrics, Data Science & Statistics for Lab Systems'),
+    ('Mathematics, Statistics & Actuarial Science',       'Chemometrics, Data Science & Statistics for Lab Systems'),
+    ('Operations Research & Optimisation',                'Process Operations & Plant Optimisation'),
+    ('Robotics, Mechatronics & Automation',               'Laboratory Information Systems (LIMS) & Informatics'),
+    ('Mechanical Engineering',                            'Maintenance & Reliability Engineering'),
+    ('Electrical & Electronics Engineering',              'Instrumentation & Control'),
+    ('Environmental Science & Management',                'HSE & Process Safety'),
+    ('Public Health Science & Epidemiology',              'Forensic & Toxicology Analysis'),
+    ('IT Infrastructure, Systems & Support',              'Laboratory Information Systems (LIMS) & Informatics'),
+    ('Quality Assurance & Quality Management',            'Quality Assurance & QMS'),
+    ('Clinical Research & Trials',                        'Clinical Research & Trials (Chemistry-Relevant)'),
+    ('Technical Sales & Business Development',            'Technical Sales & Business Development (Chemistry)'),
+    ('Agricultural Science & Technology',                 NULL),
+    ('Civil & Structural Engineering',                    NULL),
+    ('Biomedical Engineering',                            NULL),
+    ('Surveying & Geospatial Science',                    NULL),
+    ('Software Development & Engineering',                NULL),
+    ('Cybersecurity',                                     NULL),
+    ('Cloud Computing & DevOps',                          NULL),
+    ('Networking & Telecommunications',                   NULL)
+  ) AS m(old_name, new_name) ON m.old_name = elem
+  WHERE m.new_name IS NOT NULL
 )
 WHERE j.job_functions IS NOT NULL AND array_length(j.job_functions, 1) > 0;
 

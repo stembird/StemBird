@@ -7358,22 +7358,22 @@ USING (has_role(auth.uid(), 'admin'::app_role));
 UPDATE page_content SET content_value = 'Stop Searching. Start Getting Hired.'
 WHERE page_slug = 'home' AND section_key = 'hero_title';
 
-UPDATE page_content SET content_value = 'You''ve sent dozens of applications with zero callbacks. ChemistryLens changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.'
+UPDATE page_content SET content_value = 'You''ve sent dozens of applications with zero callbacks. ChemistryLens changes that. We match your chemistry skills (analytical labs, QC/QA, formulation, process engineering and industrial testing) directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.'
 WHERE page_slug = 'home' AND section_key = 'hero_subtitle';
 
 UPDATE page_content SET content_value = 'Featured Opportunities'
 WHERE page_slug = 'home' AND section_key = 'featured_section_title';
 
-UPDATE page_content SET content_value = 'Hand-picked roles from top Kenyan employers, with new jobs added daily'
+UPDATE page_content SET content_value = 'Hand-picked chemistry roles from top Kenyan employers, with new jobs added daily'
 WHERE page_slug = 'home' AND section_key = 'featured_section_subtitle';
 
-UPDATE page_content SET content_value = 'Why 95% of Our Users Land Interviews Within 3 Months'
+UPDATE page_content SET content_value = 'Why 95% of Our Chemistry Talent Lands Interviews Within 3 Months'
 WHERE page_slug = 'home' AND section_key = 'why_choose_title';
 
-UPDATE page_content SET content_value = 'Your Next Interview Is 60 Seconds Away'
+UPDATE page_content SET content_value = 'Your Next Chemistry Career Interview Is 60 Seconds Away'
 WHERE page_slug = 'home' AND section_key = 'cta_title';
 
-UPDATE page_content SET content_value = 'ChemistryLens matches your skills directly to employer requirements, not just keywords. That''s why our users get 3x more interview callbacks than on other job boards. Join free today.'
+UPDATE page_content SET content_value = 'ChemistryLens matches your technical skills directly to employer requirements, not just keywords. That''s why our users get 3x more interview callbacks than on generic job boards. Join free today.'
 WHERE page_slug = 'home' AND section_key = 'cta_subtitle';
 
 -- ============================================================
@@ -9691,7 +9691,7 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
   ('about', 'hero_subtitle', 'text', 'Kenya''s AI-Powered Job Platform. Where Skills Meet Opportunity', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_title', 'text', 'Why We Built ChemistryLens', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_p1', 'text', 'We watched thousands of talented Kenyans send 50, 100, even 200 applications and hear nothing back. Not for lack of qualifications. The system was broken. Generic job boards match keywords, not skills. Resumes disappear into black holes. And employers waste weeks sifting through unqualified applicants.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'story_p2', 'text', 'ChemistryLens was built to fix that. We use AI-powered matching that connects candidates to jobs they''ll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'story_p2', 'text', 'ChemistryLens was built to fix that. We use AI-powered matching that connects chemistry candidates to jobs they''ll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_p3', 'text', 'The result? Our users report 3x more interview callbacks than on other platforms, and employers fill positions faster with candidates who actually fit the role.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'values_title', 'text', 'Our Core Values', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_speed_title', 'text', 'Speed', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),

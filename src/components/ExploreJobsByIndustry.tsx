@@ -48,7 +48,7 @@ export function ExploreJobsByIndustry({
               Jobs by Industry
             </h2>
             <p className={SECTION_SUBCOPY_CLASS}>
-              The sectors with the most open roles on StemBird right now
+              The sectors with the most open roles on ChemistryLens right now
             </p>
           </div>
         ) : (

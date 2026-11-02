@@ -709,16 +709,16 @@ export async function runScrapeProcessOne(
       }
     }
 
-    // Subject focus gate: StemBird publishes STEM roles only. This is the
+    // Subject focus gate: ChemistryLens publishes STEM roles only. This is the
     // intelligent, deep decision. Three tiers (see scrapeSubjectFilter.ts):
     // title/field-of-study/job-function/tags are high-signal; qualifications
     // and responsibilities are AI-restated prose that only count when a study
     // cue names a hard STEM degree ("BSc Pharmacy" keeps a "Sales Rep";
     // "degree in Business Research" does not). Discovery does not pre-filter
-    // (accuracy wins) unless STEMBIRD_SUBJECT_DISCOVER_FILTER=true. Off-topic
+    // (accuracy wins) unless CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER=true. Off-topic
     // listings are recorded as skipped (so discover won't re-queue the URL).
-    // Tune the stem list via STEMBIRD_SUBJECT_TERMS / disable via
-    // STEMBIRD_SUBJECT_FILTER_ENABLED=false.
+    // Tune the stem list via CHEMISTRYLENS_SUBJECT_TERMS / disable via
+    // CHEMISTRYLENS_SUBJECT_FILTER_ENABLED=false.
     // Chemistry Lens publication gate — replaces the general STEM filter.
     // A job publishes only when it satisfies at least one of T1 (chemistry-core
     // function), T2 (chemistry-family degree requirement), T3 (chemical

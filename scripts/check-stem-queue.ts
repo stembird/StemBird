@@ -1,7 +1,7 @@
 /**
  * READ-ONLY triage of the scrape_queue. Does not modify any rows.
  *
- * Because StemBird's filter reads beyond the title, we classify each pending
+ * Because ChemistryLens's filter reads beyond the title, we classify each pending
  * job by fetching its DETAIL PAGE TEXT (no AI, no writes) and running the real
  * two-tier deep gate: title = high-signal, page text = guarded description.
  *

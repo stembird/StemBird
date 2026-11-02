@@ -2,7 +2,7 @@
 -- Backfill jobs.date_posted from board JSON-LD datePosted
 -- ============================================================
 -- Scraped MyJobMag / BrighterMonday / Fuzu jobs previously defaulted
--- date_posted to insert time (now()), so day buckets on StemBird
+-- date_posted to insert time (now()), so day buckets on ChemistryLens
 -- did not match the source board. raw_data on scraped_job_sources
 -- still holds the original datePosted for published rows.
 -- ============================================================

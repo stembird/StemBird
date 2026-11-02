@@ -33,37 +33,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (slug === ALL_INDUSTRIES_SLUG) {
     const url = `${SITE_URL.replace(/\/$/, "")}/companies/industry/all`;
     return {
-      title: "All Companies | StemBird",
+      title: "All Companies | ChemistryLens",
       description:
-        "Browse all employers hiring on StemBird across every industry in Kenya.",
+        "Browse all employers hiring on ChemistryLens across every industry in Kenya.",
       alternates: { canonical: url },
       openGraph: {
-        title: "All Companies | StemBird",
+        title: "All Companies | ChemistryLens",
         description:
-          "Browse all employers hiring on StemBird across every industry in Kenya.",
+          "Browse all employers hiring on ChemistryLens across every industry in Kenya.",
         url,
         type: "website",
-        siteName: "StemBird",
+        siteName: "ChemistryLens",
       },
     };
   }
 
   const industry = resolveIndustryFromSlug(slug, industries);
   if (!industry) {
-    return { title: "Industry Not Found | StemBird" };
+    return { title: "Industry Not Found | ChemistryLens" };
   }
 
   const url = `${SITE_URL.replace(/\/$/, "")}/companies/industry/${slug}`;
   return {
-    title: `${industry} Companies | StemBird`,
-    description: `Explore ${industry} employers hiring on StemBird. View company profiles and open jobs in Kenya.`,
+    title: `${industry} Companies | ChemistryLens`,
+    description: `Explore ${industry} employers hiring on ChemistryLens. View company profiles and open jobs in Kenya.`,
     alternates: { canonical: url },
     openGraph: {
-      title: `${industry} Companies | StemBird`,
-      description: `Explore ${industry} employers hiring on StemBird. View company profiles and open jobs in Kenya.`,
+      title: `${industry} Companies | ChemistryLens`,
+      description: `Explore ${industry} employers hiring on ChemistryLens. View company profiles and open jobs in Kenya.`,
       url,
       type: "website",
-      siteName: "StemBird",
+      siteName: "ChemistryLens",
     },
   };
 }
@@ -85,8 +85,8 @@ export default async function CompaniesByIndustryPage({ params }: PageProps) {
 
   const heading = isAll ? "All industries" : industryName!;
   const subcopy = isAll
-    ? "Every employer listed on StemBird, across all sectors."
-    : `Employers in ${industryName} hiring on StemBird.`;
+    ? "Every employer listed on ChemistryLens, across all sectors."
+    : `Employers in ${industryName} hiring on ChemistryLens.`;
   const imageUrl = isAll
     ? ALL_INDUSTRIES_IMAGE
     : getIndustryCardImage(industryName);

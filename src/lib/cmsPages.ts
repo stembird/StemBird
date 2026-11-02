@@ -240,7 +240,7 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
       section_key: "hero_title",
       content_type: "text",
       content_value: "Scholarships in Kenya",
-      seo_title: "Scholarships in Kenya | StemBird",
+      seo_title: "Scholarships in Kenya | ChemistryLens",
       seo_meta_description:
         "Browse bursaries and scholarships in Kenya. Filter by level, field of study, and deadline, then apply on the funder site.",
       seo_url_slug: "/scholarships",
@@ -258,15 +258,15 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
     {
       section_key: "eyebrow",
       content_type: "text",
-      content_value: "Employers on StemBird",
+      content_value: "Employers on ChemistryLens",
     },
     {
       section_key: "hero_title",
       content_type: "text",
       content_value: "Companies",
-      seo_title: "Companies by Industry | StemBird",
+      seo_title: "Companies by Industry | ChemistryLens",
       seo_meta_description:
-        "Browse Kenyan employers by industry on StemBird. Pick a sector to see company profiles and open jobs.",
+        "Browse Kenyan employers by industry on ChemistryLens. Pick a sector to see company profiles and open jobs.",
       seo_url_slug: "/companies",
       seo_canonical_url: `${SITE_URL}/companies`,
       seo_h1_title: "Companies",
@@ -282,14 +282,14 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
     {
       section_key: "hero_title",
       content_type: "text",
-      content_value: "About StemBird",
+      content_value: "About ChemistryLens",
       seo_title:
-        "About StemBird - Kenya's Fastest Path from Job Search to Job Offer",
+        "About ChemistryLens - Kenya's Fastest Path from Job Search to Job Offer",
       seo_meta_description:
-        "Learn how StemBird uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.",
+        "Learn how ChemistryLens uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.",
       seo_url_slug: "/about",
       seo_canonical_url: `${SITE_URL}/about`,
-      seo_h1_title: "About StemBird",
+      seo_h1_title: "About ChemistryLens",
     },
     {
       section_key: "hero_subtitle",
@@ -299,7 +299,7 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
     {
       section_key: "story_title",
       content_type: "text",
-      content_value: "Why We Built StemBird",
+      content_value: "Why We Built ChemistryLens",
     },
     {
       section_key: "story_p1",
@@ -311,7 +311,7 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
       section_key: "story_p2",
       content_type: "text",
       content_value:
-        "StemBird was built to fix that. We use AI-powered matching that connects candidates to jobs they'll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.",
+        "ChemistryLens was built to fix that. We use AI-powered matching that connects candidates to jobs they'll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.",
     },
     {
       section_key: "story_p3",
@@ -355,7 +355,7 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
       section_key: "value_fairness_body",
       content_type: "text",
       content_value:
-        "Your background shouldn't determine your future. StemBird is free for every job seeker. The best candidate might be someone who can't afford a KES 5,000 CV service.",
+        "Your background shouldn't determine your future. ChemistryLens is free for every job seeker. The best candidate might be someone who can't afford a KES 5,000 CV service.",
     },
     {
       section_key: "value_innovation_title",
@@ -371,7 +371,7 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
     {
       section_key: "stats_title",
       content_type: "text",
-      content_value: "StemBird by the Numbers",
+      content_value: "ChemistryLens by the Numbers",
     },
     {
       section_key: "stats_subtitle",
@@ -431,9 +431,9 @@ export const DEFAULT_PAGE_CONTENT: Record<string, DefaultSection[]> = {
       section_key: "hero_title",
       content_type: "text",
       content_value: "Contact Us",
-      seo_title: "Contact StemBird | Support for Job Seekers and Employers",
+      seo_title: "Contact ChemistryLens | Support for Job Seekers and Employers",
       seo_meta_description:
-        "Get in touch with StemBird. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.",
+        "Get in touch with ChemistryLens. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.",
       seo_url_slug: "/contact",
       seo_canonical_url: `${SITE_URL}/contact`,
       seo_h1_title: "Contact Us",

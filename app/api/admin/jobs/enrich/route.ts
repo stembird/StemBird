@@ -8,7 +8,7 @@ export const maxDuration = 300
 /**
  * POST /api/admin/jobs/enrich
  *
- * Enrich ANY StemBird job (manual, scraped, parse-job, n8n, …) using
+ * Enrich ANY ChemistryLens job (manual, scraped, parse-job, n8n, …) using
  * production DeepSeek → Gemini keys on the server.
  *
  * Body:

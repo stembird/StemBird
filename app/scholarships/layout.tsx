@@ -18,11 +18,11 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${title} | StemBird`,
+      title: `${title} | ChemistryLens`,
       description,
       url,
       type: "website",
-      siteName: "StemBird",
+      siteName: "ChemistryLens",
     },
   };
 }

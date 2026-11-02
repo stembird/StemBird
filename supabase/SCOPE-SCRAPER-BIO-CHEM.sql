@@ -1,7 +1,7 @@
 -- ============================================================================
 -- SCRAPE SCOPE (config-only): reduce scraper_sources to the useful boards
 -- ============================================================================
--- GOAL CONTEXT: focus StemBird on biology / chemistry roles in Kenya.
+-- GOAL CONTEXT: focus ChemistryLens on biology / chemistry roles in Kenya.
 --
 -- IMPORTANT LIMITATION (verified in the adapter code):
 --   * BrighterMonday + Fuzu adapters rebuild the listing URL from the ORIGIN

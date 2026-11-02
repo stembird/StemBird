@@ -1,4 +1,4 @@
--- Migration: Replace the Kenya-wide job taxonomy with the StemBird STEM taxonomy
+-- Migration: Replace the Kenya-wide job taxonomy with the ChemistryLens STEM taxonomy
 -- New sets: 40 industries, 47 job functions (full replacement).
 -- Idempotent: safe to re-run. Apply via Supabase Dashboard SQL Editor.
 

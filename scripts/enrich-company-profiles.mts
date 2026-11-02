@@ -27,7 +27,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
 });
 
 const UA =
-  "Mozilla/5.0 (compatible; StemBirdBot/1.0; +https://careersasa.co.ke)";
+  "Mozilla/5.0 (compatible; ChemistryLensBot/1.0; +https://careersasa.co.ke)";
 
 function cleanBlurb(raw: string | null | undefined, maxChars = 280): string | null {
   if (!raw) return null;

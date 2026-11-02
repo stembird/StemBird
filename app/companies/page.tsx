@@ -15,10 +15,10 @@ export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await fetchPageSeo("companies");
-  const title = seo?.seo_title || "Companies by Industry | StemBird";
+  const title = seo?.seo_title || "Companies by Industry | ChemistryLens";
   const description =
     seo?.seo_meta_description ||
-    "Browse Kenyan employers by industry on StemBird. Pick a sector to see company profiles and open jobs.";
+    "Browse Kenyan employers by industry on ChemistryLens. Pick a sector to see company profiles and open jobs.";
   const url = (seo?.seo_canonical_url || `${SITE_URL.replace(/\/$/, "")}/companies`);
 
   return {
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url,
       type: "website",
-      siteName: "StemBird",
+      siteName: "ChemistryLens",
     },
     robots: {
       index: seo?.seo_index !== false,
@@ -57,7 +57,7 @@ export default async function CompaniesPage() {
         <div className="absolute inset-0 bg-gradient-subtle" aria-hidden />
         <div className="container relative mx-auto px-4 py-8 md:py-10">
           <p className="text-sm font-medium text-primary mb-2 tracking-wide">
-            {getContentValue(content, "eyebrow", "Employers on StemBird")}
+            {getContentValue(content, "eyebrow", "Employers on ChemistryLens")}
           </p>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-3">
             {getContentValue(content, "hero_title", "Companies")}

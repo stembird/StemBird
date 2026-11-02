@@ -1,5 +1,5 @@
 -- ============================================================================
--- REBRAND: CareerSasa -> StemBird  (LIVE DATABASE fix-up)
+-- REBRAND: CareerSasa -> ChemistryLens  (LIVE DATABASE fix-up)
 -- ============================================================================
 -- Why: SCHEMA-FRESH-INSTALL.sql was applied while the seeds still said
 -- 'CareerSasa'. Source migration files are now corrected for FUTURE installs,
@@ -35,7 +35,7 @@ FROM (
 
 -- 2) Fix the column DEFAULT so any future insert is correct.
 ALTER TABLE public.site_settings
-  ALTER COLUMN site_name SET DEFAULT 'StemBird';
+  ALTER COLUMN site_name SET DEFAULT 'ChemistryLens';
 
 -- 3) Replace the brand in every TEXT/VARCHAR/CHAR column of the public schema.
 DO $$
@@ -57,8 +57,8 @@ BEGIN
       'UPDATE public.%I SET %I = replace(replace(%I, %L, %L), %L, %L)
        WHERE %I LIKE %L OR %I LIKE %L',
       r.table_name, r.column_name, r.column_name,
-      'CareerSasa', 'StemBird',
-      'Careersasa', 'StemBird',
+      'CareerSasa', 'ChemistryLens',
+      'Careersasa', 'ChemistryLens',
       r.column_name, '%CareerSasa%',
       r.column_name, '%Careersasa%'
     );

@@ -1,7 +1,7 @@
 /**
  * Subject focus gate for scraped jobs.
  *
- * StemBird publishes STEM (science, technology, engineering, mathematics)
+ * ChemistryLens publishes STEM (science, technology, engineering, mathematics)
  * roles only. The job boards we scrape (MyJobMag, BrighterMonday, Fuzu) mix
  * ALL categories on their listing pages and their adapters rebuild the listing
  * URL from the origin (they ignore any keyword path/query), so subject-scoping
@@ -11,7 +11,7 @@
  *     wins over cost — a non-STEM title can hide a STEM requirement (e.g.
  *     "Sales Representative" or "Marketer in Eldoret" needing a Pharmacy
  *     degree), so we never drop a job on its title alone. Every URL is queued
- *     for the deep gate. Set STEMBIRD_SUBJECT_DISCOVER_FILTER=true to re-enable
+ *     for the deep gate. Set CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER=true to re-enable
  *     cheap title-based skipping of confident non-STEM roles (trades accuracy
  *     for AI cost).
  *   - at PUBLISH time on full parsed fields (matchesSubjectFocus) — the
@@ -28,11 +28,11 @@
  *     Pharmacy"), never by a loose stem lurking in prose fields.
  *
  * CONFIG (no code edits needed to widen/narrow later):
- *   - STEMBIRD_SUBJECT_FILTER_ENABLED      "true" (default) | "false" to disable
- *   - STEMBIRD_SUBJECT_DISCOVER_FILTER     "false" (default, accuracy-first) |
+ *   - CHEMISTRYLENS_SUBJECT_FILTER_ENABLED      "true" (default) | "false" to disable
+ *   - CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER     "false" (default, accuracy-first) |
  *                                          "true" to skip confident non-STEM
  *                                          titles at discovery (cost-saving)
- *   - STEMBIRD_SUBJECT_TERMS               comma-separated stems that OVERRIDE
+ *   - CHEMISTRYLENS_SUBJECT_TERMS               comma-separated stems that OVERRIDE
  *                                          the built-in default list. Each
  *                                          entry is treated as a case-
  *                                          insensitive substring match.
@@ -289,7 +289,7 @@ function envValue(name: string): string | undefined {
 }
 
 function isFilterEnabled(): boolean {
-  const raw = (envValue('STEMBIRD_SUBJECT_FILTER_ENABLED') || 'true').trim().toLowerCase()
+  const raw = (envValue('CHEMISTRYLENS_SUBJECT_FILTER_ENABLED') || 'true').trim().toLowerCase()
   return raw !== 'false' && raw !== 'off' && raw !== '0'
 }
 
@@ -299,12 +299,12 @@ function isFilterEnabled(): boolean {
  * non-STEM titles before the (costly) detail fetch + AI parse.
  */
 function isDiscoverFilterEnabled(): boolean {
-  const raw = (envValue('STEMBIRD_SUBJECT_DISCOVER_FILTER') || 'false').trim().toLowerCase()
+  const raw = (envValue('CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER') || 'false').trim().toLowerCase()
   return raw === 'true' || raw === 'on' || raw === '1'
 }
 
 function activeStems(): string[] {
-  const override = (envValue('STEMBIRD_SUBJECT_TERMS') || '').trim()
+  const override = (envValue('CHEMISTRYLENS_SUBJECT_TERMS') || '').trim()
   if (!override) return DEFAULT_SUBJECT_STEMS
   return override
     .split(',')
@@ -524,7 +524,7 @@ export interface TitleFilterResult<T> {
  * deep publish gate (matchesSubjectFocus, which reads description +
  * qualifications) makes the real call.
  *
- * Only when STEMBIRD_SUBJECT_DISCOVER_FILTER=true (explicit cost-over-accuracy
+ * Only when CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER=true (explicit cost-over-accuracy
  * mode) does this skip confident non-STEM titles. Even then: positive STEM
  * words win over negatives ("Sales Engineer" kept), and ambiguous/empty titles
  * are always kept.

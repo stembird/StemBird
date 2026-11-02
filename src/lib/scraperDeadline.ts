@@ -191,17 +191,17 @@ export function resolveScrapedDeadline(
 }
 
 /**
- * Freshness cap. StemBird lists RECENTLY advertised roles only: a job the
+ * Freshness cap. ChemistryLens lists RECENTLY advertised roles only: a job the
  * employer posted more than this many days ago is never published, even when
  * it states no (or a future) deadline. Override without a code change via
- * STEMBIRD_MAX_POSTING_AGE_DAYS (e.g. "3" to tighten, "14" to loosen).
+ * CHEMISTRYLENS_MAX_POSTING_AGE_DAYS (e.g. "3" to tighten, "14" to loosen).
  */
 export const MAX_POSTING_AGE_DAYS = 7
 
 /** Effective posting-age cap (env override wins when a sane number). */
 export function maxPostingAgeDays(): number {
   const raw = (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } })
-    .process?.env?.STEMBIRD_MAX_POSTING_AGE_DAYS
+    .process?.env?.CHEMISTRYLENS_MAX_POSTING_AGE_DAYS
   const n = Number((raw || '').trim())
   return Number.isFinite(n) && n >= 1 ? Math.floor(n) : MAX_POSTING_AGE_DAYS
 }

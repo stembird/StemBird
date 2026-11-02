@@ -1,5 +1,5 @@
 -- ============================================================================
--- StemBird / StemBird - FRESH-INSTALL SCHEMA (all migrations, ordered)
+-- ChemistryLens / ChemistryLens - FRESH-INSTALL SCHEMA (all migrations, ordered)
 -- Target Supabase project: qhfdjccudtqnlkbtsjgg
 -- GLOBAL dependency-aware topological order (every CREATE before its referencers),
 -- base = migration timestamp. Excludes buggy 20260307_candidate_career_tools.sql.
@@ -2039,7 +2039,7 @@ INSERT INTO public.jobs (
 -- Create site_settings table for branding customization
 CREATE TABLE IF NOT EXISTS site_settings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  site_name TEXT NOT NULL DEFAULT 'StemBird',
+  site_name TEXT NOT NULL DEFAULT 'ChemistryLens',
   logo_url TEXT,
   favicon_url TEXT,
   primary_color TEXT DEFAULT '#8B5CF6',
@@ -2050,7 +2050,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
 
 -- Insert default settings
 INSERT INTO site_settings (site_name, primary_color, secondary_color)
-VALUES ('StemBird', '#8B5CF6', '#EC4899')
+VALUES ('ChemistryLens', '#8B5CF6', '#EC4899')
 ON CONFLICT DO NOTHING;
 
 -- Enable RLS
@@ -2335,23 +2335,23 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
   ('home', 'stats_success_rate', 'number', '90', '{"label": "Success Rate", "suffix": "%"}'),
   ('home', 'featured_section_title', 'text', 'Featured Opportunities', '{}'),
   ('home', 'featured_section_subtitle', 'text', 'Hand-picked roles from top employers', '{}'),
-  ('home', 'why_choose_title', 'text', 'Why Kenyan Professionals Choose StemBird', '{}'),
+  ('home', 'why_choose_title', 'text', 'Why Kenyan Professionals Choose ChemistryLens', '{}'),
   ('home', 'cta_title', 'text', 'Ready to Transform Your Career?', '{}'),
-  ('home', 'cta_subtitle', 'text', 'Join thousands of Kenyan professionals who''ve found their dream jobs through StemBird', '{}')
+  ('home', 'cta_subtitle', 'text', 'Join thousands of Kenyan professionals who''ve found their dream jobs through ChemistryLens', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 -- Insert default CV services page content
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata) VALUES
-  ('services-cv', 'hero_title', 'text', 'CV & Resume Services by StemBird', '{}'),
+  ('services-cv', 'hero_title', 'text', 'CV & Resume Services by ChemistryLens', '{}'),
   ('services-cv', 'hero_subtitle', 'text', 'Professional CVs That Open Doors 🚪📄', '{}'),
-  ('services-cv', 'hero_description', 'html', '<p>Your CV is often the <strong>first decision-maker</strong> in your job search. Before interviews. Before LinkedIn. Before explanations.</p><p>At StemBird, we don''t just rewrite CVs — we <strong>position you to be shortlisted</strong>.</p>', '{}'),
+  ('services-cv', 'hero_description', 'html', '<p>Your CV is often the <strong>first decision-maker</strong> in your job search. Before interviews. Before LinkedIn. Before explanations.</p><p>At ChemistryLens, we don''t just rewrite CVs — we <strong>position you to be shortlisted</strong>.</p>', '{}'),
   ('services-cv', 'why_cv_matters_title', 'text', 'Why Your CV Matters More Than You Think', '{}'),
-  ('services-cv', 'what_we_do_title', 'text', 'What We Do Differently at StemBird', '{}')
+  ('services-cv', 'what_we_do_title', 'text', 'What We Do Differently at ChemistryLens', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 -- Insert default LinkedIn services page content
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata) VALUES
-  ('services-linkedin', 'hero_title', 'text', 'LinkedIn Career Services by StemBird', '{}'),
+  ('services-linkedin', 'hero_title', 'text', 'LinkedIn Career Services by ChemistryLens', '{}'),
   ('services-linkedin', 'hero_subtitle', 'text', 'Turn Your LinkedIn Profile Into Opportunities 🚀', '{}'),
   ('services-linkedin', 'hero_description', 'html', '<p>Your LinkedIn profile is no longer optional. It''s your <strong>digital CV</strong>, your <strong>personal brand</strong>, and often the <strong>first interview filter</strong>.</p>', '{}'),
   ('services-linkedin', 'why_linkedin_matters_title', 'text', 'Why LinkedIn Matters More Than Ever', '{}')
@@ -2359,7 +2359,7 @@ ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 -- Insert default Cover Letter services page content
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata) VALUES
-  ('services-cover-letter', 'hero_title', 'text', 'Outstanding Cover Letters by StemBird', '{}'),
+  ('services-cover-letter', 'hero_title', 'text', 'Outstanding Cover Letters by ChemistryLens', '{}'),
   ('services-cover-letter', 'hero_subtitle', 'text', 'Cover Letters That Get Read 📄✉️', '{}'),
   ('services-cover-letter', 'hero_description', 'html', '<p>Your CV shows what you''ve done. Your cover letter explains <strong>why you''re the right fit</strong>.</p>', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;
@@ -2401,8 +2401,8 @@ CREATE INDEX IF NOT EXISTS idx_page_content_url_slug ON page_content(seo_url_slu
 
 -- Insert default SEO values for existing pages
 UPDATE page_content SET
-  seo_title = 'StemBird - Find Your Dream Job in Kenya | Top Job Listings',
-  seo_meta_description = 'Discover thousands of job opportunities in Kenya. Connect with top employers, build your career, and find your perfect role with StemBird.',
+  seo_title = 'ChemistryLens - Find Your Dream Job in Kenya | Top Job Listings',
+  seo_meta_description = 'Discover thousands of job opportunities in Kenya. Connect with top employers, build your career, and find your perfect role with ChemistryLens.',
   seo_url_slug = '/',
   seo_canonical_url = 'https://www.careersasa.co.ke/',
   seo_index = true,
@@ -2411,32 +2411,32 @@ UPDATE page_content SET
 WHERE page_slug = 'home' AND section_key = 'hero_title';
 
 UPDATE page_content SET
-  seo_title = 'Professional CV Writing Services Kenya | StemBird',
+  seo_title = 'Professional CV Writing Services Kenya | ChemistryLens',
   seo_meta_description = 'Get a professionally written CV that opens doors. Expert CV writing services tailored for the Kenyan job market. Stand out and get shortlisted.',
   seo_url_slug = '/services/cv',
   seo_canonical_url = 'https://www.careersasa.co.ke/services/cv',
   seo_index = true,
-  seo_h1_title = 'CV & Resume Services by StemBird',
+  seo_h1_title = 'CV & Resume Services by ChemistryLens',
   seo_follow = true
 WHERE page_slug = 'services-cv' AND section_key = 'hero_title';
 
 UPDATE page_content SET
-  seo_title = 'LinkedIn Profile Optimization Services Kenya | StemBird',
+  seo_title = 'LinkedIn Profile Optimization Services Kenya | ChemistryLens',
   seo_meta_description = 'Transform your LinkedIn profile into a powerful career tool. Professional LinkedIn optimization services that attract recruiters and opportunities.',
   seo_url_slug = '/services/linkedin',
   seo_canonical_url = 'https://www.careersasa.co.ke/services/linkedin',
   seo_index = true,
-  seo_h1_title = 'LinkedIn Career Services by StemBird',
+  seo_h1_title = 'LinkedIn Career Services by ChemistryLens',
   seo_follow = true
 WHERE page_slug = 'services-linkedin' AND section_key = 'hero_title';
 
 UPDATE page_content SET
-  seo_title = 'Professional Cover Letter Writing Services Kenya | StemBird',
+  seo_title = 'Professional Cover Letter Writing Services Kenya | ChemistryLens',
   seo_meta_description = 'Get a compelling cover letter that gets read. Expert cover letter writing services that showcase why you''re the perfect fit for the role.',
   seo_url_slug = '/services/cover-letter',
   seo_canonical_url = 'https://www.careersasa.co.ke/services/cover-letter',
   seo_index = true,
-  seo_h1_title = 'Outstanding Cover Letters by StemBird',
+  seo_h1_title = 'Outstanding Cover Letters by ChemistryLens',
   seo_follow = true
 WHERE page_slug = 'services-cover-letter' AND section_key = 'hero_title';
 
@@ -7358,7 +7358,7 @@ USING (has_role(auth.uid(), 'admin'::app_role));
 UPDATE page_content SET content_value = 'Stop Searching. Start Getting Hired.'
 WHERE page_slug = 'home' AND section_key = 'hero_title';
 
-UPDATE page_content SET content_value = 'You''ve sent dozens of applications with zero callbacks. StemBird changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.'
+UPDATE page_content SET content_value = 'You''ve sent dozens of applications with zero callbacks. ChemistryLens changes that. We match your skills directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.'
 WHERE page_slug = 'home' AND section_key = 'hero_subtitle';
 
 UPDATE page_content SET content_value = 'Featured Opportunities'
@@ -7373,7 +7373,7 @@ WHERE page_slug = 'home' AND section_key = 'why_choose_title';
 UPDATE page_content SET content_value = 'Your Next Interview Is 60 Seconds Away'
 WHERE page_slug = 'home' AND section_key = 'cta_title';
 
-UPDATE page_content SET content_value = 'StemBird matches your skills directly to employer requirements, not just keywords. That''s why our users get 3x more interview callbacks than on other job boards. Join free today.'
+UPDATE page_content SET content_value = 'ChemistryLens matches your skills directly to employer requirements, not just keywords. That''s why our users get 3x more interview callbacks than on other job boards. Join free today.'
 WHERE page_slug = 'home' AND section_key = 'cta_subtitle';
 
 -- ============================================================
@@ -7391,7 +7391,7 @@ WHERE page_slug = 'services-cv' AND section_key = 'hero_description';
 UPDATE page_content SET content_value = 'The 6-Second Problem That''s Costing You Interviews'
 WHERE page_slug = 'services-cv' AND section_key = 'why_cv_matters_title';
 
-UPDATE page_content SET content_value = 'Why StemBird CVs Get 3x More Interview Callbacks'
+UPDATE page_content SET content_value = 'Why ChemistryLens CVs Get 3x More Interview Callbacks'
 WHERE page_slug = 'services-cv' AND section_key = 'what_we_do_title';
 
 -- ============================================================
@@ -7909,7 +7909,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Migration: Seed salary_data with Kenyan market salary data
 -- Description: The salary_data table only had 6 US rows. This adds realistic
 -- Kenyan salary data across common job families so the Salary Insights tool
--- returns useful results for StemBird users.
+-- returns useful results for ChemistryLens users.
 
 -- ============================================================================
 -- KENYAN SALARY DATA (monthly, in KES)
@@ -8161,7 +8161,7 @@ ON CONFLICT DO NOTHING;
 -- >>> 20260715_combined_kenyan_scraper_sources.sql
 -- ----------------------------------------------------------------
 -- ============================================================
--- COMBINED: Kenyan scraper sources (StemBird — 2026-07-15)
+-- COMBINED: Kenyan scraper sources (ChemistryLens — 2026-07-15)
 -- ============================================================
 -- Run this once in Supabase SQL Editor to apply all scraper source
 -- changes from today's session. Safe to re-run (uses ON CONFLICT).
@@ -8466,8 +8466,8 @@ INSERT INTO public.page_content (
 <body style="font-family:Arial,sans-serif;line-height:1.6;color:#333;background:#f5f5f5;margin:0;padding:0;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;margin:0 auto;background:white;">
     <tr><td style="background:#0A66C2;color:white;padding:30px;text-align:center;">
-      <img src="{{site_url}}/logo.png" alt="StemBird" style="width:60px;height:60px;margin-bottom:10px;" />
-      <h1 style="margin:0;font-size:24px;">Welcome to StemBird!</h1>
+      <img src="{{site_url}}/logo.png" alt="ChemistryLens" style="width:60px;height:60px;margin-bottom:10px;" />
+      <h1 style="margin:0;font-size:24px;">Welcome to ChemistryLens!</h1>
       <p style="margin:8px 0 0;opacity:0.9;font-size:16px;">Your free toolkit is ready — no strings attached</p>
     </td></tr>
     <tr><td style="padding:30px;">
@@ -8497,7 +8497,7 @@ INSERT INTO public.page_content (
       <a href="{{toolkit_url}}" style="color:#0A66C2;">{{toolkit_url}}</a></p>
     </td></tr>
     <tr><td style="padding:20px;text-align:center;font-size:12px;color:#666;border-top:1px solid #eee;">
-      <p>&copy; {{year}} StemBird. All rights reserved.</p>
+      <p>&copy; {{year}} ChemistryLens. All rights reserved.</p>
       <p><a href="{{unsubscribe_url}}" style="color:#666;">Unsubscribe</a> | <a href="{{site_url}}/privacy" style="color:#666;">Privacy Policy</a></p>
     </td></tr>
   </table>
@@ -8506,7 +8506,7 @@ INSERT INTO public.page_content (
   jsonb_build_object(
     'name', 'Popup Newsletter Welcome',
     'description', 'Sent automatically when a visitor submits the homepage email subscription popup. Includes the free toolkit download link.',
-    'subject', '🎁 Welcome to StemBird — Your Free Toolkit Is Inside',
+    'subject', '🎁 Welcome to ChemistryLens — Your Free Toolkit Is Inside',
     'placeholders', jsonb_build_array('name', 'email', 'site_url', 'toolkit_url', 'unsubscribe_url', 'year'),
     'extra', jsonb_build_object(
       'trigger', 'lead_magnet_popup',
@@ -9037,7 +9037,7 @@ BEGIN
 END;
 $$;
 
--- 6) Optional: ensure known StemBird admin accounts stay admins.
+-- 6) Optional: ensure known ChemistryLens admin accounts stay admins.
 -- Safe to re-run. Uses auth.users emails (service-role / SQL editor only).
 INSERT INTO public.user_roles (user_id, role)
 SELECT au.id, 'admin'::public.app_role
@@ -9086,7 +9086,7 @@ CREATE INDEX IF NOT EXISTS idx_jobs_salary_is_estimated
 -- Backfill jobs.date_posted from board JSON-LD datePosted
 -- ============================================================
 -- Scraped MyJobMag / BrighterMonday / Fuzu jobs previously defaulted
--- date_posted to insert time (now()), so day buckets on StemBird
+-- date_posted to insert time (now()), so day buckets on ChemistryLens
 -- did not match the source board. raw_data on scraped_job_sources
 -- still holds the original datePosted for published rows.
 -- ============================================================
@@ -9153,11 +9153,11 @@ WHERE cp.user_id = up.id
 -- >>> 20260813_reset_scraped_jobs_date_posted.sql
 -- ----------------------------------------------------------------
 -- ============================================================
--- Reset scraped jobs.date_posted to when StemBird added them
+-- Reset scraped jobs.date_posted to when ChemistryLens added them
 -- ============================================================
 -- 20260801_backfill_board_date_posted.sql copied the source board's
 -- datePosted into jobs.date_posted, which made Google see stale
--- freshness on recrawl and shifted the day buckets. StemBird's
+-- freshness on recrawl and shifted the day buckets. ChemistryLens's
 -- date_posted should be the time the job was added/published here
 -- (DB default now() == created_at), not the source's publication date.
 -- ============================================================
@@ -9410,7 +9410,7 @@ CREATE INDEX IF NOT EXISTS idx_jobs_status_function
 -- ============================================================================
 -- Social Publishing module (Phase 1: Buffer integration)
 --
--- Central place for social posts so StemBird can later replace Buffer with
+-- Central place for social posts so ChemistryLens can later replace Buffer with
 -- a native publishing engine without redesigning the data model.
 --
 -- Design notes:
@@ -9609,7 +9609,7 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
     'Jobs by Function',
     '{}',
     'Jobs by Function',
-    'Browse every job function on StemBird. See live counts, compare fields, and open roles in the area you work.',
+    'Browse every job function on ChemistryLens. See live counts, compare fields, and open roles in the area you work.',
     '/jobs/functions',
     'https://www.careersasa.co.ke/jobs/functions',
     'Jobs by Function'
@@ -9687,11 +9687,11 @@ ON CONFLICT (page_slug, section_key) DO NOTHING;
 -- Existing keys are left unchanged.
 
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata, seo_title, seo_meta_description, seo_url_slug, seo_canonical_url, seo_h1_title, seo_index, seo_follow) VALUES
-  ('about', 'hero_title', 'text', 'About StemBird', '{}'::jsonb, 'About StemBird - Kenya''s Fastest Path from Job Search to Job Offer', 'Learn how StemBird uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.', '/about', 'https://www.careersasa.co.ke/about', 'About StemBird', true, true),
+  ('about', 'hero_title', 'text', 'About ChemistryLens', '{}'::jsonb, 'About ChemistryLens - Kenya''s Fastest Path from Job Search to Job Offer', 'Learn how ChemistryLens uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.', '/about', 'https://www.careersasa.co.ke/about', 'About ChemistryLens', true, true),
   ('about', 'hero_subtitle', 'text', 'Kenya''s AI-Powered Job Platform. Where Skills Meet Opportunity', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'story_title', 'text', 'Why We Built StemBird', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'story_title', 'text', 'Why We Built ChemistryLens', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_p1', 'text', 'We watched thousands of talented Kenyans send 50, 100, even 200 applications and hear nothing back. Not for lack of qualifications. The system was broken. Generic job boards match keywords, not skills. Resumes disappear into black holes. And employers waste weeks sifting through unqualified applicants.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'story_p2', 'text', 'StemBird was built to fix that. We use AI-powered matching that connects candidates to jobs they''ll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'story_p2', 'text', 'ChemistryLens was built to fix that. We use AI-powered matching that connects candidates to jobs they''ll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'story_p3', 'text', 'The result? Our users report 3x more interview callbacks than on other platforms, and employers fill positions faster with candidates who actually fit the role.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'values_title', 'text', 'Our Core Values', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_speed_title', 'text', 'Speed', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
@@ -9699,10 +9699,10 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
   ('about', 'value_transparency_title', 'text', 'Transparency', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_transparency_body', 'text', 'No hidden fees. No ghost listings. Every job is verified, every salary shown where possible, and every application tracked. You deserve honesty in your job search.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_fairness_title', 'text', 'Fairness', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'value_fairness_body', 'text', 'Your background shouldn''t determine your future. StemBird is free for every job seeker. The best candidate might be someone who can''t afford a KES 5,000 CV service.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'value_fairness_body', 'text', 'Your background shouldn''t determine your future. ChemistryLens is free for every job seeker. The best candidate might be someone who can''t afford a KES 5,000 CV service.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_innovation_title', 'text', 'Kenyan-First Innovation', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'value_innovation_body', 'text', 'We build for Kenya''s job market, from county-specific job filters to M-Pesa-friendly pricing to Swahili-friendly support. International tools don''t understand our market. We do.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('about', 'stats_title', 'text', 'StemBird by the Numbers', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('about', 'stats_title', 'text', 'ChemistryLens by the Numbers', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'stats_subtitle', 'text', 'Real results, not empty promises', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'stats_jobs_value', 'text', '1,070+', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('about', 'stats_jobs_label', 'text', 'Verified Active Jobs', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
@@ -9716,7 +9716,7 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata, seo_title, seo_meta_description, seo_url_slug, seo_canonical_url, seo_h1_title, seo_index, seo_follow) VALUES
-  ('contact', 'hero_title', 'text', 'Contact Us', '{}'::jsonb, 'Contact StemBird | Support for Job Seekers and Employers', 'Get in touch with StemBird. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.', '/contact', 'https://www.careersasa.co.ke/contact', 'Contact Us', true, true),
+  ('contact', 'hero_title', 'text', 'Contact Us', '{}'::jsonb, 'Contact ChemistryLens | Support for Job Seekers and Employers', 'Get in touch with ChemistryLens. Email support@careersasa.co.ke or send a message — we typically respond within 24 hours on business days.', '/contact', 'https://www.careersasa.co.ke/contact', 'Contact Us', true, true),
   ('contact', 'hero_subtitle', 'text', 'We''re here to help. Reach out with any questions or concerns.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('contact', 'form_title', 'text', 'Send Us a Message', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
   ('contact', 'form_subtitle', 'text', 'Fill out the form below and we''ll get back to you soon.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
@@ -9735,8 +9735,8 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
 INSERT INTO page_content (page_slug, section_key, content_type, content_value, metadata, seo_title, seo_meta_description, seo_url_slug, seo_canonical_url, seo_h1_title, seo_index, seo_follow) VALUES
-  ('companies', 'eyebrow', 'text', 'Employers on StemBird', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
-  ('companies', 'hero_title', 'text', 'Companies', '{}'::jsonb, 'Companies by Industry | StemBird', 'Browse Kenyan employers by industry on StemBird. Pick a sector to see company profiles and open jobs.', '/companies', 'https://www.careersasa.co.ke/companies', 'Companies', true, true),
+  ('companies', 'eyebrow', 'text', 'Employers on ChemistryLens', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true),
+  ('companies', 'hero_title', 'text', 'Companies', '{}'::jsonb, 'Companies by Industry | ChemistryLens', 'Browse Kenyan employers by industry on ChemistryLens. Pick a sector to see company profiles and open jobs.', '/companies', 'https://www.careersasa.co.ke/companies', 'Companies', true, true),
   ('companies', 'hero_subtitle', 'text', 'Choose an industry to explore employers hiring in Kenya — or browse all companies at once.', '{}'::jsonb, NULL, NULL, NULL, NULL, NULL, true, true)
 ON CONFLICT (page_slug, section_key) DO NOTHING;
 
@@ -9765,7 +9765,7 @@ CREATE INDEX IF NOT EXISTS idx_candidate_cvs_target_job
 COMMENT ON COLUMN candidate_cvs.parent_cv_id IS
   'Source CV when this row is a tailored copy for a specific job.';
 COMMENT ON COLUMN candidate_cvs.target_job_id IS
-  'StemBird job this CV is targeted at, when attached from a listing.';
+  'ChemistryLens job this CV is targeted at, when attached from a listing.';
 COMMENT ON COLUMN candidate_cvs.target_jd_text IS
   'Plain-text job description used for keyword comparison (from the listing or a paste).';
 
@@ -9955,7 +9955,7 @@ COMMENT ON COLUMN public.job_applications.application_method IS
 -- markup without the required datePosted field (GSC: Regenerative
 -- Market Garden Lead, crawled 2026-09-09).
 --
--- Fill remaining NULLs from created_at (StemBird publish time).
+-- Fill remaining NULLs from created_at (ChemistryLens publish time).
 -- ============================================================
 
 BEGIN;
@@ -10022,7 +10022,7 @@ COMMIT;
 --   failed Missing validThrough        (8)
 --   warn   Missing employmentType      (4)
 --
--- StemBird listings always expire 30 days after posting when the employer
+-- ChemistryLens listings always expire 30 days after posting when the employer
 -- did not supply a deadline (scraper + JobPostingForm already do this).
 -- Fill remaining NULLs and keep future inserts complete so JSON-LD and the
 -- visible page stay in sync.
@@ -10250,19 +10250,19 @@ INSERT INTO page_content (page_slug, section_key, content_type, content_value, m
   ('home', 'stats_success_rate', 'number', '90', '{"label": "Success Rate", "suffix": "%"}'),
   ('home', 'featured_section_title', 'text', 'Featured Opportunities', '{}'),
   ('home', 'featured_section_subtitle', 'text', 'Hand-picked roles from top employers', '{}'),
-  ('home', 'why_choose_title', 'text', 'Why Kenyan Professionals Choose StemBird', '{}'),
+  ('home', 'why_choose_title', 'text', 'Why Kenyan Professionals Choose ChemistryLens', '{}'),
   ('home', 'cta_title', 'text', 'Ready to Transform Your Career?', '{}'),
-  ('home', 'cta_subtitle', 'text', 'Join thousands of Kenyan professionals who''ve found their dream jobs through StemBird', '{}'),
-  ('services-cv', 'hero_title', 'text', 'CV & Resume Services by StemBird', '{}'),
+  ('home', 'cta_subtitle', 'text', 'Join thousands of Kenyan professionals who''ve found their dream jobs through ChemistryLens', '{}'),
+  ('services-cv', 'hero_title', 'text', 'CV & Resume Services by ChemistryLens', '{}'),
   ('services-cv', 'hero_subtitle', 'text', 'Professional CVs That Open Doors 🚪📄', '{}'),
-  ('services-cv', 'hero_description', 'html', '<p>Your CV is often the <strong>first decision-maker</strong> in your job search. Before interviews. Before LinkedIn. Before explanations.</p><p>At StemBird, we don''t just rewrite CVs — we <strong>position you to be shortlisted</strong>.</p>', '{}'),
+  ('services-cv', 'hero_description', 'html', '<p>Your CV is often the <strong>first decision-maker</strong> in your job search. Before interviews. Before LinkedIn. Before explanations.</p><p>At ChemistryLens, we don''t just rewrite CVs — we <strong>position you to be shortlisted</strong>.</p>', '{}'),
   ('services-cv', 'why_cv_matters_title', 'text', 'Why Your CV Matters More Than You Think', '{}'),
-  ('services-cv', 'what_we_do_title', 'text', 'What We Do Differently at StemBird', '{}'),
-  ('services-linkedin', 'hero_title', 'text', 'LinkedIn Career Services by StemBird', '{}'),
+  ('services-cv', 'what_we_do_title', 'text', 'What We Do Differently at ChemistryLens', '{}'),
+  ('services-linkedin', 'hero_title', 'text', 'LinkedIn Career Services by ChemistryLens', '{}'),
   ('services-linkedin', 'hero_subtitle', 'text', 'Turn Your LinkedIn Profile Into Opportunities 🚀', '{}'),
   ('services-linkedin', 'hero_description', 'html', '<p>Your LinkedIn profile is no longer optional. It''s your <strong>digital CV</strong>, your <strong>personal brand</strong>, and often the <strong>first interview filter</strong>.</p>', '{}'),
   ('services-linkedin', 'why_linkedin_matters_title', 'text', 'Why LinkedIn Matters More Than Ever', '{}'),
-  ('services-cover-letter', 'hero_title', 'text', 'Outstanding Cover Letters by StemBird', '{}'),
+  ('services-cover-letter', 'hero_title', 'text', 'Outstanding Cover Letters by ChemistryLens', '{}'),
   ('services-cover-letter', 'hero_subtitle', 'text', 'Cover Letters That Get Read 📄✉️', '{}'),
   ('services-cover-letter', 'hero_description', 'html', '<p>Your CV shows what you''ve done. Your cover letter explains <strong>why you''re the right fit</strong>.</p>', '{}')
 ON CONFLICT (page_slug, section_key) DO NOTHING;
@@ -11356,7 +11356,7 @@ WHERE key = 'mpesa_settings'
 -- ----------------------------------------------------------------
 -- >>> 20261018_replace_stem_taxonomy.sql
 -- ----------------------------------------------------------------
--- Migration: Replace the Kenya-wide job taxonomy with the StemBird STEM taxonomy
+-- Migration: Replace the Kenya-wide job taxonomy with the ChemistryLens STEM taxonomy
 -- New sets: 40 industries, 47 job functions (full replacement).
 -- Idempotent: safe to re-run. Apply via Supabase Dashboard SQL Editor.
 -- (On a fresh install the seeds above already use the new taxonomy, so the

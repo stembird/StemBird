@@ -13,7 +13,7 @@ export const DEFAULT_MPESA_SETTINGS: MpesaPaymentSettings = {
   phoneNumber: DEFAULT_MPESA_PHONE,
   tillNumber: '',
   paybillNumber: '',
-  accountReference: 'StemBird',
+  accountReference: 'ChemistryLens',
 };
 
 function product(

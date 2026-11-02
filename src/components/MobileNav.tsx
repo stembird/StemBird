@@ -50,7 +50,7 @@ const MobileNav = () => {
   const [boostOpen, setBoostOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
 
-  const siteName = "StemBird";
+  const siteName = "ChemistryLens";
   const logoUrl = "/logo.png";
   const { browseLabel, links: browseLinks } = useNavContent();
 

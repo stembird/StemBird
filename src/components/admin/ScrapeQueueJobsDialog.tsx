@@ -389,7 +389,7 @@ export function ScrapeQueueJobsDialog({
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs text-primary hover:underline inline-flex items-center gap-1 truncate max-w-full"
-                            title="Open the published StemBird job"
+                            title="Open the published ChemistryLens job"
                           >
                             View job
                             <ExternalLink className="h-3 w-3" />

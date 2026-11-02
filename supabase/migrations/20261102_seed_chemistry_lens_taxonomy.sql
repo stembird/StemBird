@@ -1,5 +1,5 @@
 -- Migration: Chemistry Lens taxonomy v1.1
--- Replaces the StemBird STEM taxonomy (40 industries, 47 job functions) with
+-- Replaces the ChemistryLens STEM taxonomy (40 industries, 47 job functions) with
 -- the Chemistry Lens hub taxonomy (27 active industries + 2 reserved,
 -- 29 active job functions + 2 reserved).
 --

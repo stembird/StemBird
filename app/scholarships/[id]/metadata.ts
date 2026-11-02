@@ -88,7 +88,7 @@ export async function generateScholarshipMetadata(id: string): Promise<Metadata>
 
   if (!job || !isScholarshipRow(job)) {
     return {
-      title: "Scholarship Not Found - StemBird",
+      title: "Scholarship Not Found - ChemistryLens",
       description: "The scholarship you are looking for could not be found.",
     };
   }
@@ -103,12 +103,12 @@ export async function generateScholarshipMetadata(id: string): Promise<Metadata>
   );
 
   const title = isRemote
-    ? `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship — Remote (Kenya) | StemBird`
-    : `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship in ${locationPart} | StemBird`;
+    ? `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship — Remote (Kenya) | ChemistryLens`
+    : `${titleText}${companyName ? ` at ${companyName}` : ""} Scholarship in ${locationPart} | ChemistryLens`;
 
   const description = `${titleText} scholarship${companyName ? ` at ${companyName}` : ""}${
     isRemote ? " — Remote (Kenya)" : ` in ${locationPart}`
-  }. Eligibility, award details, and how to apply on StemBird.`;
+  }. Eligibility, award details, and how to apply on ChemistryLens.`;
 
   const siteUrl = "https://www.careersasa.co.ke";
   const thumbnailUrl = `${siteUrl}${buildShareOgImagePath(id)}`;
@@ -123,7 +123,7 @@ export async function generateScholarshipMetadata(id: string): Promise<Metadata>
       title,
       description,
       url,
-      siteName: "StemBird",
+      siteName: "ChemistryLens",
       images: [
         {
           url: thumbnailUrl,

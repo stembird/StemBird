@@ -52,7 +52,7 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const siteName = "StemBird";
+  const siteName = "ChemistryLens";
   const logoUrl = "/logo.png";
   const { browseLabel, links: browseLinks } = useNavContent();
 

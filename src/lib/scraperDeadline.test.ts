@@ -80,11 +80,11 @@ assert.equal(isStalePosting('2026-08-20T09:00:00Z', 7, auditNow), true, 'old ISO
 // default maxAgeDays resolves to the constant when no env override is set
 assert.equal(maxPostingAgeDays(), 7, 'default cap is 7 days')
 assert.equal(isStalePosting('2026-08-10', undefined, new Date(auditNow)), true)
-// STEMBIRD_MAX_POSTING_AGE_DAYS overrides the cap without a code change
-process.env.STEMBIRD_MAX_POSTING_AGE_DAYS = '14'
+// CHEMISTRYLENS_MAX_POSTING_AGE_DAYS overrides the cap without a code change
+process.env.CHEMISTRYLENS_MAX_POSTING_AGE_DAYS = '14'
 assert.equal(maxPostingAgeDays(), 14, 'env override loosens cap to 14 days')
 assert.equal(isStalePosting('2026-08-20', maxPostingAgeDays(), auditNow), false, '14-day window keeps a 12-day-old job')
-delete process.env.STEMBIRD_MAX_POSTING_AGE_DAYS
+delete process.env.CHEMISTRYLENS_MAX_POSTING_AGE_DAYS
 
 assert.equal(
   normalizeJobUrl('https://Apply.Workable.com/tatucity/j/ABC123/?utm_source=x'),

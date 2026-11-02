@@ -671,7 +671,7 @@ export function applyKenyanSalaryEstimateIfMissing<T extends Record<string, any>
     salary_currency: estimate.salary_currency,
     salary_period: estimate.salary_period,
     salary_is_estimated: true,
-    // Source boards omit pay → adapters set Hide. Estimates are StemBird
+    // Source boards omit pay → adapters set Hide. Estimates are ChemistryLens
     // figures we publish, so they must be visible (page + JSON-LD) or GSC
     // reports Missing field baseSalary on every estimated listing.
     salary_visibility: 'Show',

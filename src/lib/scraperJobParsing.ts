@@ -1,5 +1,5 @@
 /**
- * Intelligent parsing of scraped job content into StemBird job fields.
+ * Intelligent parsing of scraped job content into ChemistryLens job fields.
  *
  * Uses the same AI parse + finalize path as manual job parsing
  * (callAIWithRetry → buildJobParseSystemPrompt → finalizeParsedJobData),
@@ -869,7 +869,7 @@ const FUNCTION_ALIASES: Record<string, string> = {
 }
 
 /**
- * Infer a StemBird job function from the job title (+ optional department hint).
+ * Infer a ChemistryLens job function from the job title (+ optional department hint).
  * Used when ATS provides no function taxonomy (common on Workable).
  */
 export function inferJobFunctionFromTitle(
@@ -934,7 +934,7 @@ export function inferJobFunctionFromTitle(
   return null
 }
 
-/** ATS categories that are too vague to map to StemBird taxonomy. */
+/** ATS categories that are too vague to map to ChemistryLens taxonomy. */
 export function isGenericTaxonomyHint(hint?: string | null): boolean {
   if (!hint?.trim()) return true
   return /^(management|other|general|various|miscellaneous|n\/?a|none|all|corporate)$/i.test(
@@ -983,7 +983,7 @@ export function matchJobFunctionName(
 }
 
 /**
- * Parse scraped job content into StemBird fields.
+ * Parse scraped job content into ChemistryLens fields.
  * Uses the same AI prompt + finalize path as manual job parsing, then applies
  * scraper taxonomy heuristics when the model omits industry/function.
  */

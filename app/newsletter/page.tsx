@@ -182,7 +182,7 @@ export default function NewsletterPage() {
                   {loading ? 'Subscribing\u2026' : 'Subscribe & Get My Toolkit'}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
-                  By subscribing you agree to receive marketing emails from StemBird.
+                  By subscribing you agree to receive marketing emails from ChemistryLens.
                   You can unsubscribe at any time.
                 </p>
               </form>

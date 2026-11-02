@@ -1,17 +1,17 @@
 /**
- * Design tokens + helpers for StemBird social / OG job cards.
+ * Design tokens + helpers for ChemistryLens social / OG job cards.
  * Tuned for @vercel/og (Satori): flexbox + inline styles only.
  */
 
 import { OG_FETCH_TIMEOUT_MS, fetchWithTimeout } from '@/lib/ogFetch';
 
 export const OG_COLORS = {
-  /** StemBird primary — LinkedIn / corporate blue family */
+  /** ChemistryLens primary — LinkedIn / corporate blue family */
   primaryBlue: '#1565C0',
   linkedinBlue: '#0077B5',
   primaryBlueDeep: '#0D47A1',
   primaryBlueMid: '#1976D2',
-  /** StemBird secondary */
+  /** ChemistryLens secondary */
   accentOrange: '#FF7A00',
   accentOrangeDeep: '#E86A00',
   white: '#FFFFFF',

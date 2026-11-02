@@ -309,10 +309,10 @@ assert.equal(matchesSubjectFocus([null, '', undefined]), true, 'no signal keeps 
   assert.deepEqual(skippedUrls, [], 'default: no skips')
 }
 
-// Only the explicit cost mode (STEMBIRD_SUBJECT_DISCOVER_FILTER=true) drops
+// Only the explicit cost mode (CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER=true) drops
 // confident non-STEM titles while still keeping ambiguous/STEM ones.
 {
-  process.env.STEMBIRD_SUBJECT_DISCOVER_FILTER = 'true'
+  process.env.CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER = 'true'
   const discovered = [
     { job_url: 'https://a/1', partial_data: { title: 'Chemist' } }, // STEM signal → keep
     { job_url: 'https://a/2', partial_data: { title: 'Sales Executive' } }, // confident non-STEM → skip
@@ -327,7 +327,7 @@ assert.equal(matchesSubjectFocus([null, '', undefined]), true, 'no signal keeps 
     'cost mode: only confident non-STEM title dropped'
   )
   assert.deepEqual(skippedUrls, ['https://a/2'], 'Sales Executive skipped in cost mode')
-  delete process.env.STEMBIRD_SUBJECT_DISCOVER_FILTER
+  delete process.env.CHEMISTRYLENS_SUBJECT_DISCOVER_FILTER
 }
 
 console.log('scrapeDiscover.test.ts: all assertions passed')

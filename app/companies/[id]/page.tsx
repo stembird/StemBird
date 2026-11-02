@@ -169,8 +169,8 @@ export async function generateMetadata({
 
   if (!company) {
     return {
-      title: "Company Not Found | StemBird",
-      description: "This company profile could not be found on StemBird.",
+      title: "Company Not Found | ChemistryLens",
+      description: "This company profile could not be found on ChemistryLens.",
     };
   }
 
@@ -186,25 +186,25 @@ export async function generateMetadata({
   const industryBit = company.industry ? ` (${company.industry})` : "";
   const description =
     company.description?.replace(/<[^>]*>/g, "").slice(0, 160) ||
-    `Explore ${company.name}${industryBit} careers${locationBit} on StemBird. View open roles and apply today.`;
+    `Explore ${company.name}${industryBit} careers${locationBit} on ChemistryLens. View open roles and apply today.`;
 
   return {
-    title: `${company.name} Careers & Jobs${locationBit} | StemBird`,
+    title: `${company.name} Careers & Jobs${locationBit} | ChemistryLens`,
     description,
     alternates: { canonical: pageUrl },
     openGraph: {
-      title: `${company.name} Careers | StemBird`,
+      title: `${company.name} Careers | ChemistryLens`,
       description,
       url: pageUrl,
       type: "website",
-      siteName: "StemBird",
+      siteName: "ChemistryLens",
       images: logo
         ? [{ url: logo, alt: `${company.name} logo` }]
         : undefined,
     },
     twitter: {
       card: "summary",
-      title: `${company.name} Careers | StemBird`,
+      title: `${company.name} Careers | ChemistryLens`,
       description,
       images: logo ? [logo] : undefined,
     },
@@ -287,7 +287,7 @@ export default async function CompanyProfilePage({
               <div className="min-w-0 flex-1 space-y-4">
                 <div>
                   <p className="text-[11px] uppercase tracking-[0.16em] text-white/75 mb-2">
-                    Hiring on StemBird
+                    Hiring on ChemistryLens
                   </p>
                   <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white drop-shadow-sm">
                     {company.name}
@@ -403,7 +403,7 @@ export default async function CompanyProfilePage({
                     </p>
                   ) : (
                     <p className="text-muted-foreground leading-relaxed">
-                      {company.name} is hiring on StemBird
+                      {company.name} is hiring on ChemistryLens
                       {company.industry ? ` in the ${company.industry} space` : ""}
                       {company.location ? ` · based in ${company.location}` : ""}.
                       Browse current openings below and apply directly.
@@ -459,7 +459,7 @@ export default async function CompanyProfilePage({
             </section>
           )}
 
-          {/* Open jobs on StemBird */}
+          {/* Open jobs on ChemistryLens */}
           <section
             id="open-jobs"
             aria-labelledby="jobs-heading"
@@ -475,15 +475,15 @@ export default async function CompanyProfilePage({
                 </h2>
                 <p className="text-muted-foreground mt-1">
                   {jobs.length > 0
-                    ? `Active listings posted on StemBird · ${jobCountLabel}`
-                    : "No active StemBird listings right now"}
+                    ? `Active listings posted on ChemistryLens · ${jobCountLabel}`
+                    : "No active ChemistryLens listings right now"}
                 </p>
               </div>
               <Link
                 href="/jobs"
                 className="text-sm font-medium text-primary hover:underline"
               >
-                Browse all StemBird jobs
+                Browse all ChemistryLens jobs
               </Link>
             </div>
 
@@ -546,7 +546,7 @@ export default async function CompanyProfilePage({
                       No open roles listed yet
                     </p>
                     <p className="text-muted-foreground max-w-md mx-auto">
-                      {company.name} doesn&apos;t have active jobs on StemBird
+                      {company.name} doesn&apos;t have active jobs on ChemistryLens
                       at the moment. Check back soon or browse other openings.
                     </p>
                   </div>

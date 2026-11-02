@@ -42,8 +42,8 @@ function buildMeta(data: OgJobCardData): MetaItem[] {
 }
 
 /**
- * Template 5 — Medium LinkedIn-blue gradient (green reference → StemBird blue).
- * Circular portrait with white ring. StemBird branding throughout.
+ * Template 5 — Medium LinkedIn-blue gradient (green reference → ChemistryLens blue).
+ * Circular portrait with white ring. ChemistryLens branding throughout.
  */
 export function JobSocialCardTemplate5(data: OgJobCardData) {
   const { width, height } = OG_CARD_SIZES[data.size];

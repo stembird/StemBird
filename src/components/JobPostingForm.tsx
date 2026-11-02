@@ -876,7 +876,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         savedJobId = inserted?.id || null;
       }
 
-      // Universal AI normalize/enrich on production keys (any intake → StemBird fields).
+      // Universal AI normalize/enrich on production keys (any intake → ChemistryLens fields).
       // Save already succeeded — enrich errors must not fail the mutation.
       let enriched = false;
       if (savedJobId) {

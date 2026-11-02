@@ -204,7 +204,7 @@ export async function GET(
               fontWeight: 'bold',
             }}
           >
-            StemBird.co.ke — Career Insights
+            ChemistryLens.co.ke — Career Insights
           </div>
           
           {/* Read More CTA - Bottom Right */}
@@ -316,7 +316,7 @@ function getDefaultImage() {
               marginBottom: '20px',
             }}
           >
-            StemBird Blog
+            ChemistryLens Blog
           </h1>
           <p
             style={{

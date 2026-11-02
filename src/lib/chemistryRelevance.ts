@@ -22,7 +22,7 @@
  *   general business/HR/marketing/etc. A vetoed title is only re-admitted
  *   when T2 fires AND duties also pass T3.
  *
- * Env config (mirrors STEMBIRD_SUBJECT_FILTER_*):
+ * Env config (mirrors CHEMISTRYLENS_SUBJECT_FILTER_*):
  *   CHEMISTRY_LENS_GATE_ENABLED     "true" (default) | "false" to bypass
  *   CHEMISTRY_LENS_DISCOVER_FILTER  "false" (default; accuracy-first)
  */

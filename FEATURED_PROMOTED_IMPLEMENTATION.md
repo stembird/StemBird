@@ -1,7 +1,7 @@
 # Featured and Promoted Jobs - Implementation Summary
 
 ## Overview
-This document summarizes the implementation of featured and promoted job badges across the StemBird website.
+This document summarizes the implementation of featured and promoted job badges across the ChemistryLens website.
 
 ## Changes Made (Commit: 2bdedde)
 

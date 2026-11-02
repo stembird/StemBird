@@ -1,8 +1,8 @@
 /**
- * Canonical StemBird county data — the single source of truth for county
+ * Canonical ChemistryLens county data — the single source of truth for county
  * names used by the interactive Kenya jobs map and the jobs search filter.
  *
- * These 47 names are exactly the values StemBird uses when filtering jobs
+ * These 47 names are exactly the values ChemistryLens uses when filtering jobs
  * by county (`job_location_county` on `public.jobs`), and they correspond to
  * the names seeded into `public.counties` in Supabase. Keeping the list here
  * means the map, county grouping, and search all agree on one naming system.

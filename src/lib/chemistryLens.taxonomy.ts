@@ -1,7 +1,7 @@
 /**
  * Chemistry Lens taxonomy v1.1 — the single source of truth for industries,
  * job functions, sectors, families, degree fields, and the migration maps
- * from the retired StemBird STEM taxonomy.
+ * from the retired ChemistryLens STEM taxonomy.
  *
  * THREE SEPARATE DIMENSIONS (never conflated):
  *   - Degree fields — what did you study?  → DEGREE_FIELDS
@@ -342,7 +342,7 @@ export function findFunctionByName(name: string): JobFunction | undefined {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MIGRATION MAPS — old StemBird STEM taxonomy → new Chemistry Lens taxonomy.
+// MIGRATION MAPS — old ChemistryLens STEM taxonomy → new Chemistry Lens taxonomy.
 // Value = array of new-taxonomy names; empty array means "deprecated, drop
 // this tag". When more than one entry appears, the correct choice depends on
 // the job description (see docs/migration notes).

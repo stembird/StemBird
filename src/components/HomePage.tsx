@@ -83,12 +83,12 @@ export default function HomePage({
   const { data: content } = usePageContent("home");
 
   const heroTitle = getContentValue(content, "hero_title", "Stop Searching. Start Getting Hired.");
-  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. StemBird changes that. We match your STEM skills (engineering, labs, tech, data and research) directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
+  const heroSubtitle = getContentValue(content, "hero_subtitle", "You've sent dozens of applications with zero callbacks. ChemistryLens changes that. We match your STEM skills (engineering, labs, tech, data and research) directly to employers who are hiring right now, so you skip the black hole and land your next interview faster.");
   const statsJobsTarget = Math.max(0, activeJobsCount);
   const statsCompaniesTarget = Math.max(0, companiesCount);
   const statsSuccessRateTarget = parseInt(getContentValue(content, "stats_success_rate", "90"));
   const ctaTitle = getContentValue(content, "cta_title", "Your Next STEM Interview Is 60 Seconds Away");
-  const ctaSubtitle = getContentValue(content, "cta_subtitle", "StemBird matches your technical skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on generic job boards. Join free today.");
+  const ctaSubtitle = getContentValue(content, "cta_subtitle", "ChemistryLens matches your technical skills directly to employer requirements, not just keywords. That's why our users get 3x more interview callbacks than on generic job boards. Join free today.");
 
   const companiesPlugin = useRef(
     Autoplay({ delay: 3500, stopOnInteraction: true })
@@ -186,7 +186,7 @@ export default function HomePage({
         <div className="container relative z-10 mx-auto py-12 md:py-16 px-4">
           <div className="max-w-2xl animate-fade-in md:mx-auto md:text-center">
             <p className="text-[11px] uppercase tracking-[0.22em] text-sky-200 mb-3 font-semibold drop-shadow-[0_1px_6px_rgba(0,0,0,0.55)]">
-              StemBird · STEM Careers in Kenya
+              ChemistryLens · STEM Careers in Kenya
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-[3.25rem] font-bold mb-4 text-[#0A66C2] leading-[1.1] drop-shadow-[0_1px_10px_rgba(255,255,255,0.75)]">
               {heroTitle}
@@ -327,7 +327,7 @@ export default function HomePage({
               Why 95% of Our STEM Talent Lands Interviews Within 3 Months
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              Generic job boards dump every listing and leave you to figure it out. StemBird is
+              Generic job boards dump every listing and leave you to figure it out. ChemistryLens is
               built for science, technology, engineering and math professionals — we actively match
               your technical skills to hiring employers using AI, not just keywords.
             </p>
@@ -397,21 +397,21 @@ export default function HomePage({
                 role: "Software Developer at Safaricom",
                 image: "/assets/testimonial-1.jpg",
                 quote:
-                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on StemBird, I had 3 interviews. The AI matching actually works. It connected me to engineering roles I would never have found myself.",
+                  "I'd been applying for 4 months with zero callbacks. Within 2 weeks on ChemistryLens, I had 3 interviews. The AI matching actually works. It connected me to engineering roles I would never have found myself.",
               },
               {
                 name: "Grace Wanjiru",
                 role: "Laboratory Scientist at a pharmaceutical manufacturer",
                 image: "/assets/testimonial-2.jpg",
                 quote:
-                  "I was stuck in a routine QA role for 2 years. StemBird's job alerts put a lab scientist position in my inbox that I wasn't even searching for. My technical skills were a perfect match — I applied the same day and got the offer.",
+                  "I was stuck in a routine QA role for 2 years. ChemistryLens's job alerts put a lab scientist position in my inbox that I wasn't even searching for. My technical skills were a perfect match — I applied the same day and got the offer.",
               },
               {
                 name: "Brian Ochieng",
                 role: "Data Analyst at Equity Bank",
                 image: "/assets/testimonial-3.jpg",
                 quote:
-                  "The free CV builder alone was worth signing up for — it finally framed my analytics projects the way employers read them. Then I got 3 interview invitations in my first month. StemBird shows you jobs that actually match your technical skills.",
+                  "The free CV builder alone was worth signing up for — it finally framed my analytics projects the way employers read them. Then I got 3 interview invitations in my first month. ChemistryLens shows you jobs that actually match your technical skills.",
               },
             ].map((testimonial, idx) => (
               <Card
@@ -547,7 +547,7 @@ export default function HomePage({
               Your Career, Transformed
             </h2>
             <p className={`${SECTION_SUBCOPY_CLASS} max-w-2xl mx-auto`}>
-              From fresh graduates to senior engineers and scientists, StemBird has helped thousands
+              From fresh graduates to senior engineers and scientists, ChemistryLens has helped thousands
               of Kenyan STEM professionals level up.
             </p>
           </div>
@@ -566,7 +566,7 @@ export default function HomePage({
                   From Graduate to Senior Engineer in 3 Years
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  &quot;I started as a fresh civil engineering graduate with no connections. StemBird matched
+                  &quot;I started as a fresh civil engineering graduate with no connections. ChemistryLens matched
                   me to my first site role, then my second, then my third. In 3 years, I went from intern
                   to Senior Engineer at a national infrastructure firm. Every opportunity was the right next step.&quot;
                 </p>
@@ -596,7 +596,7 @@ export default function HomePage({
                 </h3>
                 <p className="text-muted-foreground mb-4">
                   &quot;I spent 6 years in mechanical engineering and wanted to move into software, but every job
-                  board made me feel like I had to start from scratch. StemBird&apos;s matching found tech roles
+                  board made me feel like I had to start from scratch. ChemistryLens&apos;s matching found tech roles
                   that valued my engineering background. I&apos;m now a Tech Lead at Andela Kenya.&quot;
                 </p>
                 <div className="flex items-center gap-3">

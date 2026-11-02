@@ -89,7 +89,7 @@ export const useJobThumbnail = (): UseJobThumbnailReturn => {
     // Draw branding
     ctx.font = 'bold 24px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-    ctx.fillText('StemBird.co.ke', width * 0.1, height * 0.9);
+    ctx.fillText('ChemistryLens.co.ke', width * 0.1, height * 0.9);
     
     // Draw "Apply Now" button
     drawApplyButton(ctx, width, height);
@@ -114,7 +114,7 @@ export const useJobThumbnail = (): UseJobThumbnailReturn => {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.fill();
     
-    // Letter "C" to represent StemBird
+    // Letter "C" to represent ChemistryLens
     ctx.font = 'bold 48px system-ui, -apple-system, sans-serif';
     ctx.fillStyle = 'white';
     ctx.textAlign = 'center';

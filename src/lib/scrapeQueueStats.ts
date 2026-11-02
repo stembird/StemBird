@@ -160,12 +160,15 @@ export function emptyQueueStats(): QueueStatusCounts {
 
 /**
  * A `done` queue row means "processed", not "published": duplicates, expired
- * adverts and STEM-screened rejects are all marked done too. Bucket them by
- * error_message so the admin UI can show the real outcomes. Legacy pre-check
- * skips ("Skipped: pre-check outside STEM…") land in the same non-STEM bucket.
+ * adverts and chemistry/STEM-screened rejects are all marked done too. Bucket
+ * them by error_message so the admin UI can show the real outcomes. Legacy
+ * STEM-gate skips ("Skipped: pre-check outside STEM…") and current Chemistry
+ * Lens gate skips ("Skipped: outside chemistry focus") land in the same bucket.
  */
 export function isNonStemSkipMessage(message: string | null | undefined): boolean {
-  return typeof message === 'string' && message.toLowerCase().includes('outside stem')
+  if (typeof message !== 'string') return false
+  const m = message.toLowerCase()
+  return m.includes('outside stem') || m.includes('outside chemistry')
 }
 
 export function isOtherDoneMessage(message: string | null | undefined): boolean {

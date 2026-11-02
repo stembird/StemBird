@@ -33,7 +33,7 @@ import {
   scholarshipPublishFields,
   withoutScholarshipColumns,
 } from './listingKind'
-import { matchesSubjectFocus } from './scrapeSubjectFilter'
+import { matchesChemistryFocus } from './chemistryRelevance'
 
 export interface PublishScrapedJobParams {
   supabase: SupabaseClient
@@ -248,29 +248,28 @@ export async function publishScrapedJob(
       }
     }
 
-    // Subject focus gate (STEM only) — three tiers (see scrapeSubjectFilter.ts):
-    // high-signal structured fields count a stem alone; qualifications /
-    // responsibilities / description only promote when a study cue names a
-    // hard STEM degree, so a non-STEM title with e.g. a Pharmacy requirement
-    // is kept while "business research" prose is not.
+    // Chemistry Lens publication gate (see chemistryRelevance.ts). A job
+    // publishes only when at least one of T1 chemistry-core function,
+    // T2 chemistry-family degree, T3 chemical duties, or T4 commercial
+    // chemistry passes. Clinical / pure-biology / general-business titles
+    // are hard-vetoed unless T2 + T3 rescue them.
     if (
-      !matchesSubjectFocus(
-        [
-          normalized.title,
-          parsed.field_of_study,
-          parsed.area_of_study,
+      !matchesChemistryFocus({
+        title: normalized.title || '',
+        jobFunctions: [
           parsed.job_function,
           ...(parsed.job_functions || []),
-          parsed.tags || normalized.tags,
-        ],
-        // Body copy: low-signal, study-cue + hard-degree guard applies.
-        parsed.description || normalized.description,
-        // Prose fields: qualifications/responsibilities — guarded tier.
-        [
-          parsed.required_qualifications || normalized.required_qualifications,
-          parsed.responsibilities || normalized.responsibilities,
-        ]
-      )
+        ].filter((v): v is string => typeof v === 'string' && v.length > 0),
+        industries: parsed.industries || (parsed.industry ? [parsed.industry] : null),
+        description: parsed.description || normalized.description || null,
+        requiredQualifications:
+          parsed.required_qualifications || normalized.required_qualifications || null,
+        responsibilities:
+          parsed.responsibilities || normalized.responsibilities || null,
+        tags: parsed.tags || normalized.tags || null,
+        fieldOfStudy: parsed.field_of_study || null,
+        areaOfStudy: parsed.area_of_study || null,
+      })
     ) {
       await supabase.from('scraped_job_sources').upsert(
         {

@@ -20,7 +20,11 @@ export const QUEUE_DONE_BUCKETS = ['published', 'non_stem', 'other', 'all'] as c
 export type QueueDoneBucket = (typeof QUEUE_DONE_BUCKETS)[number]
 
 function isNonStemSkip(message: string | null | undefined): boolean {
-  return typeof message === 'string' && message.toLowerCase().includes('outside stem')
+  if (typeof message !== 'string') return false
+  const m = message.toLowerCase()
+  // Legacy STEM gate + current Chemistry Lens gate both live in the same
+  // admin bucket so operators keep one review queue across the taxonomy swap.
+  return m.includes('outside stem') || m.includes('outside chemistry')
 }
 
 function isOtherDone(message: string | null | undefined): boolean {

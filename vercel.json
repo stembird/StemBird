@@ -28,5 +28,28 @@
       "path": "/api/cron/social-auto-queue",
       "schedule": "30 6 * * *"
     }
+  ],
+  "redirects": [
+    { "source": "/companies/industry/food-and-beverage-manufacturing", "destination": "/companies/industry/food-beverage-and-brewery-laboratories", "permanent": true },
+    { "source": "/companies/industry/plastics-rubber-and-composites", "destination": "/companies/industry/polymers-plastics-and-rubber", "permanent": true },
+    { "source": "/companies/industry/oil-gas-and-petrochemicals", "destination": "/companies/industry/petrochemicals-refining-and-fuels", "permanent": true },
+    { "source": "/companies/industry/energy-power-and-renewable-energy", "destination": "/companies/industry/energy-power-and-utilities", "permanent": true },
+    { "source": "/companies/industry/environmental-services-and-conservation", "destination": "/companies/industry/environmental-consulting-eia-and-air-quality", "permanent": true },
+    { "source": "/companies/industry/scientific-research-and-development", "destination": "/companies/industry/scientific-research-and-r-and-d-institutions", "permanent": true },
+    { "source": "/companies/industry/healthcare-hospitals-and-medical-laboratories", "destination": "/companies/industry/clinical-chemistry-and-medical-laboratory-services", "permanent": true },
+    { "source": "/companies/industry/manufacturing-and-industrial-production", "destination": "/companies/industry/chemicals-driven-manufacturing-and-industrial-production", "permanent": true },
+    { "source": "/companies/industry/universities-and-higher-education", "destination": "/companies/industry/education-and-training-universities-tvet-and-professional", "permanent": true },
+    { "source": "/companies/industry/schools-and-secondary-education", "destination": "/companies/industry/education-and-training-schools", "permanent": true },
+    { "source": "/companies/industry/government-and-public-sector", "destination": "/companies/industry/regulatory-standards-and-public-health-authorities", "permanent": true },
+    { "source": "/companies/industry/consulting-and-professional-services", "destination": "/companies/industry/chemical-and-process-engineering-consultancy", "permanent": true },
+    { "source": "/companies/industry/life-sciences-and-biomedical-research", "destination": "/companies/industry/biotechnology-and-life-sciences", "permanent": true },
+    { "source": "/companies/industry/ngos-development-and-international-organisations", "destination": "/companies/industry/development-organisations-and-ngo-laboratory-programmes", "permanent": true },
+    { "source": "/companies/industry/information-technology-and-software", "destination": "/companies/industry/all", "permanent": true },
+    { "source": "/companies/industry/banking-finance-and-insurance", "destination": "/companies/industry/all", "permanent": true },
+    { "source": "/companies/industry/real-estate-and-facilities-management", "destination": "/companies/industry/all", "permanent": true },
+    { "source": "/companies/industry/telecommunications-and-networking", "destination": "/companies/industry/all", "permanent": true },
+    { "source": "/companies/industry/logistics-supply-chain-and-distribution", "destination": "/companies/industry/all", "permanent": true },
+    { "source": "/companies/industry/consumer-goods-and-retail", "destination": "/companies/industry/all", "permanent": true },
+    { "source": "/companies/industry/construction-infrastructure-and-built-environment", "destination": "/companies/industry/all", "permanent": true }
   ]
 }

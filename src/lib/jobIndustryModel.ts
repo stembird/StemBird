@@ -9,7 +9,6 @@
  */
 
 import { OG_FETCH_TIMEOUT_MS, fetchWithTimeout } from '@/lib/ogFetch';
-import { FALLBACK_JOB_FUNCTIONS } from '@/lib/jobParseNormalization';
 
 export type JobIndustryModelCategory =
   | 'healthcare'
@@ -82,60 +81,55 @@ export const INDUSTRY_MODEL_FILENAMES: Record<JobIndustryModelCategory, string> 
 };
 
 /**
- * Canonical StemBird job function → portrait category.
- * Every FALLBACK_JOB_FUNCTIONS entry must appear here.
+ * Canonical Chemistry Lens job function → portrait category.
+ * Keys must match every active JOB_FUNCTIONS entry in
+ * `chemistryLens.taxonomy.ts` (the jobIndustryModel test asserts coverage).
  */
-export const JOB_FUNCTION_MODEL_CATEGORY: Record<
-  (typeof FALLBACK_JOB_FUNCTIONS)[number],
-  JobIndustryModelCategory
-> = {
+export const JOB_FUNCTION_MODEL_CATEGORY: Record<string, JobIndustryModelCategory> = {
+  // F1 Laboratory & Analytical Sciences
+  'Analytical & Instrumental Chemistry': 'science',
+  'Laboratory Operations & Management': 'science',
+  'Laboratory Technician & Sample Handling': 'science',
+  'Microbiology & Molecular Analysis (Product/Quality)': 'science',
+  'Forensic & Toxicology Analysis': 'science',
+  'Method Development & Validation': 'science',
+
+  // F2 Research & Development
   'Research & Development (R&D)': 'science',
-  'Analytical Chemistry': 'science',
-  'Laboratory Operations & Testing': 'science',
-  'Quality Control (QC)': 'manufacturing',
-  'Quality Assurance & Quality Management': 'manufacturing',
-  'Regulatory Affairs & Compliance': 'professional',
-  'Product Development & Formulation': 'manufacturing',
-  'Microbiology & Biotechnology': 'science',
-  'Clinical Research & Trials': 'healthcare',
-  'Materials Science & Engineering': 'engineering',
-  'Food Science & Technology': 'science',
-  'Environmental Science & Management': 'environment',
-  'Geology, Geoscience & Mineral Exploration': 'engineering',
-  'Agricultural Science & Technology': 'agriculture',
-  'Public Health Science & Epidemiology': 'healthcare',
-  'Biostatistics & Bioinformatics': 'technology',
-  'Scientific Data Management': 'technology',
+  'Clinical Research & Trials (Chemistry-Relevant)': 'healthcare',
+
+  // F3 Process, Production & Engineering
+  'Formulation & Product Development': 'manufacturing',
   'Chemical & Process Engineering': 'engineering',
-  'Industrial & Manufacturing Engineering': 'manufacturing',
-  'Mechanical Engineering': 'engineering',
-  'Electrical & Electronics Engineering': 'engineering',
-  'Civil & Structural Engineering': 'engineering',
-  'Biomedical Engineering': 'engineering',
-  'Robotics, Mechatronics & Automation': 'engineering',
-  'Instrumentation, Control & Metrology': 'engineering',
+  'Process Operations & Plant Optimisation': 'manufacturing',
+  'Production & Plant Operations Management': 'manufacturing',
+  'Materials & Polymer Science': 'engineering',
+  'Mining, Assay & Mineral Processing': 'engineering',
+  'Energy & Utilities Process': 'environment',
+  'Water & Wastewater Treatment Operations': 'environment',
+
+  // F4 Quality, Compliance & Regulation
+  'Quality Control (QC)': 'manufacturing',
+  'Quality Assurance & QMS': 'manufacturing',
+  'Regulatory Affairs & Compliance': 'professional',
+  'Metrology, Calibration & Lab Accreditation (ISO 17025)': 'science',
+
+  // F5 Engineering Support, Safety & Maintenance
+  'Instrumentation & Control': 'engineering',
   'Maintenance & Reliability Engineering': 'maintenance',
-  'Production & Manufacturing Operations': 'manufacturing',
-  'Process Optimisation & Production Planning': 'manufacturing',
-  'Health, Safety & Process Risk Management': 'health-safety',
-  'Energy Systems & Renewable Energy': 'environment',
-  'Water & Wastewater Engineering': 'environment',
-  'Mining & Mineral Processing': 'engineering',
-  'Surveying & Geospatial Science': 'engineering',
-  'Software Development & Engineering': 'technology',
-  'IT Infrastructure, Systems & Support': 'technology',
-  Cybersecurity: 'technology',
-  'Cloud Computing & DevOps': 'technology',
-  'Data Science, Analytics & Artificial Intelligence': 'technology',
-  'Networking & Telecommunications': 'telecommunications',
-  'Mathematics, Statistics & Actuarial Science': 'technology',
-  'Operations Research & Optimisation': 'technology',
-  'Technical Support & Field Service': 'maintenance',
-  'Technical Sales & Business Development': 'sales',
-  'Technical Procurement & Supply Chain': 'manufacturing',
-  'Technical Project Management & Operations': 'professional',
-  'STEM Education, Teaching & Curriculum Development': 'education',
-  'Technical Training, Academic Research & Science Communication': 'education',
+  'HSE & Process Safety': 'health-safety',
+
+  // F6 Commercial, Service & Supply Chain
+  'Technical Sales & Business Development (Chemistry)': 'sales',
+  'Applications, Technical Support & Field Service': 'maintenance',
+  'Procurement, Warehousing & Supply Chain (Lab/Chemical)': 'manufacturing',
+
+  // F7 Digital Science & Data
+  'Laboratory Information Systems (LIMS) & Informatics': 'technology',
+  'Chemometrics, Data Science & Statistics for Lab Systems': 'technology',
+
+  // F8 Education & Cross-Functional
+  'Chemistry Teaching, Training & Science Communication': 'education',
 };
 
 const FUNCTION_CATEGORY_BY_LOWER = new Map<string, JobIndustryModelCategory>(

@@ -1,97 +1,20 @@
 /** Shared helpers for normalizing AI-parsed job fields against allowed dropdown values. */
 
-export const FALLBACK_INDUSTRIES = [
-  'Agriculture, Agribusiness & Agricultural Technology',
-  'Food & Beverage Manufacturing',
-  'Chemicals, Paints, Polymers & Industrial Materials',
-  'Pharmaceuticals & Biotechnology',
-  'Healthcare, Hospitals & Medical Laboratories',
-  'Manufacturing & Industrial Production',
-  'Paper, Pulp & Packaging',
-  'Plastics, Rubber & Composites',
-  'Oil, Gas & Petrochemicals',
-  'Energy, Power & Renewable Energy',
-  'Water, Wastewater & Water Treatment',
-  'Environmental Services & Conservation',
-  'Mining, Geology & Mineral Processing',
-  'Construction, Infrastructure & Built Environment',
-  'Electrical & Electronics Manufacturing',
-  'Automotive & Transport Equipment',
-  'Aerospace & Defence',
-  'Information Technology & Software',
-  'Telecommunications & Networking',
-  'Data, Artificial Intelligence & Analytics',
-  'Banking, Finance & Insurance',
-  'Consulting & Professional Services',
-  'Scientific Research & Development',
-  'Testing, Inspection, Certification & Calibration',
-  'Schools & Secondary Education',
-  'Universities & Higher Education',
-  'Technical & Vocational Education and Training (TVET)',
-  'STEM Training & Professional Development',
-  'Educational Technology (EdTech)',
-  'Government & Public Sector',
-  'NGOs, Development & International Organisations',
-  'Logistics, Supply Chain & Distribution',
-  'Consumer Goods & Retail',
-  'Textiles, Apparel & Leather Manufacturing',
-  'Life Sciences & Biomedical Research',
-  'Laboratories & Scientific Services',
-  'Aviation & Aerospace Services',
-  'Real Estate & Facilities Management',
-  'Telecommunications Infrastructure',
-  'Waste Management & Recycling',
-] as const;
+import {
+  ACTIVE_INDUSTRY_NAMES,
+  ACTIVE_JOB_FUNCTION_NAMES,
+  EXTRA_INDUSTRY_ALIASES,
+} from "@/lib/chemistryLens.taxonomy";
 
-export const FALLBACK_JOB_FUNCTIONS = [
-  'Research & Development (R&D)',
-  'Analytical Chemistry',
-  'Laboratory Operations & Testing',
-  'Quality Control (QC)',
-  'Quality Assurance & Quality Management',
-  'Regulatory Affairs & Compliance',
-  'Product Development & Formulation',
-  'Microbiology & Biotechnology',
-  'Clinical Research & Trials',
-  'Materials Science & Engineering',
-  'Food Science & Technology',
-  'Environmental Science & Management',
-  'Geology, Geoscience & Mineral Exploration',
-  'Agricultural Science & Technology',
-  'Public Health Science & Epidemiology',
-  'Biostatistics & Bioinformatics',
-  'Scientific Data Management',
-  'Chemical & Process Engineering',
-  'Industrial & Manufacturing Engineering',
-  'Mechanical Engineering',
-  'Electrical & Electronics Engineering',
-  'Civil & Structural Engineering',
-  'Biomedical Engineering',
-  'Robotics, Mechatronics & Automation',
-  'Instrumentation, Control & Metrology',
-  'Maintenance & Reliability Engineering',
-  'Production & Manufacturing Operations',
-  'Process Optimisation & Production Planning',
-  'Health, Safety & Process Risk Management',
-  'Energy Systems & Renewable Energy',
-  'Water & Wastewater Engineering',
-  'Mining & Mineral Processing',
-  'Surveying & Geospatial Science',
-  'Software Development & Engineering',
-  'IT Infrastructure, Systems & Support',
-  'Cybersecurity',
-  'Cloud Computing & DevOps',
-  'Data Science, Analytics & Artificial Intelligence',
-  'Networking & Telecommunications',
-  'Mathematics, Statistics & Actuarial Science',
-  'Operations Research & Optimisation',
-  'Technical Support & Field Service',
-  'Technical Sales & Business Development',
-  'Technical Procurement & Supply Chain',
-  'Technical Project Management & Operations',
-  'STEM Education, Teaching & Curriculum Development',
-  'Technical Training, Academic Research & Science Communication',
-] as const;
+/**
+ * Chemistry Lens taxonomy v1.1 — allowed industries for parsers, filters
+ * and hub pages. Sourced from `chemistryLens.taxonomy.ts` (active entries
+ * only; reserved categories are intentionally excluded).
+ */
+export const FALLBACK_INDUSTRIES: readonly string[] = ACTIVE_INDUSTRY_NAMES;
+
+/** Allowed job functions — active Chemistry Lens taxonomy only. */
+export const FALLBACK_JOB_FUNCTIONS: readonly string[] = ACTIVE_JOB_FUNCTION_NAMES;
 
 export const MAX_JOB_TAGS = 5;
 
@@ -127,30 +50,12 @@ export function resolveValidThrough(
 }
 
 /**
- * Common free-text / scrape industry labels → canonical StemBird industries.
- * Keys must be lowercase trimmed.
+ * Common free-text / scrape industry labels → canonical Chemistry Lens industries.
+ * Keys must be lowercase trimmed. Sourced from the taxonomy module so aliases
+ * and canonical names live in one place.
  */
 export const INDUSTRY_VALUE_ALIASES: Record<string, string> = {
-  governmental: "Government & Public Sector",
-  government: "Government & Public Sector",
-  "public sector": "Government & Public Sector",
-  pharmaceuticals: "Pharmaceuticals & Biotechnology",
-  pharmaceutical: "Pharmaceuticals & Biotechnology",
-  "health care, medical": "Healthcare, Hospitals & Medical Laboratories",
-  healthcare: "Healthcare, Hospitals & Medical Laboratories",
-  "consumer goods": "Consumer Goods & Retail",
-  fmcg: "Consumer Goods & Retail",
-  "ngo/non-profit": "NGOs, Development & International Organisations",
-  "ngo / non-profit": "NGOs, Development & International Organisations",
-  "ngo, npo & charity": "NGOs, Development & International Organisations",
-  "non-profit": "NGOs, Development & International Organisations",
-  "paper milling": "Paper, Pulp & Packaging",
-  manufacturing: "Manufacturing & Industrial Production",
-  "transportation, logistics, storage": "Logistics, Supply Chain & Distribution",
-  "construction, renovation, maintenance": "Construction, Infrastructure & Built Environment",
-  "consulting, business support, auditing": "Consulting & Professional Services",
-  "global wines & spirits": "Food & Beverage Manufacturing",
-  "wines & spirits": "Food & Beverage Manufacturing",
+  ...EXTRA_INDUSTRY_ALIASES,
 };
 
 export function fuzzyMatchOption(
@@ -260,8 +165,8 @@ RULES:
 8. Extract salary as numbers only (e.g., 80000 not "80,000")
 9. If a field is not found in the text, OMIT it — EXCEPT additional_info, which is REQUIRED even though the career tips are generated advice (not copied from the posting). Never omit additional_info or the 8 tips to save tokens. Write additional_info as the FIRST key in the JSON object so the 8 tips cannot be truncated.
 10. Put all education/degree requirements inside required_qualifications only — do NOT output education_requirements
-11. industries: ONLY exact names from ALLOWED_INDUSTRIES (max 3, no duplicates). NEVER invent values.
-12. job_functions: ONLY exact names from ALLOWED_JOB_FUNCTIONS (max 3, no duplicates). NEVER invent values.
+11. industries: ONLY exact names from ALLOWED_INDUSTRIES (UP TO 3 — never more, and NEVER pad to hit a quota; 1 accurate tag beats 3 speculative ones). If the posting describes a role outside chemistry, biochemical, pharma, lab, process, environmental, mining/assay, TIC or chemistry-education context, OMIT the field. NEVER invent values.
+12. job_functions: ONLY exact names from ALLOWED_JOB_FUNCTIONS (UP TO 3 — ceilings, not quotas; 1 tag is fine). Chemistry Lens doctrine: chemistry is the subject, industry is the application. If the role does not use chemistry knowledge, chemical processes, laboratory science or chemical-industry expertise, OMIT the field. NEVER invent values.
 13. tags: Comma-separated string with at most 5 of the most relevant skills/keywords
 14. If no allowed industry or job function clearly matches, OMIT that field entirely
 15. description: Write a clear role overview in <p> tags (2–4 sentences). Use facts from the posting only — do not invent duties, benefits, or requirements.
@@ -320,7 +225,7 @@ Return JSON structure:
   "job_location_country": "Kenya",
   "job_location_county": "Nairobi",
   "job_location_city": "Nairobi",
-  "industries": ["Manufacturing & Industrial Production"],
+  "industries": ["Chemicals-Driven Manufacturing & Industrial Production"],
   "job_functions": ["Quality Control (QC)"],
   "education_level_name": "Bachelor's Degree",
   "area_of_study": "Science",

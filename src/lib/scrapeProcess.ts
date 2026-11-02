@@ -6,7 +6,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js'
 import { fetchHtml, extractJobDetails, normalizeJob, ScraperSelectors, datePostedForInsert } from '@/lib/scraper'
-import { matchesSubjectFocus, SKIPPED_NON_STEM_MESSAGE } from '@/lib/scrapeSubjectFilter'
+import { matchesChemistryFocus, SKIPPED_NON_CHEMISTRY_MESSAGE } from '@/lib/chemistryRelevance'
 import {
   fetchWorkableJobDetails,
   normalizeWorkableJob,
@@ -719,31 +719,36 @@ export async function runScrapeProcessOne(
     // listings are recorded as skipped (so discover won't re-queue the URL).
     // Tune the stem list via STEMBIRD_SUBJECT_TERMS / disable via
     // STEMBIRD_SUBJECT_FILTER_ENABLED=false.
+    // Chemistry Lens publication gate — replaces the general STEM filter.
+    // A job publishes only when it satisfies at least one of T1 (chemistry-core
+    // function), T2 (chemistry-family degree requirement), T3 (chemical
+    // duties), or T4 (commercial chemistry with chemical-literacy). Hard vetoes
+    // for clinical care / pure biology / general business can only be rescued
+    // by T2 + T3 together. See chemistryRelevance.ts. Tune via
+    // CHEMISTRY_LENS_GATE_ENABLED=false to bypass entirely.
     if (
-      !matchesSubjectFocus(
-        [
-          normalized.title,
-          parsed.field_of_study,
-          parsed.area_of_study,
+      !matchesChemistryFocus({
+        title: normalized.title || '',
+        jobFunctions: [
           parsed.job_function,
           ...(parsed.job_functions || []),
-          parsed.tags || normalized.tags,
-        ],
-        // Body copy: low-signal, study-cue + hard-degree guard applies.
-        parsed.description || normalized.description,
-        // Prose fields: qualifications/responsibilities — guarded tier.
-        [
-          parsed.required_qualifications || normalized.required_qualifications,
-          parsed.responsibilities,
-        ]
-      )
+        ].filter((v): v is string => typeof v === 'string' && v.length > 0),
+        industries: parsed.industries || (parsed.industry ? [parsed.industry] : null),
+        description: parsed.description || normalized.description || null,
+        requiredQualifications:
+          parsed.required_qualifications || normalized.required_qualifications || null,
+        responsibilities: parsed.responsibilities || null,
+        tags: parsed.tags || normalized.tags || null,
+        fieldOfStudy: parsed.field_of_study || null,
+        areaOfStudy: parsed.area_of_study || null,
+      })
     ) {
       await supabase
         .from('scrape_queue')
         .update({
           status: 'done',
           processed_at: new Date().toISOString(),
-          error_message: SKIPPED_NON_STEM_MESSAGE,
+          error_message: SKIPPED_NON_CHEMISTRY_MESSAGE,
         })
         .eq('id', queueItem.id)
 
@@ -763,7 +768,7 @@ export async function runScrapeProcessOne(
       )
 
       return {
-        message: 'Off-topic job skipped (not STEM)',
+        message: 'Off-topic job skipped (outside chemistry focus)',
         processed: 1,
         off_topic: true,
         job_url: queueItem.job_url,

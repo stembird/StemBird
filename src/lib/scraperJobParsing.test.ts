@@ -52,76 +52,63 @@ assert.equal(sr.education_level, "Master's")
 assert.equal(sr.minimum_experience, 5)
 
 const industries = [
-  'Information Technology & Software',
-  'Energy, Power & Renewable Energy',
-  'Banking, Finance & Insurance',
+  'Industrial & Basic Chemicals',
+  'Energy, Power & Utilities',
+  'Regulatory, Standards & Public Health Authorities',
 ]
 assert.equal(
-  matchIndustryName('Information Technology And Services', industries),
-  'Information Technology & Software'
+  matchIndustryName('Energy And Petroleum', industries),
+  'Energy, Power & Utilities'
 )
 assert.notEqual(
-  matchIndustryName('Information Technology And Services', industries),
-  'Banking, Finance & Insurance'
+  matchIndustryName('Energy And Petroleum', industries),
+  'Industrial & Basic Chemicals'
 )
 
 const functions = [
-  'Mechanical Engineering',
-  'Technical Sales & Business Development',
+  'Analytical & Instrumental Chemistry',
+  'Technical Sales & Business Development (Chemistry)',
   'Regulatory Affairs & Compliance',
-  'Civil & Structural Engineering',
-  'Health, Safety & Process Risk Management',
-  'Mathematics, Statistics & Actuarial Science',
-  'Software Development & Engineering',
-  'Technical Project Management & Operations',
-  'IT Infrastructure, Systems & Support',
-  'Cybersecurity',
+  'HSE & Process Safety',
+  'Chemometrics, Data Science & Statistics for Lab Systems',
+  'Applications, Technical Support & Field Service',
+  'Laboratory Information Systems (LIMS) & Informatics',
+  'Quality Assurance & QMS',
+  'Procurement, Warehousing & Supply Chain (Lab/Chemical)',
 ]
-assert.equal(inferJobFunctionFromTitle('Material Engineer', functions), 'Mechanical Engineering')
-assert.equal(inferJobFunctionFromTitle('Sales Representative - Fahari Link', functions), 'Technical Sales & Business Development')
-assert.equal(inferJobFunctionFromTitle('Project Architect, Kiswishi City', functions), 'Civil & Structural Engineering')
-assert.equal(inferJobFunctionFromTitle('Senior HSE Officer', functions), 'Health, Safety & Process Risk Management')
-assert.equal(inferJobFunctionFromTitle('Legal Assistant', functions, 'Legal Department'), 'Regulatory Affairs & Compliance')
-assert.equal(
-  matchJobFunctionName('Legal Department', functions),
-  'Regulatory Affairs & Compliance'
-)
+assert.equal(inferJobFunctionFromTitle('QC Chemist', [...functions, 'Quality Control (QC)']), 'Quality Control (QC)')
+assert.equal(inferJobFunctionFromTitle('Sales Representative - Fahari Link', functions), 'Technical Sales & Business Development (Chemistry)')
+assert.equal(inferJobFunctionFromTitle('Senior HSE Officer', functions), 'HSE & Process Safety')
+assert.equal(inferJobFunctionFromTitle('Analytical Chemist', functions), 'Analytical & Instrumental Chemistry')
+assert.equal(inferJobFunctionFromTitle('LIMS Administrator', functions), 'Laboratory Information Systems (LIMS) & Informatics')
 
 const moreFunctions = [
   ...functions,
   'Research & Development (R&D)',
-  'Quality Assurance & Quality Management',
   'Quality Control (QC)',
-  'Data Science, Analytics & Artificial Intelligence',
-  'Laboratory Operations & Testing',
-  'Technical Support & Field Service',
-  'Networking & Telecommunications',
-  'STEM Education, Teaching & Curriculum Development',
+  'Laboratory Operations & Management',
 ]
-assert.equal(inferJobFunctionFromTitle('QA Analyst', moreFunctions), 'Quality Assurance & Quality Management')
+assert.equal(inferJobFunctionFromTitle('QA Analyst', moreFunctions), 'Quality Assurance & QMS')
 assert.equal(inferJobFunctionFromTitle('M&E Officer', moreFunctions), 'Research & Development (R&D)')
 assert.equal(
-  inferJobFunctionFromTitle('Information Security Officer', moreFunctions),
-  'Cybersecurity'
-)
-assert.equal(
-  inferJobFunctionFromTitle('Applications Specialist - Customer Experience Systems', moreFunctions),
-  'IT Infrastructure, Systems & Support'
+  inferJobFunctionFromTitle('Applications Scientist - Chromatography Systems', moreFunctions),
+  'Applications, Technical Support & Field Service'
 )
 
 const industryList = [
-  'Construction, Infrastructure & Built Environment',
-  'Real Estate & Facilities Management',
-  'NGOs, Development & International Organisations',
-  'Information Technology & Software',
+  'Chemicals-Driven Manufacturing & Industrial Production',
+  'Regulatory, Standards & Public Health Authorities',
+  'Development Organisations & NGO Laboratory Programmes',
 ]
 assert.equal(
-  inferCompanyIndustry('Tatu City', 'https://tatucity.com', industryList),
-  'Construction, Infrastructure & Built Environment'
+  inferCompanyIndustry('Acme Holdings Ltd', null, industryList),
+  null,
+  'generic non-chemistry company returns null under Chemistry Lens'
 )
 assert.equal(
   inferCompanyIndustry('Inkomoko', 'https://inkomoko.com', industryList),
-  'NGOs, Development & International Organisations'
+  'Development Organisations & NGO Laboratory Programmes',
+  'known NGO override resolves when allowed'
 )
 
 // Greenhouse-style: entity-escaped HTML must be decoded before split
@@ -151,8 +138,8 @@ const tatuParsed = await parseScrapedJobContent(
   },
   { industryNames: industryList, jobFunctionNames: functions, attachCareerTips: false }
 )
-assert.equal(tatuParsed.industry, 'Construction, Infrastructure & Built Environment')
-assert.equal(tatuParsed.job_function, 'Technical Project Management & Operations')
+assert.equal(tatuParsed.industry, null, 'Tatu City is out of Chemistry Lens scope')
+assert.equal(tatuParsed.job_function, null, 'community relations has no chemistry function match')
 
 // Full manual-parse merge must retain enrichment fields (study, apply, tips, types)
 const baseFallback = parseScrapedJobFallback({

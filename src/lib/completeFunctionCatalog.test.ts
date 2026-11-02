@@ -9,8 +9,8 @@ function assert(condition: unknown, message: string) {
 }
 
 const live = [
-  { name: "Technical Sales & Business Development", count: 12 },
-  { name: "Software Development & Engineering", count: 4 },
+  { name: "Technical Sales & Business Development (Chemistry)", count: 12 },
+  { name: "Analytical & Instrumental Chemistry", count: 4 },
 ];
 
 const catalog = completeFunctionCatalog(live);
@@ -20,15 +20,15 @@ assert(
   `expected ${FALLBACK_JOB_FUNCTIONS.length} functions, got ${catalog.length}`
 );
 assert(
-  catalog[0].name === "Technical Sales & Business Development" && catalog[0].count === 12,
-  "Technical Sales & Business Development leads"
+  catalog[0].name === "Technical Sales & Business Development (Chemistry)" && catalog[0].count === 12,
+  "Technical Sales & Business Development (Chemistry) leads"
 );
 assert(
-  catalog.some((f) => f.name === "Cybersecurity" && f.count === 0),
+  catalog.some((f) => f.name === "Quality Control (QC)" && f.count === 0),
   "zero-count catalog functions are present"
 );
 assert(
-  catalog.filter((f) => f.name === "Software Development & Engineering").length === 1,
+  catalog.filter((f) => f.name === "Analytical & Instrumental Chemistry").length === 1,
   "no duplicate live functions"
 );
 

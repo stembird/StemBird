@@ -121,7 +121,7 @@ ON CONFLICT (name) DO NOTHING;
 
 -- jobs.industry (single text) — use inline VALUES as a CTE
 UPDATE public.jobs j
-SET industry = r.new_name
+SET industry = m.new_name
 FROM (VALUES
   ('Food & Beverage Manufacturing',                     'Food, Beverage & Brewery Laboratories'),
   ('Plastics, Rubber & Composites',                     'Polymers, Plastics & Rubber'),
@@ -163,8 +163,8 @@ FROM (VALUES
   ('Logistics, Supply Chain & Distribution',              NULL),
   ('Real Estate & Facilities Management',                 NULL),
   ('Consumer Goods & Retail',                             NULL)
-) AS m(old_name, new_name) r
-WHERE j.industry = r.old_name;
+) AS m(old_name, new_name)
+WHERE j.industry = m.old_name;
 
 -- jobs.industries (text array) — replace mapped elements, de-dupe, drop NULLs
 UPDATE public.jobs j
@@ -217,7 +217,7 @@ WHERE j.industries IS NOT NULL AND array_length(j.industries, 1) > 0;
 
 -- companies.industry
 UPDATE public.companies c
-SET industry = r.new_name
+SET industry = m.new_name
 FROM (VALUES
   ('Food & Beverage Manufacturing',                     'Food, Beverage & Brewery Laboratories'),
   ('Plastics, Rubber & Composites',                     'Polymers, Plastics & Rubber'),
@@ -257,12 +257,12 @@ FROM (VALUES
   ('Logistics, Supply Chain & Distribution',              NULL),
   ('Real Estate & Facilities Management',                 NULL),
   ('Consumer Goods & Retail',                             NULL)
-) AS m(old_name, new_name) r
-WHERE c.industry = r.old_name;
+) AS m(old_name, new_name)
+WHERE c.industry = m.old_name;
 
 -- jobs.job_function (single text)
 UPDATE public.jobs j
-SET job_function = r.new_name
+SET job_function = m.new_name
 FROM (VALUES
   ('Analytical Chemistry',                              'Analytical & Instrumental Chemistry'),
   ('Laboratory Operations & Testing',                   'Laboratory Operations & Management'),
@@ -306,8 +306,8 @@ FROM (VALUES
   ('Cybersecurity',                                     NULL),
   ('Cloud Computing & DevOps',                          NULL),
   ('Networking & Telecommunications',                   NULL)
-) AS m(old_name, new_name) r
-WHERE j.job_function = r.old_name;
+) AS m(old_name, new_name)
+WHERE j.job_function = m.old_name;
 
 -- jobs.job_functions (text array)
 UPDATE public.jobs j

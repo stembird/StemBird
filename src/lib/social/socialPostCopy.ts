@@ -60,7 +60,10 @@ export const PLATFORM_SPECS: Record<SocialPlatform, PlatformSpec> = {
   instagram: { label: 'Instagram', maxLength: 2200, usesMedia: true },
 }
 
-export const SITE_URL = 'https://www.careersasa.co.ke'
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.careersasa.co.ke'
 
 export function jobUrl(job: { job_slug?: string | null; slug?: string | null; id: string }): string {
   const slug = job.job_slug ?? job.slug ?? job.id

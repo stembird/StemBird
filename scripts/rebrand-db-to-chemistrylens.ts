@@ -94,6 +94,27 @@ const PAGE_COPY_REWRITES: Record<string, Record<string, string>> = {
     value_fairness_body:
       "Your background shouldn't determine your future. ChemistryLens is free for every job seeker. The best candidate might be someone who can't afford a KES 5,000 CV service.",
     stats_title: 'ChemistryLens by the Numbers',
+    // Founder section (introduced Nov 2026)
+    founder_title: 'Meet the Founder',
+    founder_name: 'Emmanuel Juma Makona',
+    founder_initials: 'EM',
+    founder_role:
+      'Founder, ChemistryLens · BSc Industrial Chemistry with Management (Kenyatta University) · Based in Kakamega, Kenya',
+    founder_story_p1:
+      "ChemistryLens was started by Emmanuel Juma Makona — an industrial chemist by training and a plant-floor operator by trade. After graduating from Kenyatta University with a BSc in Industrial Chemistry with Management, he spent more than seven years running production and quality operations across Kenya's chemical, sugar, paper, beverage and manufacturing industries: QC testing paint batches at Kansai Plascon, supervising juice clarification, sugar boiling and water treatment on a 4,200 TCD line at West Kenya Sugar, blending and shipping cleaning chemicals through his own company Emmax Cleaning Solutions, and today running a 20+ operator paper machine shift at Rai Paper Kenya delivering 30+ tonnes per shift.",
+    founder_story_p2:
+      'On both sides of the hiring table — as a job seeker early in his career and, later, as the supervisor actually reading CVs — he kept seeing the same failure. Kenyan chemists, laboratory analysts, QC technicians and process engineers were applying for months with no callbacks, not because they lacked skill, but because generic job boards match keywords, not instruments run, techniques mastered or standards internalised. A chemist who has calibrated refractometers and titrated juice samples looks identical to a stranger on a keyword-based board.',
+    founder_story_p3:
+      'ChemistryLens is his answer: a Kenyan job platform built specifically for chemistry, laboratory, quality and process careers — where AI matching reads HPLC, GC-MS, ISO 9001, HACCP, GMP, brix, effluent treatment, formulation and shift supervision the way an employer actually does. It is free for every job seeker, because Emmanuel knows what it looks like to be talented and overlooked.',
+    founder_credential_1_title: 'Education',
+    founder_credential_1_body:
+      'BSc Industrial Chemistry with Management, Kenyatta University (Second Class Honours, Upper Division)',
+    founder_credential_2_title: 'Professional certifications',
+    founder_credential_2_body:
+      'ISO 9001:2015 · HACCP · ISO 22000 · ISO 31000 Risk Management · GMP / FMP · Occupational Safety & Health · SAP ERP',
+    founder_contact_label: 'Reach the founder:',
+    founder_email: 'ejuma90@gmail.com',
+    founder_contact_link: 'or use the ChemistryLens contact form',
   },
   'services-cv': {
     what_we_do_title: 'Why ChemistryLens CVs Get 3x More Interview Callbacks',
@@ -177,7 +198,20 @@ async function main() {
         .eq('section_key', sectionKey)
         .limit(1)
       const row = (existing ?? [])[0] as unknown as { id: string; content_value: string } | undefined
-      if (!row) { console.log(`  [skip] ${slug}/${sectionKey}: not present in DB`); continue }
+      if (!row) {
+        console.log(`  [insert] ${slug}/${sectionKey}: not present, adding new CMS row`)
+        if (EXECUTE) {
+          const { error } = await sb.from('page_content').insert({
+            page_slug: slug,
+            section_key: sectionKey,
+            content_type: 'text',
+            content_value: newValue,
+            metadata: {},
+          })
+          if (error) console.log(`    FAILED: ${error.message}`); else copyCellsUpdated++
+        }
+        continue
+      }
       if (row.content_value === newValue) { console.log(`  [no-op] ${slug}/${sectionKey}`); continue }
       console.log(`  [rewrite] ${slug}/${sectionKey}  (was: ${row.content_value.slice(0, 60)}…)`)
       if (EXECUTE) {

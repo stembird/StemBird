@@ -24,7 +24,10 @@ import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 export const runtime = 'edge';
 export const revalidate = 86400;
 
-const SITE_URL = 'https://www.careersasa.co.ke';
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  'https://www.careersasa.co.ke';
 
 /** Facebook (and Buffer) often HEAD the image URL first — never run Satori here. */
 export async function HEAD(

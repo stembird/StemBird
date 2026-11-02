@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
-import { Building2, Users, Target, Heart } from "lucide-react";
+import { Building2, Users, Target, Heart, GraduationCap, Award } from "lucide-react";
 import { fetchPageContentMap, fetchPageSeo } from "@/lib/fetchPageContent";
 import { getContentValue } from "@/lib/pageContent";
 
@@ -78,6 +78,108 @@ export default async function AboutPage() {
                   "The result? Our users report 3x more interview callbacks than on other platforms, and employers fill positions faster with candidates who actually fit the role."
                 )}
               </p>
+            </div>
+          </section>
+
+          <section>
+            <div className="bg-card border border-border rounded-lg p-8 space-y-6">
+              <div className="flex flex-col md:flex-row md:items-start md:gap-8">
+                <div className="md:w-56 md:flex-shrink-0 mb-6 md:mb-0 text-center md:text-left">
+                  <div className="w-28 h-28 mx-auto md:mx-0 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-4xl font-bold shadow-lg">
+                    {getContentValue(content, "founder_initials", "EM")}
+                  </div>
+                  <h3 className="mt-4 text-xl font-semibold text-foreground leading-tight">
+                    {getContentValue(content, "founder_name", "Emmanuel Juma Makona")}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {getContentValue(
+                      content,
+                      "founder_role",
+                      "Founder, ChemistryLens · BSc Industrial Chemistry with Management (Kenyatta University) · Based in Kakamega, Kenya"
+                    )}
+                  </p>
+                </div>
+
+                <div className="flex-1 space-y-4">
+                  <h2 className="text-3xl font-bold text-primary">
+                    {getContentValue(content, "founder_title", "Meet the Founder")}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {getContentValue(
+                      content,
+                      "founder_story_p1",
+                      "ChemistryLens was started by Emmanuel Juma Makona — an industrial chemist by training and a plant-floor operator by trade. After graduating from Kenyatta University with a BSc in Industrial Chemistry with Management, he spent more than seven years running production and quality operations across Kenya's chemical, sugar, paper, beverage and manufacturing industries: QC testing paint batches at Kansai Plascon, supervising juice clarification, sugar boiling and water treatment on a 4,200 TCD line at West Kenya Sugar, blending and shipping cleaning chemicals through his own company Emmax Cleaning Solutions, and today running a 20+ operator paper machine shift at Rai Paper Kenya delivering 30+ tonnes per shift."
+                    )}
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {getContentValue(
+                      content,
+                      "founder_story_p2",
+                      "On both sides of the hiring table — as a job seeker early in his career and, later, as the supervisor actually reading CVs — he kept seeing the same failure. Kenyan chemists, laboratory analysts, QC technicians and process engineers were applying for months with no callbacks, not because they lacked skill, but because generic job boards match keywords, not instruments run, techniques mastered or standards internalised. A chemist who has calibrated refractometers and titrated juice samples looks identical to a stranger on a keyword-based board."
+                    )}
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {getContentValue(
+                      content,
+                      "founder_story_p3",
+                      "ChemistryLens is his answer: a Kenyan job platform built specifically for chemistry, laboratory, quality and process careers — where AI matching reads HPLC, GC-MS, ISO 9001, HACCP, GMP, brix, effluent treatment, formulation and shift supervision the way an employer actually does. It is free for every job seeker, because Emmanuel knows what it looks like to be talented and overlooked."
+                    )}
+                  </p>
+
+                  <div className="grid sm:grid-cols-2 gap-4 pt-2">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <GraduationCap className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {getContentValue(content, "founder_credential_1_title", "Education")}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {getContentValue(
+                            content,
+                            "founder_credential_1_body",
+                            "BSc Industrial Chemistry with Management, Kenyatta University (Second Class Honours, Upper Division)"
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Award className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {getContentValue(content, "founder_credential_2_title", "Professional certifications")}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {getContentValue(
+                            content,
+                            "founder_credential_2_body",
+                            "ISO 9001:2015 · HACCP · ISO 22000 · ISO 31000 Risk Management · GMP / FMP · Occupational Safety & Health · SAP ERP"
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground pt-2">
+                    <span className="font-semibold text-foreground">
+                      {getContentValue(content, "founder_contact_label", "Reach the founder:")}
+                    </span>{" "}
+                    <a
+                      href={`mailto:${getContentValue(content, "founder_email", "ejuma90@gmail.com")}`}
+                      className="text-primary hover:underline"
+                    >
+                      {getContentValue(content, "founder_email", "ejuma90@gmail.com")}
+                    </a>
+                    {" · "}
+                    <a href="/contact" className="text-primary hover:underline">
+                      {getContentValue(content, "founder_contact_link", "or use the ChemistryLens contact form")}
+                    </a>
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 

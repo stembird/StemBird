@@ -1,5 +1,7 @@
 import { runScrapeDiscover } from '../../src/lib/scrapeDiscover'
 import { runScrapeProcessBatch } from '../../src/lib/scrapeProcess'
+import { runScholarshipDiscover as runScholarshipDiscoverImpl } from '../../src/lib/scholarshipDiscover'
+import { runScholarshipProcessBatch } from '../../src/lib/scholarshipProcess'
 import { enrichJobsNeedingEnrichment } from '../../src/lib/enrichJobById'
 import { runReenrichScrapedJobs } from '../../src/lib/reenrichScrapedJobs'
 import { autoQueueDailyPosts } from '../../src/lib/social/autoQueueJobs'
@@ -33,6 +35,29 @@ export async function runProcess(batch = 10) {
     budgetMs: env.processBudgetMs,
   })
   return result
+}
+
+/**
+ * Scholarship pipeline passthroughs — same libs as the Vercel scholarship
+ * crons/admin routes, just with the worker's generous budgets. The Vercel
+ * crons remain the primary scheduler; these exist so a GitHub Actions run or
+ * a manual `tsx worker/src/index.ts scholarship-discover` can drain the
+ * scholarship queue with identical behaviour.
+ */
+export async function runScholarshipDiscover(sourceId?: string) {
+  const supabase = createServiceRoleClient()
+  return runScholarshipDiscoverImpl(supabase, {
+    sourceId,
+    budgetMs: env.discoverBudgetMs,
+  })
+}
+
+export async function runScholarshipProcess(batch = 10) {
+  const supabase = createServiceRoleClient()
+  return runScholarshipProcessBatch(supabase, {
+    maxItems: batch,
+    budgetMs: env.processBudgetMs,
+  })
 }
 
 /**

@@ -178,10 +178,21 @@ export async function runScrapeDiscover(
   supabase: SupabaseClient,
   options?: DiscoverRunOptions
 ): Promise<DiscoverRunResult> {
-  let query = supabase.from('scraper_sources').select('*').eq('is_active', true)
+  // content_type routing (20261106_create_scholarships_pipeline.sql): job
+  // Discover must never pull scholarship sources — those run through
+  // scholarshipDiscover.ts on the same scraper_sources table.
+  let query = supabase
+    .from('scraper_sources')
+    .select('*')
+    .eq('is_active', true)
+    .eq('content_type', 'job')
 
   if (options?.sourceId) {
-    query = supabase.from('scraper_sources').select('*').eq('source_id', options.sourceId)
+    query = supabase
+      .from('scraper_sources')
+      .select('*')
+      .eq('source_id', options.sourceId)
+      .eq('content_type', 'job')
   }
 
   const { data: sources, error: sourcesError } = await query

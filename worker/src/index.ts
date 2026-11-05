@@ -1,5 +1,12 @@
 import { env } from './env'
-import { runDiscover, runEnrich, runProcess, runSocial } from './jobs'
+import {
+  runDiscover,
+  runEnrich,
+  runProcess,
+  runScholarshipDiscover,
+  runScholarshipProcess,
+  runSocial,
+} from './jobs'
 import { startScheduler } from './scheduler'
 import { startServer } from './server'
 
@@ -29,6 +36,30 @@ async function main() {
         (result.results || []).some(r => r.success || r.published || r.duplicates) ||
         (result.results || []).some(r => r.message === 'No pending jobs in queue')
       if (!madeProgress && (result.results || []).length > 0) process.exit(1)
+      break
+    }
+
+    case 'scholarship-discover': {
+      const result = await runScholarshipDiscover(extra || undefined)
+      console.log(JSON.stringify(result, null, 2))
+      if (result.success === false) process.exit(1)
+      break
+    }
+
+    case 'scholarship-process': {
+      const batch = extra ? parseInt(extra, 10) || env.processBatch : env.processBatch
+      console.log(`[worker] processing scholarship batch of ${batch}`)
+      const result = await runScholarshipProcess(batch)
+      console.log(JSON.stringify(result, null, 2))
+      // Mirror the jobs process mode: a batch that errored on every item with
+      // no publish and no screened-out skip is an outage and should show red.
+      const published = (result.results || []).filter(r => r.success).length
+      const screened = (result.results || []).filter(
+        r => r.skipped || r.off_topic || r.message
+      ).length
+      if (published === 0 && screened === 0 && (result.results || []).length > 0) {
+        process.exit(1)
+      }
       break
     }
 
@@ -93,7 +124,7 @@ async function main() {
 
     default:
       console.error(
-        'Usage: tsx src/index.ts <discover|process [batch]|enrich [scraped|sparse] [limit] [source_id]|social [--dry-run]|schedule|server>'
+        'Usage: tsx src/index.ts <discover|process [batch]|scholarship-discover [source_id]|scholarship-process [batch]|enrich [scraped|sparse] [limit] [source_id]|social [--dry-run]|schedule|server>'
       )
       process.exit(1)
   }

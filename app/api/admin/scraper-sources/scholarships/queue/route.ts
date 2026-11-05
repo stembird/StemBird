@@ -1,0 +1,92 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/lib/adminAuth'
+import {
+  parseFailedQueueAction,
+  parseFailedQueueListOptions,
+  parseFailedQueueScope,
+  parseQueueManageStatus,
+} from '@/lib/scrapeQueueFailed'
+import { listScholarshipQueueItems, mutateScholarshipQueueItems } from '@/lib/scholarshipQueueFailed'
+
+export const runtime = 'nodejs'
+
+/**
+ * GET /api/admin/scraper-sources/scholarships/queue
+ * Admin-only: list scholarship_queue items by status for review.
+ * Query: status=pending|processing|done|failed, bucket=published|non_stem|other|all
+ *        (only for status=done), source_id?, limit?, offset?
+ *
+ * Parsers are shared with the jobs queue route so both dialogs speak the same
+ * vocabulary; only the table (and the published-ref join) differs.
+ */
+export async function GET(request: NextRequest) {
+  const auth = await requireAdmin(request)
+  if (auth.ok === false) {
+    return NextResponse.json({ error: auth.message }, { status: auth.status })
+  }
+
+  try {
+    const options = parseFailedQueueListOptions(request.nextUrl.searchParams, {
+      requireStatus: true,
+    })
+    if ('error' in options) {
+      return NextResponse.json({ error: options.error }, { status: 400 })
+    }
+
+    const result = await listScholarshipQueueItems(auth.adminClient, options)
+    return NextResponse.json(result)
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[admin/scraper-sources/scholarships/queue] GET failed:', message)
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
+}
+
+/**
+ * POST /api/admin/scraper-sources/scholarships/queue
+ * Admin-only: requeue (to pending) or delete scholarship queue items of one
+ * status. Done rows may only be deleted.
+ * Body: { status, action: 'retry' | 'requeue' | 'delete', ids?: string[],
+ *         source_id?: string, all?: true }
+ */
+export async function POST(request: NextRequest) {
+  const auth = await requireAdmin(request)
+  if (auth.ok === false) {
+    return NextResponse.json({ error: auth.message }, { status: auth.status })
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}))
+    const status = parseQueueManageStatus(body.status)
+    if (typeof status === 'object') {
+      return NextResponse.json({ error: status.error }, { status: 400 })
+    }
+
+    const action = parseFailedQueueAction(body.action)
+    if (typeof action === 'object') {
+      return NextResponse.json({ error: action.error }, { status: 400 })
+    }
+
+    if ((action === 'retry' || action === 'requeue') && status === 'pending') {
+      return NextResponse.json({ error: 'Pending scholarships are already queued' }, { status: 400 })
+    }
+    if ((action === 'retry' || action === 'requeue') && status === 'done') {
+      return NextResponse.json(
+        { error: 'Done scholarships cannot be requeued — delete or run Discover again' },
+        { status: 400 }
+      )
+    }
+
+    const scope = parseFailedQueueScope(body)
+    if ('error' in scope) {
+      return NextResponse.json({ error: scope.error }, { status: 400 })
+    }
+
+    const result = await mutateScholarshipQueueItems(auth.adminClient, action, scope, status)
+    return NextResponse.json(result)
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[admin/scraper-sources/scholarships/queue] POST failed:', message)
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,10 +20,11 @@ import {
   Rss,
   Building2,
   Send,
+  Square,
   Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
-import { PROCESS_QUEUE_BATCH } from "@/lib/scrapeProcessBatch";
+import { PROCESS_QUEUE_BATCH_CAP } from "@/lib/scrapeProcessBatch";
 import { ScrapeQueueJobsDialog, type QueueDialogStatus } from "@/components/admin/ScrapeQueueJobsDialog";
 import {
   ADAPTER_LABELS,
@@ -78,6 +79,10 @@ export default function AdminScraperSourcesPage() {
   const [discoveringAll, setDiscoveringAll] = useState(false);
   const [discoveringId, setDiscoveringId] = useState<string | null>(null);
   const [processingQueue, setProcessingQueue] = useState(false);
+  // Auto-loop controller: one click drains the whole queue. The cancel ref lets
+  // a second click (now "Stop") end the loop after the in-flight batch returns.
+  const processCancelRef = useRef(false);
+  const [processProgress, setProcessProgress] = useState<string | null>(null);
   const [enrichingAll, setEnrichingAll] = useState(false);
   const [enrichingId, setEnrichingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | ScraperSourceCategory>("all");
@@ -163,51 +168,110 @@ export default function AdminScraperSourcesPage() {
     }
   };
 
-  const runProcess = async (max = PROCESS_QUEUE_BATCH) => {
+  /**
+   * Auto-loop Process: one click keeps calling /api/admin/scraper-sources/process
+   * (batches of 15, each bounded by the server's 270s soft budget) until the queue
+   * drains or the user cancels. Handles the ~769-job backlog with 1 click instead
+   * of ~80 manual clicks.
+   *
+   * Second click while running = graceful stop (cancel flag is checked between batches).
+   */
+  const runProcess = async () => {
+    // If already running, second click means "stop"
+    if (processingQueue) {
+      processCancelRef.current = true;
+      toast.message("Stopping after current batch…");
+      return;
+    }
+
+    processCancelRef.current = false;
+    setProcessingQueue(true);
+
+    let totalProcessed = 0;
+    let totalPublished = 0;
+    let totalSkipped = 0;
+    let totalErrors = 0;
+
+    // Safety cap: max rounds before we bail. Each round processes up to
+    // PROCESS_QUEUE_BATCH_CAP but may stop early on the server's soft time budget,
+    // so a full backlog can need more rounds than jobs/cap. 500 rounds is far
+    // above any realistic queue while still guarding against a runaway loop
+    // (real termination is processed===0 once the queue drains).
+    const MAX_ROUNDS = 500;
+
     try {
-      setProcessingQueue(true);
+      for (let round = 0; round < MAX_ROUNDS; round++) {
+        if (processCancelRef.current) break;
 
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Not authenticated");
+        // Re-read the session every round: a full backlog drain can run for
+        // hours, outliving the ~1h access-token life. getSession() returns the
+        // auto-renewed token, so a long loop won't start 401ing mid-drain.
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error("Not authenticated");
 
-      const response = await fetch("/api/admin/scraper-sources/process", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-        body: JSON.stringify({ max }),
-      });
+        const response = await fetch("/api/admin/scraper-sources/process", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+          body: JSON.stringify({ max: PROCESS_QUEUE_BATCH_CAP }),
+        });
 
-      const body = await parseJsonResponse(response);
-      if (!response.ok) throw new Error(body.error || "Process failed");
+        const body = await parseJsonResponse(response);
+        if (!response.ok) throw new Error(body.error || "Process failed");
 
-      if (body.processed === 0) {
-        toast.info("Process complete: no pending jobs in queue");
-      } else if (typeof body.published === "number" && body.published > 0) {
-        toast.success(
-          `Published ${body.published} job(s) from ${body.processed} queue item(s)` +
-            (typeof body.skipped === "number" && body.skipped > 0
-              ? ` (${body.skipped} duplicate(s) skipped)`
-              : "")
+        const processed: number = body.processed ?? 0;
+        const published: number = body.published ?? 0;
+        const skipped: number = body.skipped ?? 0;
+        const errors: number = body.errors ?? 0;
+
+        totalProcessed += processed;
+        totalPublished += published;
+        totalSkipped += skipped;
+        totalErrors += errors;
+
+        // Update progress indicator
+        setProcessProgress(
+          `Batch ${round + 1}: +${processed} processed (total ${totalProcessed})`
         );
-      } else if (typeof body.errors === "number" && body.errors > 0) {
-        toast.error(`Process failed for ${body.errors} item(s) — check queue stats`);
+
+        // Silent-refresh the source list so the pending badge stays current
+        await fetchSources({ silent: true });
+
+        // Terminate only when a batch claims nothing — that means the queue is
+        // genuinely empty. A partial batch (processed < cap) usually just means
+        // the server hit its soft time budget with items still pending, so we
+        // must keep looping; the next round returns processed=0 once drained.
+        if (processed === 0) {
+          break;
+        }
+
+        // Brief pause between rounds to avoid hammering the server
+        await new Promise(r => setTimeout(r, 1_000));
+      }
+
+      // Final summary toast
+      if (totalProcessed === 0) {
+        toast.info("Process complete: queue was already empty");
       } else {
-        toast.info(`Processed ${body.processed} item(s); nothing new published`);
+        const parts = [`Processed ${totalProcessed} job(s)`];
+        if (totalPublished > 0) parts.push(`${totalPublished} published`);
+        if (totalSkipped > 0) parts.push(`${totalSkipped} duplicate skipped`);
+        if (totalErrors > 0) parts.push(`${totalErrors} errored`);
+        const msg = parts.join(", ");
+        if (totalErrors > 0) toast.warning(msg);
+        else toast.success(msg);
       }
-
-      if (typeof body.stopped_early === "string" && body.stopped_early) {
-        toast.message(body.stopped_early);
-      }
-
-      await fetchSources();
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Process failed";
       toast.error(message);
     } finally {
       setProcessingQueue(false);
+      setProcessProgress(null);
+      // Final data refresh
+      await fetchSources({ silent: true });
     }
   };
 
@@ -441,29 +505,35 @@ export default function AdminScraperSourcesPage() {
           </Button>
           <Button
             variant="secondary"
-            onClick={() => runProcess(PROCESS_QUEUE_BATCH)}
+            onClick={runProcess}
             disabled={
-              busy ||
-              ((data?.totals.pending ?? 0) === 0 &&
+              // While a loop is running the button becomes "Stop" — keep it clickable.
+              (busy && !processingQueue) ||
+              (!processingQueue &&
+                (data?.totals.pending ?? 0) === 0 &&
                 (data?.totals.processing ?? 0) === 0)
             }
             title={
-              (data?.totals.pending ?? 0) > 0
-                ? `Process up to ${PROCESS_QUEUE_BATCH} of ${data?.totals.pending} pending queue items`
-                : (data?.totals.processing ?? 0) > 0
-                  ? `${data?.totals.processing} item(s) stuck in processing — click to reclaim & process`
-                  : "Queue is empty — run Discover first (scanned ≠ queued)"
+              processingQueue
+                ? "Click to stop after the current batch"
+                : (data?.totals.pending ?? 0) > 0
+                  ? `Process ALL ${data?.totals.pending} pending queue item(s) automatically (one click, batches of 15)`
+                  : (data?.totals.processing ?? 0) > 0
+                    ? `${data?.totals.processing} item(s) stuck in processing — click to reclaim & process`
+                    : "Queue is empty — run Discover first (scanned ≠ queued)"
             }
           >
             {processingQueue ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              <Square className="h-4 w-4 mr-2" />
             ) : (
               <Send className="h-4 w-4 mr-2" />
             )}
-            Process queue ({PROCESS_QUEUE_BATCH})
-            {(data?.totals.pending ?? 0) > 0
+            {processingQueue
+              ? processProgress ?? "Stopping after current batch…"
+              : "Process queue (all)"}
+            {!processingQueue && (data?.totals.pending ?? 0) > 0
               ? ` · ${data?.totals.pending}`
-              : (data?.totals.processing ?? 0) > 0
+              : !processingQueue && (data?.totals.processing ?? 0) > 0
                 ? ` · ${data?.totals.processing} stuck`
                 : ""}
           </Button>

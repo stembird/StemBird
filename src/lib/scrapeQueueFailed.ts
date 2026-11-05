@@ -380,7 +380,15 @@ export async function listFailedQueueItems(
     // Coarse PostgREST pre-filter; exact bucket classification happens
     // in-memory below via rowMatchesDoneBucket (mirrors scrapeQueueStats).
     if (bucket === 'non_stem') {
-      query = query.ilike('error_message', '%outside STEM%')
+      // Match BOTH the legacy STEM-gate skip ("...outside STEM...") and the
+      // current Chemistry Lens gate skip ("Skipped: outside chemistry focus").
+      // This must mirror isNonStemSkipMessage / isNonStemSkip in scrapeQueueStats,
+      // or the count (uses the broad predicate) and this list (used to query only
+      // "outside STEM") diverge — which is why the non-chemistry dialog showed
+      // 228 screened jobs but rendered empty after the taxonomy swap.
+      query = query.or(
+        'error_message.ilike.*outside STEM*,error_message.ilike.*outside chemistry*'
+      )
     } else if (bucket === 'published') {
       query = query.or('error_message.is.null,error_message.eq.""')
     } else if (bucket === 'other') {

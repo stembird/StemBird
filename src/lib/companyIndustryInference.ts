@@ -40,30 +40,30 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
 
   // Paints / coatings / adhesives / chemicals
   "savitri industries": CHEMICALS,
-  savitri: CHEMICALS,
+  "savitri": CHEMICALS,
   "atlantic paint industries": CHEMICALS,
   "atlas paint": CHEMICALS,
   "dulux kenya": CHEMICALS,
   "nyala plastics": CHEMICALS,
   "polymac plastics": CHEMICALS,
-  intaplast: CHEMICALS,
+  "intaplast": CHEMICALS,
   "mcdk plastics": CHEMICALS,
   "basf kenya": CHEMICALS,
 
   // Petrochemicals / fuels / energy
   "national oil corporation of kenya": ENERGY,
-  nopk: ENERGY,
+  "nopk": ENERGY,
   "rubis fuel kenya": ENERGY,
   "total kenya": ENERGY,
   "ptl kenya": ENERGY,
-  veboken: ENERGY,
+  "veboken": ENERGY,
   "kenya pipeline": ENERGY,
   "kenya power": ENERGY,
-  kplc: ENERGY,
+  "kplc": ENERGY,
   "kenya electricity transmission": ENERGY,
   "powergen renewable energy": ENERGY,
-  powergen: ENERGY,
-  kengen: ENERGY,
+  "powergen": ENERGY,
+  "kengen": ENERGY,
   "geothermal development corporation": ENERGY,
 
   // Scientific supply & labs
@@ -77,11 +77,11 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
   "twaha pharmaceuticals": PHARMA,
   "universal micropharma": PHARMA,
   "dawa limited": PHARMA,
-  philapharm: PHARMA,
+  "philapharm": PHARMA,
   "cosmos pharmaceuticals": PHARMA,
   "mcm5 kenya": PHARMA,
   "wellness pharmaceuticals": PHARMA,
-  bioline: PHARMA,
+  "bioline": PHARMA,
   "boston lab africa": PHARMA,
 
   // Clinical & healthcare
@@ -90,14 +90,14 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
   "afya medic laboratories": HEALTHCARE,
   "equity afya": HEALTHCARE,
   "amref health africa": HEALTHCARE,
-  amref: HEALTHCARE,
+  "amref": HEALTHCARE,
   "aga khan university hospital": HEALTHCARE,
   "nairobi hospital": HEALTHCARE,
   "kenyatta national hospital": HEALTHCARE,
 
   // Food & Agriculture
   "east african breweries": AGRICULTURE,
-  eabl: AGRICULTURE,
+  "eabl": AGRICULTURE,
   "titan brewing": AGRICULTURE,
   "christopher industries": AGRICULTURE,
   "kp foods": AGRICULTURE,
@@ -105,10 +105,10 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
   "delmonte kenya": AGRICULTURE,
   "mcoa bakery": AGRICULTURE,
   "kenya tea growers association": AGRICULTURE,
-  ktda: AGRICULTURE,
+  "ktda": AGRICULTURE,
   "kenya tea research institute": AGRICULTURE,
-  gtw kenya: AGRICULTURE,
-  ktgda: AGRICULTURE,
+  "gtw kenya": AGRICULTURE,
+  "ktgda": AGRICULTURE,
   "coffee bureau of kenya": AGRICULTURE,
   "kenya coffee estates": AGRICULTURE,
 
@@ -121,13 +121,13 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
   // Water & waste management
   "nairobi water": WATER_WASTE,
   "kenya pipeline and distribution agency": WATER_WASTE,
-  ncpwb: WATER_WASTE,
+  "ncpwb": WATER_WASTE,
   "national water harvest and storage": WATER_WASTE,
   "wajir water": WATER_WASTE,
 
   // Environmental
   "national environment management authority (nema)": ENVIRONMENT,
-  nema: ENVIRONMENT,
+  "nema": ENVIRONMENT,
   "national environment management agency": ENVIRONMENT,
   "kenya forest service": ENVIRONMENT,
   "kenya wildlife service": ENVIRONMENT,
@@ -135,39 +135,39 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
 
   // Research institutes
   "kenya medical research institute (kemri)": SCIENCE_RESEARCH,
-  kemri: SCIENCE_RESEARCH,
+  "kemri": SCIENCE_RESEARCH,
   "kenya agricultural research institute ( kari )": SCIENCE_RESEARCH,
   "international centre of insect physiology and ecology": SCIENCE_RESEARCH,
-  icipe: SCIENCE_RESEARCH,
+  "icipe": SCIENCE_RESEARCH,
   "kenya science research institute in nairobi": SCIENCE_RESEARCH,
   "worldfish center": SCIENCE_RESEARCH,
-  kalro: SCIENCE_RESEARCH,
+  "kalro": SCIENCE_RESEARCH,
 
   // Standards / TIC
   "kenya bureau of standards (kebs)": SCIENCE_RESEARCH,
-  kebs: SCIENCE_RESEARCH,
+  "kebs": SCIENCE_RESEARCH,
   "sgs kenya": SCIENCE_RESEARCH,
   "intertek kenya": SCIENCE_RESEARCH,
   "bureau veritas": SCIENCE_RESEARCH,
   "cotecna east africa": SCIENCE_RESEARCH,
 
   // IT & Tech & Telecoms
-  safaricom: TELECOM,
-  airtel: TELECOM,
-  telkom: TELECOM,
-  cellulant: IT_SOFTWARE,
-  andela: IT_SOFTWARE,
-  microsoft: IT_SOFTWARE,
-  google: IT_SOFTWARE,
+  "safaricom": TELECOM,
+  "airtel": TELECOM,
+  "telkom": TELECOM,
+  "cellulant": IT_SOFTWARE,
+  "andela": IT_SOFTWARE,
+  "microsoft": IT_SOFTWARE,
+  "google": IT_SOFTWARE,
 
   // Education & STEM Training
   "aga khan university": EDUCATION,
-  aku: EDUCATION,
+  "aku": EDUCATION,
   "university of nairobi": EDUCATION,
-  uon: EDUCATION,
+  "uon": EDUCATION,
   "kenyatta university": EDUCATION,
   "technical university of kenya": EDUCATION,
-  tuk: EDUCATION,
+  "tuk": EDUCATION,
   "strathmore university": EDUCATION,
   "jkuat": EDUCATION,
 };
@@ -180,7 +180,7 @@ export const KNOWN_COMPANY_DESCRIPTIONS: Record<string, string> = {
     "NEMA regulates environmental impact, biodiversity and sustainable natural resource management in Kenya.",
   "kenya revenue authority":
     "The Kenya Revenue Authority (KRA) operates technical and laboratory services for verification and customs.",
-  kemri:
+  "kemri":
     "The Kenya Medical Research Institute (KEMRI) conducts biomedical and clinical health sciences research across Kenya.",
   "east african breweries":
     "East African Breweries Limited (EABL) is a leading manufacturing and agro-processing enterprise with state-of-the-art QA facilities.",

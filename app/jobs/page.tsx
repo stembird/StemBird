@@ -21,7 +21,7 @@ import { isMissingListingKindColumnError } from "@/lib/listingKind";
 import {
   ACTIVE_INDUSTRY_NAMES,
   ACTIVE_JOB_FUNCTION_NAMES,
-} from "@/lib/chemistryLens.taxonomy";
+} from "@/lib/stemBird.taxonomy";
 
 interface SearchFilters {
   searchTerm: string;
@@ -37,7 +37,7 @@ interface SearchFilters {
   sortBy: string;
 }
 
-// Dropdowns are sourced directly from the Chemistry Lens taxonomy so they
+// Dropdowns are sourced directly from the StemBird taxonomy so they
 // stay in sync with the industries/job_functions lookup tables in Supabase.
 const JOB_FUNCTIONS = ACTIVE_JOB_FUNCTION_NAMES.map((name) => ({ name }));
 const INDUSTRIES = ACTIVE_INDUSTRY_NAMES.map((name) => ({ name }));

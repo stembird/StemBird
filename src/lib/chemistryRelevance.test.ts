@@ -1,7 +1,7 @@
 /**
  * Run: npx tsx src/lib/chemistryRelevance.test.ts
  *
- * Chemistry Lens publication gate smoke tests. Each case exercises one of the
+ * StemBird publication gate smoke tests. Each case exercises one of the
  * T1–T4 tests or a hard veto with/without rescue.
  */
 import assert from 'node:assert/strict'

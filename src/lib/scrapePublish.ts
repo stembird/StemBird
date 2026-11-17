@@ -248,7 +248,7 @@ export async function publishScrapedJob(
       }
     }
 
-    // Chemistry Lens publication gate (see chemistryRelevance.ts). A job
+    // StemBird publication gate (see chemistryRelevance.ts). A job
     // publishes only when at least one of T1 chemistry-core function,
     // T2 chemistry-family degree, T3 chemical duties, or T4 commercial
     // chemistry passes. Clinical / pure-biology / general-business titles

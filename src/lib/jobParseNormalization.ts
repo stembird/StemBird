@@ -4,16 +4,15 @@ import {
   ACTIVE_INDUSTRY_NAMES,
   ACTIVE_JOB_FUNCTION_NAMES,
   EXTRA_INDUSTRY_ALIASES,
-} from "@/lib/chemistryLens.taxonomy";
+} from "@/lib/stemBird.taxonomy";
 
 /**
- * Chemistry Lens taxonomy v1.1 — allowed industries for parsers, filters
- * and hub pages. Sourced from `chemistryLens.taxonomy.ts` (active entries
- * only; reserved categories are intentionally excluded).
+ * StemBird STEM taxonomy — allowed industries for parsers, filters
+ * and hub pages. Sourced from `stemBird.taxonomy.ts`.
  */
 export const FALLBACK_INDUSTRIES: readonly string[] = ACTIVE_INDUSTRY_NAMES;
 
-/** Allowed job functions — active Chemistry Lens taxonomy only. */
+/** Allowed job functions — active StemBird STEM taxonomy. */
 export const FALLBACK_JOB_FUNCTIONS: readonly string[] = ACTIVE_JOB_FUNCTION_NAMES;
 
 export const MAX_JOB_TAGS = 5;
@@ -50,7 +49,7 @@ export function resolveValidThrough(
 }
 
 /**
- * Common free-text / scrape industry labels → canonical Chemistry Lens industries.
+ * Common free-text / scrape industry labels → canonical StemBird industries.
  * Keys must be lowercase trimmed. Sourced from the taxonomy module so aliases
  * and canonical names live in one place.
  */
@@ -165,8 +164,8 @@ RULES:
 8. Extract salary as numbers only (e.g., 80000 not "80,000")
 9. If a field is not found in the text, OMIT it — EXCEPT additional_info, which is REQUIRED even though the career tips are generated advice (not copied from the posting). Never omit additional_info or the 8 tips to save tokens. Write additional_info as the FIRST key in the JSON object so the 8 tips cannot be truncated.
 10. Put all education/degree requirements inside required_qualifications only — do NOT output education_requirements
-11. industries: ONLY exact names from ALLOWED_INDUSTRIES (UP TO 3 — never more, and NEVER pad to hit a quota; 1 accurate tag beats 3 speculative ones). If the posting describes a role outside chemistry, biochemical, pharma, lab, process, environmental, mining/assay, TIC or chemistry-education context, OMIT the field. NEVER invent values.
-12. job_functions: ONLY exact names from ALLOWED_JOB_FUNCTIONS (UP TO 3 — ceilings, not quotas; 1 tag is fine). Chemistry Lens doctrine: chemistry is the subject, industry is the application. If the role does not use chemistry knowledge, chemical processes, laboratory science or chemical-industry expertise, OMIT the field. NEVER invent values.
+11. industries: ONLY exact names from ALLOWED_INDUSTRIES (UP TO 3 — never more, and NEVER pad to hit a quota; 1 accurate tag beats 3 speculative ones). If the posting describes a role outside STEM (Science & Healthcare, Technology, Engineering & Architecture, Mathematics), OMIT the field. NEVER invent values.
+12. job_functions: ONLY exact names from ALLOWED_JOB_FUNCTIONS (UP TO 3 — ceilings, not quotas; 1 tag is fine). StemBird doctrine: STEM careers across science & healthcare, technology, engineering & architecture, and mathematics. NEVER invent values.
 13. tags: Comma-separated string with at most 5 of the most relevant skills/keywords
 14. If no allowed industry or job function clearly matches, OMIT that field entirely
 15. description: Write a clear role overview in <p> tags (2–4 sentences). Use facts from the posting only — do not invent duties, benefits, or requirements.

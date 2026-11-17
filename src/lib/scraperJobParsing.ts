@@ -1,5 +1,5 @@
 /**
- * Intelligent parsing of scraped job content into ChemistryLens job fields.
+ * Intelligent parsing of scraped job content into StemBird job fields.
  *
  * Uses the same AI parse + finalize path as manual job parsing
  * (callAIWithRetry → buildJobParseSystemPrompt → finalizeParsedJobData),
@@ -788,89 +788,135 @@ export function mergeManualParseResult(
   }
 }
 
-/** Common ATS industry labels → Chemistry Lens industry names */
+/** Common ATS industry labels → StemBird 20 Canonical STEM industries */
 const INDUSTRY_ALIASES: Record<string, string> = {
-  // Energy & utilities
-  utilities: 'Energy, Power & Utilities',
-  'renewables & environment': 'Energy, Power & Utilities',
-  'oil & energy': 'Energy, Power & Utilities',
-  'energy and petroleum': 'Energy, Power & Utilities',
-  'energy & petroleum': 'Energy, Power & Utilities',
-  // Petrochemicals
-  'oil & gas': 'Petrochemicals, Refining & Fuels',
-  'petroleum & utilities': 'Energy, Power & Utilities',
-  // Clinical / lab
-  'hospital & health care': 'Clinical Chemistry & Medical Laboratory Services',
-  'hospital and health care': 'Clinical Chemistry & Medical Laboratory Services',
-  'health care': 'Clinical Chemistry & Medical Laboratory Services',
-  // NGO / development
-  'nonprofit organization management': 'Development Organisations & NGO Laboratory Programmes',
-  'non-profit organization management': 'Development Organisations & NGO Laboratory Programmes',
-  'civic & social organization': 'Development Organisations & NGO Laboratory Programmes',
-  // Education
-  'education management': 'Education & Training — Universities, TVET & Professional',
-  'higher education': 'Education & Training — Universities, TVET & Professional',
-  // Manufacturing
-  manufacturing: 'Chemicals-Driven Manufacturing & Industrial Production',
-  'industrial automation': 'Chemicals-Driven Manufacturing & Industrial Production',
-  // Mining
-  'mining & metals': 'Mining, Geology & Assay Laboratories',
-  'mining & minerals': 'Mining, Geology & Assay Laboratories',
-  // Food
-  'food production': 'Food, Beverage & Brewery Laboratories',
-  'food and beverages': 'Food, Beverage & Brewery Laboratories',
-  // Chemicals
-  chemicals: 'Industrial & Basic Chemicals',
-  'chemical services': 'Industrial & Basic Chemicals',
-  // Pharma
-  pharmaceuticals: 'Pharmaceuticals & Drug Manufacturing',
-  // Retired — pointing to old names causes natural null when not in allowed
+  // Energy, Oil & Gas
+  utilities: 'Energy, Oil & Gas',
+  'renewables & environment': 'Energy, Oil & Gas',
+  'oil & energy': 'Energy, Oil & Gas',
+  'energy and petroleum': 'Energy, Oil & Gas',
+  'energy & petroleum': 'Energy, Oil & Gas',
+  'oil & gas': 'Energy, Oil & Gas',
+  'petroleum & utilities': 'Energy, Oil & Gas',
+  // Healthcare & Medical Sciences
+  'hospital & health care': 'Healthcare & Medical Sciences',
+  'hospital and health care': 'Healthcare & Medical Sciences',
+  'health care': 'Healthcare & Medical Sciences',
+  healthcare: 'Healthcare & Medical Sciences',
+  // Science & Research
+  'scientific research': 'Science & Research',
+  'research & development': 'Science & Research',
+  // Education & STEM Training
+  'education management': 'Education & STEM Training',
+  'higher education': 'Education & STEM Training',
+  education: 'Education & STEM Training',
+  // Manufacturing & Industrial Processing
+  manufacturing: 'Manufacturing & Industrial Processing',
+  'industrial automation': 'Manufacturing & Industrial Processing',
+  'paper & forest products': 'Manufacturing & Industrial Processing',
+  // Mining, Geology & Earth Sciences
+  'mining & metals': 'Mining, Geology & Earth Sciences',
+  'mining & minerals': 'Mining, Geology & Earth Sciences',
+  mining: 'Mining, Geology & Earth Sciences',
+  // Agriculture & Food Science
+  'food production': 'Agriculture & Food Science',
+  'food and beverages': 'Agriculture & Food Science',
+  agriculture: 'Agriculture & Food Science',
+  farming: 'Agriculture & Food Science',
+  // Chemicals & Chemical Manufacturing
+  chemicals: 'Chemicals & Chemical Manufacturing',
+  'chemical services': 'Chemicals & Chemical Manufacturing',
+  // Pharmaceuticals & Biotechnology
+  pharmaceuticals: 'Pharmaceuticals & Biotechnology',
+  biotechnology: 'Pharmaceuticals & Biotechnology',
+  // Information Technology & Software
   'information technology and services': 'Information Technology & Software',
   'information technology': 'Information Technology & Software',
-  'financial services': 'Banking, Finance & Insurance',
-  banking: 'Banking, Finance & Insurance',
-  'real estate': 'Real Estate & Facilities Management',
-  construction: 'Construction, Infrastructure & Built Environment',
-  'staffing and recruiting': 'Consulting & Professional Services',
-  'human resources': 'Consulting & Professional Services',
+  software: 'Information Technology & Software',
+  internet: 'Information Technology & Software',
+  // Telecommunications & Networking
+  telecommunications: 'Telecommunications & Networking',
+  networking: 'Telecommunications & Networking',
+  // Engineering & Construction
+  construction: 'Engineering & Construction',
+  'civil engineering': 'Engineering & Construction',
+  // Architecture & Urban Planning
+  architecture: 'Architecture & Urban Planning',
+  'architecture & planning': 'Architecture & Urban Planning',
+  // Electronics & Electrical Equipment
+  'electrical & electronic manufacturing': 'Electronics & Electrical Equipment',
+  electronics: 'Electronics & Electrical Equipment',
+  // Automotive & Transport Technology
+  automotive: 'Automotive & Transport Technology',
+  transportation: 'Automotive & Transport Technology',
+  // Aerospace & Aviation
+  aviation: 'Aerospace & Aviation',
+  'airlines/aviation': 'Aerospace & Aviation',
+  'aerospace & aviation': 'Aerospace & Aviation',
+  // Environmental & Natural Sciences
+  environmental: 'Environmental & Natural Sciences',
+  'environmental services': 'Environmental & Natural Sciences',
+  // Water, Sanitation & Waste Management
+  'water supply': 'Water, Sanitation & Waste Management',
+  'waste management': 'Water, Sanitation & Waste Management',
+  // Mathematics, Statistics & Actuarial Science
+  'financial services': 'Mathematics, Statistics & Actuarial Science',
+  banking: 'Mathematics, Statistics & Actuarial Science',
+  actuarial: 'Mathematics, Statistics & Actuarial Science',
 }
 
 const FUNCTION_ALIASES: Record<string, string> = {
-  education: 'Chemistry Teaching, Training & Science Communication',
-  engineering: 'Chemical & Process Engineering',
-  'business development': 'Technical Sales & Business Development (Chemistry)',
+  education: 'STEM Education, Training & Instruction',
+  teaching: 'STEM Education, Training & Instruction',
+  training: 'STEM Education, Training & Instruction',
+  engineering: 'Mechanical Engineering',
+  'business development': 'Technical Sales & Applications Engineering',
   'project management': 'Technical Project Management',
   'product management': 'Technical Project Management',
-  'customer service': 'Applications, Technical Support & Field Service',
-  production: 'Production & Plant Operations Management',
-  research: 'Research & Development (R&D)',
-  marketing: 'Technical Sales & Business Development (Chemistry)',
-  sales: 'Technical Sales & Business Development (Chemistry)',
-  finance: 'Chemometrics, Data Science & Statistics for Lab Systems',
-  accounting: 'Chemometrics, Data Science & Statistics for Lab Systems',
-  'human resources': 'Laboratory Operations & Management',
+  'customer service': 'IT Support & Systems Administration',
+  production: 'Production & Manufacturing',
+  manufacturing: 'Production & Manufacturing',
+  research: 'Research & Development',
+  'r&d': 'Research & Development',
+  marketing: 'Technical Sales & Applications Engineering',
+  sales: 'Technical Sales & Applications Engineering',
+  finance: 'Mathematics, Statistics & Actuarial Analysis',
+  accounting: 'Mathematics, Statistics & Actuarial Analysis',
   legal: 'Regulatory Affairs & Compliance',
-  'legal department': 'Regulatory Affairs & Compliance',
-  'information technology': 'Laboratory Information Systems (LIMS) & Informatics',
-  'it and software': 'Laboratory Information Systems (LIMS) & Informatics',
-  'it department': 'Laboratory Information Systems (LIMS) & Informatics',
-  'city management department': '',
-  'city management': '',
-  'utilities department': 'Energy & Utilities Process',
-  utilities: 'Energy & Utilities Process',
-  construction: 'Chemical & Process Engineering',
-  'construction department': 'Chemical & Process Engineering',
-  'finance department': 'Chemometrics, Data Science & Statistics for Lab Systems',
-  'hr department': 'Laboratory Operations & Management',
-  'people department': 'Laboratory Operations & Management',
-  'sales department': 'Technical Sales & Business Development (Chemistry)',
-  'marketing department': 'Technical Sales & Business Development (Chemistry)',
-  other: '',
+  'regulatory affairs': 'Regulatory Affairs & Compliance',
+  'information technology': 'IT Support & Systems Administration',
+  'it and software': 'Software Development & Programming',
+  'it department': 'IT Support & Systems Administration',
+  software: 'Software Development & Programming',
+  development: 'Software Development & Programming',
+  programming: 'Software Development & Programming',
+  utilities: 'Energy & Renewable Energy Engineering',
+  energy: 'Energy & Renewable Energy Engineering',
+  construction: 'Civil & Structural Engineering',
+  maintenance: 'Technical Maintenance & Reliability',
+  quality: 'Quality Assurance & Quality Control',
+  qa: 'Quality Assurance & Quality Control',
+  qc: 'Quality Assurance & Quality Control',
+  laboratory: 'Laboratory & Scientific Analysis',
+  nursing: 'Nursing & Patient Care',
+  medical: 'Clinical & Medical Practice',
+  health: 'Clinical & Medical Practice',
+  telecom: 'Telecommunications & Network Engineering',
+  networking: 'Telecommunications & Network Engineering',
+  data: 'Data Science & Analytics',
+  analytics: 'Data Science & Analytics',
+  ai: 'Artificial Intelligence & Machine Learning',
+  safety: 'Occupational Health, Safety & EHS',
+  ehs: 'Occupational Health, Safety & EHS',
+  environment: 'Environmental Management & Sustainability',
+  agriculture: 'Agriculture & Agronomy',
+  mining: 'Mining & Mineral Processing',
+  water: 'Water Treatment & Wastewater Management',
 }
 
 /**
- * Infer a ChemistryLens job function from the job title (+ optional department hint).
- * Used when ATS provides no function taxonomy (common on Workable).
+ * Infer a StemBird job function from the job title (+ optional department hint).
+ * Sourced directly from the 36 Canonical STEM functions.
  */
 export function inferJobFunctionFromTitle(
   title: string,
@@ -881,38 +927,57 @@ export function inferJobFunctionFromTitle(
   const hay = `${title} ${tagsHint || ''}`.toLowerCase()
 
   const rules: Array<{ re: RegExp; fn: string }> = [
-    { re: /\b(applications? (scientist|specialist|engineer)|field service engineer)\b/, fn: 'Applications, Technical Support & Field Service' },
-    { re: /\b(chemical|process|petroleum|refinery)\b.*\b(engineer|engineering)\b/, fn: 'Chemical & Process Engineering' },
-    { re: /\b(industrial|manufacturing|production|plant)\b.*\b(engineer|engineering)\b/, fn: 'Process Operations & Plant Optimisation' },
-    { re: /\b(instrumentation|control engineer|metrolog)\b/, fn: 'Instrumentation & Control' },
-    { re: /\b(mining|mineral|geologist|geoscience|assay|mineral processing|hydrometallurg|beneficiation)\b/, fn: 'Mining, Assay & Mineral Processing' },
-    { re: /\b(maintenance engineer|reliability engineer|maintenance officer)\b/, fn: 'Maintenance & Reliability Engineering' },
-    { re: /\b(water engineer|wastewater|water treatment|sewage|effluent)\b/, fn: 'Water & Wastewater Treatment Operations' },
-    { re: /\b(solar|wind power|grid engineer|energy engineer|boiler chemist|power plant chemist)\b/, fn: 'Energy & Utilities Process' },
-    { re: /\b(hse|ehs|health and safety|health & safety|environmental health|safety officer|risk officer|process safety)\b/, fn: 'HSE & Process Safety' },
-    { re: /\b(environmental (scientist|officer|consultant)|conservation|eia|air quality)\b/, fn: 'HSE & Process Safety' },
-    { re: /\b(quality assurance|qms|iso auditor|qa (engineer|analyst|officer|chemist))\b/, fn: 'Quality Assurance & QMS' },
-    { re: /\b(quality control|\bqc\b|qc (chemist|analyst|officer)|inspector)\b/, fn: 'Quality Control (QC)' },
-    { re: /\b(analytical chemist|analytical chemistry|hplc|gc-ms|icp|aas|spectroscop\w*|chromatograph\w*)/, fn: 'Analytical & Instrumental Chemistry' },
-    { re: /\b(laboratory|lab (technician|assistant|scientist|manager)|chemistry)\b/, fn: 'Laboratory Operations & Management' },
-    { re: /\b(microbiolog|sterility|endotoxin|bioburden)\b/, fn: 'Microbiology & Molecular Analysis (Product/Quality)' },
-    { re: /\b(toxicolog|forensic)\b/, fn: 'Forensic & Toxicology Analysis' },
-    { re: /\b(method (development|validation)|analytical method)\b/, fn: 'Method Development & Validation' },
-    { re: /\b(food (scientist|technologist|technology)|beverage (lab|chemist))\b/, fn: 'Formulation & Product Development' },
-    { re: /\b(research (associate|officer|assistant|fellow)|me&?l|m&e\b|monitoring and evaluation|scientist)\b/, fn: 'Research & Development (R&D)' },
-    { re: /\b(clinical (research|trial|officer)|bioanalytical)\b/, fn: 'Clinical Research & Trials (Chemistry-Relevant)' },
-    { re: /\b(metrolog|iso 17025|accreditation|calibration officer)\b/, fn: 'Metrology, Calibration & Lab Accreditation (ISO 17025)' },
-    { re: /\b(chemometr|design of experiments|\bdoe\b|lab data analysis)\b/, fn: 'Chemometrics, Data Science & Statistics for Lab Systems' },
-    { re: /\b(lims|laboratory information|lab automation|scientific informatics)\b/, fn: 'Laboratory Information Systems (LIMS) & Informatics' },
-    { re: /\b(regulatory affairs|pharmacovigilance|compliance officer|registration officer)\b/, fn: 'Regulatory Affairs & Compliance' },
-    { re: /\b(product development|formulation)\b/, fn: 'Formulation & Product Development' },
-    { re: /\b(materials (scientist|engineer)|polymer (scientist|engineer))\b/, fn: 'Materials & Polymer Science' },
-    { re: /\b(technical (sales|support)|field (service|sales) officer|business development|sales (representative|officer|executive|manager|agent))\b/, fn: 'Technical Sales & Business Development (Chemistry)' },
-    { re: /\b(procurement|supply chain|logistics|warehouse|inventory)\b/, fn: 'Procurement, Warehousing & Supply Chain (Lab/Chemical)' },
-    { re: /\b(production (manager|officer|supervisor)|factory (manager|operations)|plant manager)\b/, fn: 'Production & Plant Operations Management' },
-    { re: /\b(process (engineer|optimisation|improvement)|production planning)\b/, fn: 'Process Operations & Plant Optimisation' },
-    { re: /\b(project (manager|officer|coordinator)|programme manager|program manager)\b/, fn: 'Technical Project Management' },
-    { re: /\b(chemistry (teacher|lecturer)|science (communicator|writer)|outreach officer)\b/, fn: 'Chemistry Teaching, Training & Science Communication' },
+    // Software & IT
+    { re: /\b(software (engineer|developer|architect)|full ?stack|frontend|backend|mobile developer|devops|cloud engineer|programmer|web developer)\b/, fn: 'Software Development & Programming' },
+    { re: /\b(cyber ?security|information security|infosec|soc analyst|penetration test)\b/, fn: 'Cybersecurity & Information Security' },
+    { re: /\b(it (support|officer|specialist|technician)|systems? (admin|administrator|engineer)|network admin|helpdesk)\b/, fn: 'IT Support & Systems Administration' },
+    { re: /\b(data (scientist|analyst|engineer)|business intelligence|bi analyst|big data)\b/, fn: 'Data Science & Analytics' },
+    { re: /\b(machine learning|artificial intelligence|\bml\b engineer|\bai\b engineer|deep learning|nlp)\b/, fn: 'Artificial Intelligence & Machine Learning' },
+    { re: /\b(telecom|telecommunication|network (engineer|specialist)|rf engineer|transmission engineer|fibre|fiber optic)\b/, fn: 'Telecommunications & Network Engineering' },
+
+    // Engineering & Architecture
+    { re: /\b(civil (engineer|engineering)|structural (engineer|engineering)|site engineer|construction engineer)\b/, fn: 'Civil & Structural Engineering' },
+    { re: /\b(mechanical (engineer|engineering|technician)|mechatronics|hvac)\b/, fn: 'Mechanical Engineering' },
+    { re: /\b(electrical (engineer|engineering|technician)|electronics (engineer|engineering)|power systems)\b/, fn: 'Electrical & Electronics Engineering' },
+    { re: /\b(chemical (engineer|engineering)|process engineer|petroleum engineer|refinery engineer)\b/, fn: 'Chemical Engineering & Processing' },
+    { re: /\b(process (operations|optimisation|optimization|improvement)|plant operator)\b/, fn: 'Process Engineering & Operations' },
+    { re: /\b(architect\b|architecture|architectural|urban (planner|planning)|interior design)\b/, fn: 'Architecture & Design' },
+    { re: /\b(surveyor|surveying|gis (analyst|specialist|officer)|geospatial|cartograph)\b/, fn: 'Surveying, GIS & Geospatial Analysis' },
+    { re: /\b(instrumentation|control engineer|automation engineer|plc|scada|metrolog)\b/, fn: 'Instrumentation, Automation & Control' },
+    { re: /\b(maintenance (engineer|technician|officer)|reliability engineer|plant maintenance)\b/, fn: 'Technical Maintenance & Reliability' },
+    { re: /\b(solar|wind power|renewable energy|energy engineer|power plant|boiler)\b/, fn: 'Energy & Renewable Energy Engineering' },
+    { re: /\b(mining (engineer|technician)|mineral processing|metallurg|geologist|geoscience|assay)\b/, fn: 'Mining & Mineral Processing' },
+
+    // Science & Lab
+    { re: /\b(research (scientist|officer|associate|assistant|fellow)|postdoctoral|\br&d\b)\b/, fn: 'Research & Development' },
+    { re: /\b(analytical chemist|chemist\b|chemistry|laboratory (analyst|technician|officer|manager)|lab (tech|analyst|manager))\b/, fn: 'Laboratory & Scientific Analysis' },
+    { re: /\b(microbiolog|biotechnolog|molecular|molecular biology)\b/, fn: 'Biotechnology & Microbiology' },
+    { re: /\b(pharmaceutical|formulation|drug (development|discovery)|pharmacolog)\b/, fn: 'Pharmaceutical & Drug Development' },
+
+    // Healthcare & Medical
+    { re: /\b(nurse|nursing|midwife|patient care)\b/, fn: 'Nursing & Patient Care' },
+    { re: /\b(medical (officer|doctor)|physician|clinical officer|surgeon|clinical practice)\b/, fn: 'Clinical & Medical Practice' },
+    { re: /\b(medical lab|medical laboratory|diagnostic|pathology technician|phlebotom)\b/, fn: 'Medical Laboratory & Diagnostics' },
+
+    // Agriculture, Food & Environment
+    { re: /\b(agronom|agriculture|agricultural|crop scientist|soil scientist|horticultur)\b/, fn: 'Agriculture & Agronomy' },
+    { re: /\b(food (scientist|technologist|safety|quality)|food technology|brewery|dairy)\b/, fn: 'Food Science & Technology' },
+    { re: /\b(environmental (officer|scientist|specialist|consultant)|sustainability|eia|conservation)\b/, fn: 'Environmental Management & Sustainability' },
+    { re: /\b(water (treatment|engineer|operator)|wastewater|effluent|sewerage)\b/, fn: 'Water Treatment & Wastewater Management' },
+
+    // Quality, Safety, Reg & Operations
+    { re: /\b(quality assurance|quality control|\bqa\b|\bqc\b|qms|iso auditor|quality officer)\b/, fn: 'Quality Assurance & Quality Control' },
+    { re: /\b(production (manager|supervisor|engineer|officer)|manufacturing (manager|engineer)|plant manager)\b/, fn: 'Production & Manufacturing' },
+    { re: /\b(hse|ehs|health (and|&) safety|safety (officer|engineer)|occupational health)\b/, fn: 'Occupational Health, Safety & EHS' },
+    { re: /\b(regulatory (affairs|officer|specialist)|compliance officer|standards compliance)\b/, fn: 'Regulatory Affairs & Compliance' },
+
+    // Math & Stats
+    { re: /\b(actuar|statistic|mathematic|quantitative analyst|operations research)\b/, fn: 'Mathematics, Statistics & Actuarial Analysis' },
+
+    // Tech Sales, Project Management & STEM Education
+    { re: /\b(technical sales|applications? (engineer|specialist)|field (service|sales) engineer)\b/, fn: 'Technical Sales & Applications Engineering' },
+    { re: /\b(technical project|engineering project|it project manager|project engineer)\b/, fn: 'Technical Project Management' },
+    { re: /\b(stem (teacher|trainer|instructor)|science teacher|engineering lecturer|math teacher)\b/, fn: 'STEM Education, Training & Instruction' },
   ]
 
   for (const rule of rules) {
@@ -934,7 +999,7 @@ export function inferJobFunctionFromTitle(
   return null
 }
 
-/** ATS categories that are too vague to map to ChemistryLens taxonomy. */
+/** ATS categories that are too vague to map to StemBird taxonomy. */
 export function isGenericTaxonomyHint(hint?: string | null): boolean {
   if (!hint?.trim()) return true
   return /^(management|other|general|various|miscellaneous|n\/?a|none|all|corporate)$/i.test(
@@ -983,7 +1048,7 @@ export function matchJobFunctionName(
 }
 
 /**
- * Parse scraped job content into ChemistryLens fields.
+ * Parse scraped job content into StemBird fields.
  * Uses the same AI prompt + finalize path as manual job parsing, then applies
  * scraper taxonomy heuristics when the model omits industry/function.
  */

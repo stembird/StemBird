@@ -103,7 +103,7 @@ const industryList = [
 assert.equal(
   inferCompanyIndustry('Acme Holdings Ltd', null, industryList),
   null,
-  'generic non-chemistry company returns null under Chemistry Lens'
+  'generic non-chemistry company returns null under StemBird'
 )
 assert.equal(
   inferCompanyIndustry('Inkomoko', 'https://inkomoko.com', industryList),
@@ -138,7 +138,7 @@ const tatuParsed = await parseScrapedJobContent(
   },
   { industryNames: industryList, jobFunctionNames: functions, attachCareerTips: false }
 )
-assert.equal(tatuParsed.industry, null, 'Tatu City is out of Chemistry Lens scope')
+assert.equal(tatuParsed.industry, null, 'Tatu City is out of StemBird scope')
 assert.equal(tatuParsed.job_function, null, 'community relations has no chemistry function match')
 
 // Full manual-parse merge must retain enrichment fields (study, apply, tips, types)

@@ -35,7 +35,7 @@ assert.equal(
 // Done-bucket classification mirrors scrapeQueueStats.
 assert.equal(rowMatchesDoneBucket('Skipped: outside STEM focus', 'non_stem'), true)
 assert.equal(rowMatchesDoneBucket('Skipped: pre-check outside STEM (HTML board)', 'non_stem'), true)
-// Current Chemistry Lens gate skip — the DB pre-filter must match this too, or
+// Current StemBird gate skip — the DB pre-filter must match this too, or
 // the non-chemistry dialog renders empty despite the stats count including it.
 assert.equal(rowMatchesDoneBucket('Skipped: outside chemistry focus', 'non_stem'), true)
 assert.equal(rowMatchesDoneBucket('Skipped: outside chemistry focus', 'published'), false)

@@ -58,8 +58,8 @@ function MpesaPaymentContent() {
   );
   const [description, setDescription] = useState(
     presetPricing
-      ? `ChemistryLens ${presetPricing.label}`
-      : "ChemistryLens sandbox payment"
+      ? `StemBird ${presetPricing.label}`
+      : "StemBird sandbox payment"
   );
   const [submitting, setSubmitting] = useState(false);
   const [stkData, setStkData] = useState<StkPushData | null>(null);

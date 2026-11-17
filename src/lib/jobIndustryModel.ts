@@ -81,24 +81,59 @@ export const INDUSTRY_MODEL_FILENAMES: Record<JobIndustryModelCategory, string> 
 };
 
 /**
- * Canonical Chemistry Lens job function → portrait category.
+ * Canonical StemBird STEM job function → portrait category.
  * Keys must match every active JOB_FUNCTIONS entry in
- * `chemistryLens.taxonomy.ts` (the jobIndustryModel test asserts coverage).
+ * `stemBird.taxonomy.ts` (the jobIndustryModel test asserts coverage).
  */
 export const JOB_FUNCTION_MODEL_CATEGORY: Record<string, JobIndustryModelCategory> = {
-  // F1 Laboratory & Analytical Sciences
+  // ── StemBird 36 Canonical Functions ──────────────────────────────────────────
+  'Research & Development': 'science',
+  'Laboratory & Scientific Analysis': 'science',
+  'Clinical & Medical Practice': 'healthcare',
+  'Nursing & Patient Care': 'healthcare',
+  'Medical Laboratory & Diagnostics': 'healthcare',
+  'Pharmaceutical & Drug Development': 'science',
+  'Quality Assurance & Quality Control': 'manufacturing',
+  'Production & Manufacturing': 'manufacturing',
+  'Process Engineering & Operations': 'engineering',
+  'Chemical Engineering & Processing': 'engineering',
+  'Mechanical Engineering': 'engineering',
+  'Electrical & Electronics Engineering': 'engineering',
+  'Civil & Structural Engineering': 'construction',
+  'Software Development & Programming': 'technology',
+  'IT Support & Systems Administration': 'technology',
+  'Cybersecurity & Information Security': 'technology',
+  'Data Science & Analytics': 'technology',
+  'Artificial Intelligence & Machine Learning': 'technology',
+  'Telecommunications & Network Engineering': 'telecommunications',
+  'Architecture & Design': 'construction',
+  'Surveying, GIS & Geospatial Analysis': 'engineering',
+  'Environmental Management & Sustainability': 'environment',
+  'Occupational Health, Safety & EHS': 'health-safety',
+  'Agriculture & Agronomy': 'agriculture',
+  'Food Science & Technology': 'food-services',
+  'Biotechnology & Microbiology': 'science',
+  'Mathematics, Statistics & Actuarial Analysis': 'finance',
+  'Instrumentation, Automation & Control': 'engineering',
+  'Technical Maintenance & Reliability': 'maintenance',
+  'Energy & Renewable Energy Engineering': 'engineering',
+  'Mining & Mineral Processing': 'engineering',
+  'Water Treatment & Wastewater Management': 'environment',
+  'Technical Sales & Applications Engineering': 'sales',
+  'STEM Education, Training & Instruction': 'education',
+  'Technical Project Management': 'professional',
+  'Regulatory Affairs & Compliance': 'government',
+
+  // ── Legacy Aliases / Compatibility ─────────────────────────────────────────
   'Analytical & Instrumental Chemistry': 'science',
   'Laboratory Operations & Management': 'science',
   'Laboratory Technician & Sample Handling': 'science',
   'Microbiology & Molecular Analysis (Product/Quality)': 'science',
   'Forensic & Toxicology Analysis': 'science',
   'Method Development & Validation': 'science',
-
-  // F2 Research & Development
   'Research & Development (R&D)': 'science',
   'Clinical Research & Trials (Chemistry-Relevant)': 'healthcare',
-
-  // F3 Process, Production & Engineering
+  'Clinical Research & Trials': 'healthcare',
   'Formulation & Product Development': 'manufacturing',
   'Chemical & Process Engineering': 'engineering',
   'Process Operations & Plant Optimisation': 'manufacturing',
@@ -107,28 +142,17 @@ export const JOB_FUNCTION_MODEL_CATEGORY: Record<string, JobIndustryModelCategor
   'Mining, Assay & Mineral Processing': 'engineering',
   'Energy & Utilities Process': 'environment',
   'Water & Wastewater Treatment Operations': 'environment',
-
-  // F4 Quality, Compliance & Regulation
   'Quality Control (QC)': 'manufacturing',
   'Quality Assurance & QMS': 'manufacturing',
-  'Regulatory Affairs & Compliance': 'professional',
   'Metrology, Calibration & Lab Accreditation (ISO 17025)': 'science',
-
-  // F5 Engineering Support, Safety & Maintenance
   'Instrumentation & Control': 'engineering',
   'Maintenance & Reliability Engineering': 'maintenance',
   'HSE & Process Safety': 'health-safety',
-
-  // F6 Commercial, Service & Supply Chain
   'Technical Sales & Business Development (Chemistry)': 'sales',
   'Applications, Technical Support & Field Service': 'maintenance',
   'Procurement, Warehousing & Supply Chain (Lab/Chemical)': 'manufacturing',
-
-  // F7 Digital Science & Data
   'Laboratory Information Systems (LIMS) & Informatics': 'technology',
   'Chemometrics, Data Science & Statistics for Lab Systems': 'technology',
-
-  // F8 Education & Cross-Functional
   'Chemistry Teaching, Training & Science Communication': 'education',
 };
 

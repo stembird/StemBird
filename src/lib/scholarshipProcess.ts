@@ -337,7 +337,7 @@ export async function runScholarshipProcessOne(
       }
     }
 
-    // ── Chemistry Lens gate. Verdict is logged so a wrong-looking skip can be
+    // ── StemBird gate. Verdict is logged so a wrong-looking skip can be
     //    traced without re-running the page. ──
     const gate = evaluateScholarshipChemistryFocus(
       {

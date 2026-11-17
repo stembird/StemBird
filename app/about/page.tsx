@@ -5,9 +5,9 @@ import { fetchPageContentMap, fetchPageSeo } from "@/lib/fetchPageContent";
 import { getContentValue } from "@/lib/pageContent";
 
 const FALLBACK_TITLE =
-  "About ChemistryLens - Kenya's Fastest Path from Job Search to Job Offer";
+  "About StemBird - Kenya's Fastest Path from Job Search to Job Offer";
 const FALLBACK_DESCRIPTION =
-  "Learn how ChemistryLens uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.";
+  "Learn how StemBird uses AI-powered matching, free career tools, and verified job listings to help Kenyan professionals land interviews 3x faster than any other job board.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await fetchPageSeo("about");
@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const content = await fetchPageContentMap("about");
 
-  const heroTitle = getContentValue(content, "hero_title", "About ChemistryLens");
+  const heroTitle = getContentValue(content, "hero_title", "About StemBird");
   const heroSubtitle = getContentValue(
     content,
     "hero_subtitle",
@@ -55,7 +55,7 @@ export default async function AboutPage() {
           <section className="prose prose-lg max-w-none">
             <div className="bg-card border border-border rounded-lg p-8 space-y-4">
               <h2 className="text-3xl font-bold text-primary">
-                {getContentValue(content, "story_title", "Why We Built ChemistryLens")}
+                {getContentValue(content, "story_title", "Why We Built StemBird")}
               </h2>
               <p className="text-muted-foreground leading-relaxed">
                 {getContentValue(
@@ -68,7 +68,7 @@ export default async function AboutPage() {
                 {getContentValue(
                   content,
                   "story_p2",
-                  "ChemistryLens was built to fix that. We use AI-powered matching that connects candidates to jobs they'll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months."
+                  "StemBird was built to fix that. We use AI-powered matching that connects candidates to jobs they'll actually get, not just jobs that exist. We give every user free career tools worth KES 10,000+: CV builder, cover letter generator, LinkedIn optimizer. We believe the barrier to getting hired should never be money. And we give employers pre-screened, qualified candidates so they can hire in days, not months."
                 )}
               </p>
               <p className="text-muted-foreground leading-relaxed">
@@ -95,7 +95,7 @@ export default async function AboutPage() {
                     {getContentValue(
                       content,
                       "founder_role",
-                      "Founder, ChemistryLens · BSc Industrial Chemistry with Management (Kenyatta University) · Based in Kakamega, Kenya"
+                      "Founder, StemBird · BSc Industrial Chemistry with Management (Kenyatta University) · Based in Kakamega, Kenya"
                     )}
                   </p>
                 </div>
@@ -108,7 +108,7 @@ export default async function AboutPage() {
                     {getContentValue(
                       content,
                       "founder_story_p1",
-                      "ChemistryLens was started by Emmanuel Juma Makona — an industrial chemist by training and a plant-floor operator by trade. After graduating from Kenyatta University with a BSc in Industrial Chemistry with Management, he spent more than seven years running production and quality operations across Kenya's chemical, sugar, paper, beverage and manufacturing industries: QC testing paint batches at Kansai Plascon, supervising juice clarification, sugar boiling and water treatment on a 4,200 TCD line at West Kenya Sugar, blending and shipping cleaning chemicals through his own company Emmax Cleaning Solutions, and today running a 20+ operator paper machine shift at Rai Paper Kenya delivering 30+ tonnes per shift."
+                      "StemBird was started by Emmanuel Juma Makona — an industrial chemist by training and a plant-floor operator by trade. After graduating from Kenyatta University with a BSc in Industrial Chemistry with Management, he spent more than seven years running production and quality operations across Kenya's chemical, sugar, paper, beverage and manufacturing industries: QC testing paint batches at Kansai Plascon, supervising juice clarification, sugar boiling and water treatment on a 4,200 TCD line at West Kenya Sugar, blending and shipping cleaning chemicals through his own company Emmax Cleaning Solutions, and today running a 20+ operator paper machine shift at Rai Paper Kenya delivering 30+ tonnes per shift."
                     )}
                   </p>
                   <p className="text-muted-foreground leading-relaxed">
@@ -122,7 +122,7 @@ export default async function AboutPage() {
                     {getContentValue(
                       content,
                       "founder_story_p3",
-                      "ChemistryLens is his answer: a Kenyan job platform built specifically for chemistry, laboratory, quality and process careers — where AI matching reads HPLC, GC-MS, ISO 9001, HACCP, GMP, brix, effluent treatment, formulation and shift supervision the way an employer actually does. It is free for every job seeker, because Emmanuel knows what it looks like to be talented and overlooked."
+                      "StemBird is his answer: a Kenyan job platform built specifically for chemistry, laboratory, quality and process careers — where AI matching reads HPLC, GC-MS, ISO 9001, HACCP, GMP, brix, effluent treatment, formulation and shift supervision the way an employer actually does. It is free for every job seeker, because Emmanuel knows what it looks like to be talented and overlooked."
                     )}
                   </p>
 
@@ -175,7 +175,7 @@ export default async function AboutPage() {
                     </a>
                     {" · "}
                     <a href="/contact" className="text-primary hover:underline">
-                      {getContentValue(content, "founder_contact_link", "or use the ChemistryLens contact form")}
+                      {getContentValue(content, "founder_contact_link", "or use the StemBird contact form")}
                     </a>
                   </p>
                 </div>
@@ -231,7 +231,7 @@ export default async function AboutPage() {
                   {getContentValue(
                     content,
                     "value_fairness_body",
-                    "Your background shouldn't determine your future. ChemistryLens is free for every job seeker. The best candidate might be someone who can't afford a KES 5,000 CV service."
+                    "Your background shouldn't determine your future. StemBird is free for every job seeker. The best candidate might be someone who can't afford a KES 5,000 CV service."
                   )}
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default async function AboutPage() {
 
           <section className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg p-8 space-y-6">
             <h2 className="text-3xl font-bold text-primary text-center">
-              {getContentValue(content, "stats_title", "ChemistryLens by the Numbers")}
+              {getContentValue(content, "stats_title", "StemBird by the Numbers")}
             </h2>
             <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
               {getContentValue(content, "stats_subtitle", "Real results, not empty promises")}

@@ -55,7 +55,7 @@ function brandFallbackCard(width: number, height: number) {
             padding: 48,
           }}
         >
-          <div style={{ display: 'flex', fontSize: 64, fontWeight: 800 }}>ChemistryLens</div>
+          <div style={{ display: 'flex', fontSize: 64, fontWeight: 800 }}>StemBird</div>
           <div style={{ display: 'flex', fontSize: 32, marginTop: 16, opacity: 0.9 }}>
             Find Your Dream Job in Kenya
           </div>
@@ -165,7 +165,7 @@ export async function GET(
 
     const [personImageSrc, brandLogoSrc, companyLogoSrc, fonts] = await Promise.all([
       loadIndustryModelDataUrl(modelCategory, assetOrigin),
-      // Official ChemistryLens symbol only; the wordmark is rendered separately in the footer.
+      // Official StemBird symbol only; the wordmark is rendered separately in the footer.
       loadPublicAssetDataUrl('/careersasa-icon.png', assetOrigin),
       companyLogoUrl
         ? fetchWithTimeout(companyLogoUrl, OG_FETCH_TIMEOUT_MS.logo)

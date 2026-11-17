@@ -1,10 +1,9 @@
 /**
  * Run: npx tsx src/lib/companyIndustryInference.test.ts
  *
- * Chemistry Lens inference is deliberately conservative: employers outside
- * the chemistry / lab / pharma / process / environmental / mining / TIC /
- * education scope return null (banks, ICT, real estate, HR consultancies,
- * general retail, logistics).
+ * StemBird STEM inference: employers across Science & Healthcare,
+ * Technology, Engineering & Architecture, and Mathematics are mapped.
+ * General non-STEM employers (banking, HR consultancies, general retail) return null.
  */
 import {
   inferCompanyIndustry,
@@ -17,95 +16,84 @@ function assert(condition: unknown, message: string) {
 
 // ── In-scope: known-company overrides ────────────────────────────────────────
 assert(
-  inferCompanyIndustry("Kenya Bureau of Standards (KEBS)") ===
-    "Regulatory, Standards & Public Health Authorities",
-  "kebs regulator"
+  inferCompanyIndustry("Kenya Bureau of Standards (KEBS)") === "Science & Research",
+  "kebs regulator/standards"
 );
 assert(
-  inferCompanyIndustry("NEMA", null) === "Environmental Consulting, EIA & Air Quality",
+  inferCompanyIndustry("NEMA", null) === "Environmental & Natural Sciences",
   "nema environmental"
 );
 assert(
   inferCompanyIndustry("National Environment Management Authority (NEMA)") ===
-    "Environmental Consulting, EIA & Air Quality",
+  "Environmental & Natural Sciences",
   "nema full name"
 );
 assert(
-  inferCompanyIndustry("Kemri") === "Scientific Research & R&D Institutions",
+  inferCompanyIndustry("Kemri") === "Science & Research",
   "kemri research"
 );
 assert(
-  inferCompanyIndustry("East African Breweries") === "Food, Beverage & Brewery Laboratories",
-  "eabl beverage lab"
+  inferCompanyIndustry("East African Breweries") === "Agriculture & Food Science",
+  "eabl agriculture/food science"
 );
 assert(
-  inferCompanyIndustry("Bamburi Cement") === "Building & Construction Materials Chemistry",
+  inferCompanyIndustry("Bamburi Cement") === "Engineering & Construction",
   "bamburi cement"
 );
 assert(
-  inferCompanyIndustry("Twaha Pharmaceuticals") === "Pharmaceuticals & Drug Manufacturing",
+  inferCompanyIndustry("Twaha Pharmaceuticals") === "Pharmaceuticals & Biotechnology",
   "twaha pharma"
 );
 assert(
-  inferCompanyIndustry("Lancet Kenya") === "Clinical Chemistry & Medical Laboratory Services",
-  "lancet pathology"
+  inferCompanyIndustry("Lancet Kenya") === "Healthcare & Medical Sciences",
+  "lancet healthcare"
 );
 assert(
-  inferCompanyIndustry("SGS Kenya") === "Testing, Inspection, Certification & Calibration",
+  inferCompanyIndustry("SGS Kenya") === "Science & Research",
   "sgs tic"
 );
 assert(
   inferCompanyIndustry("Kenya Tea Development Agency", "ktda.co.ke") ===
-    "Tea, Coffee & Horticulture Post-Harvest Processing",
+  "Agriculture & Food Science",
   "ktda tea"
+);
+
+// ── In-scope: tech & telecom ────────────────────────────────────────────────
+assert(
+  inferCompanyIndustry("Safaricom") === "Telecommunications & Networking",
+  "safaricom telecom"
+);
+assert(
+  inferCompanyIndustry("Cellulant") === "Information Technology & Software",
+  "cellulant software/fintech"
 );
 
 // ── In-scope: regex inference from name ──────────────────────────────────────
 assert(
-  inferCompanyIndustry("Nairobi Water Company") === "Water Supply & Treatment",
+  inferCompanyIndustry("Nairobi Water Company") === "Water, Sanitation & Waste Management",
   "water utility regex"
 );
 assert(
-  inferCompanyIndustry("Rift Valley Paints") === "Paints, Coatings, Adhesives & Sealants",
+  inferCompanyIndustry("Rift Valley Paints") === "Chemicals & Chemical Manufacturing",
   "paints regex"
 );
 assert(
-  inferCompanyIndustry("Coast Petrochemicals Refinery") === "Petrochemicals, Refining & Fuels",
+  inferCompanyIndustry("Coast Petrochemicals Refinery") === "Energy, Oil & Gas",
   "petro regex"
 );
 
 // ── Out of scope → null ──────────────────────────────────────────────────────
 assert(
   inferCompanyIndustry("Equity Bank") === null,
-  "banking is out of Chemistry Lens scope"
-);
-assert(
-  inferCompanyIndustry("Safaricom") === null,
-  "telecom is out of scope"
+  "banking is out of StemBird scope"
 );
 assert(
   inferCompanyIndustry("Corporate Staffing") === null,
   "HR consultancy is out of scope"
 );
 assert(
-  inferCompanyIndustry("Tatu City") === null,
-  "real estate is out of scope (not cement / not building-materials chemistry)"
-);
-assert(
   inferCompanyIndustry("Career Options Africa Ltd") === null,
   "career-options HR is out of scope"
-);
-
-// ── Government regex inference via county + .go.ke ───────────────────────────
-assert(
-  inferCompanyIndustry("Nakuru County Government") ===
-    "Regulatory, Standards & Public Health Authorities",
-  "county government via override"
-);
-assert(
-  inferCompanyIndustry("Some County Water", "https://somewater.go.ke") ===
-    "Water Supply & Treatment",
-  "water utility on .go.ke beats generic government"
 );
 
 // ── Descriptions (spot check) ────────────────────────────────────────────────

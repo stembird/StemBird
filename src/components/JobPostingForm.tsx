@@ -45,7 +45,7 @@ interface JobFormData {
   additional_locations: Array<{ county: string; city: string }>;
   direct_apply: boolean;
   application_url: string;
-  // Chemistry/Health/Architecture Fields
+  // STEM (Science, Health, Tech, Engineering, Architecture, Math) Fields
   industry: string;
   industries: string[];
   education_level_id: string;
@@ -109,7 +109,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
       additional_locations: [],
       direct_apply: true,
       application_url: "",
-      // Chemistry/Health/Architecture Fields
+      // STEM (Science, Health, Tech, Engineering, Architecture, Math) Fields
       industry: "",
       industries: [],
       education_level_id: "none",
@@ -222,7 +222,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
   const [selectedCountyId, setSelectedCountyId] = useState<string>("");
   const [selectedTownId, setSelectedTownId] = useState<string>("");
-  
+
   // State for automatic company creation
   // If parsed data has company name but no company_id, auto-enable company creation
   const [shouldCreateCompany, setShouldCreateCompany] = useState(
@@ -231,7 +231,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
   const [newCompanyName, setNewCompanyName] = useState(
     isParsedData && initialData?.company && !initialData?.company_id ? initialData.company : ""
   );
-  
+
   // Check if company already exists (exact or identity variant, for UI feedback)
   const { data: existingCompanyCheck } = useQuery({
     queryKey: ["check-company", newCompanyName],
@@ -328,13 +328,13 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
   // Keep form location fields in sync with selected county/town
   const countyName = counties?.find(c => String(c.id) === selectedCountyId)?.name || "";
   const townName = towns?.find(t => String(t.id) === selectedTownId)?.name || "";
-  
+
   // Update form data when county/town selection changes (derived state)
   useEffect(() => {
     setFormData(prev => {
       const needsUpdate = prev.job_location_county !== countyName || prev.job_location_city !== townName;
       if (!needsUpdate) return prev;
-      
+
       return {
         ...prev,
         job_location_county: countyName,
@@ -541,7 +541,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
     queryKey: ["job", jobId],
     queryFn: async () => {
       if (!jobId) return null;
-      
+
       const { data, error } = await supabase
         .from("jobs")
         .select("*")
@@ -556,12 +556,12 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
   // Populate form with existing job data when loaded
   const hasLoadedJobRef = useRef(false);
-  
+
   useEffect(() => {
     if (!jobId || isParsedData) return;
     if (existingJob && !isJobLoading && !hasLoadedJobRef.current) {
       hasLoadedJobRef.current = true;
-      
+
       // Build form data from existing job
       const newFormData = {
         // Core fields
@@ -571,7 +571,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         responsibilities: existingJob.responsibilities || "",
         required_qualifications: existingJob.required_qualifications?.toString() || "",
         company_id: existingJob.company_id ? String(existingJob.company_id) : "",
-        
+
         // Google Job Posting Fields
         valid_through: existingJob.valid_through || "",
         employment_type: existingJob.employment_type || "FULL_TIME",
@@ -588,8 +588,8 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         additional_locations: (existingJob as any).additional_locations || [],
         direct_apply: existingJob.direct_apply ?? true,
         application_url: existingJob.application_url || "",
-        
-        // Chemistry/Health/Architecture Fields
+
+        // STEM (Science, Health, Tech, Engineering, Architecture, Math) Fields
         industry: existingJob.industry || "",
         industries: (existingJob as any).industries?.length > 0
           ? (existingJob as any).industries
@@ -600,24 +600,24 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         education_requirements: (existingJob as any).education_requirements || "",
         experience_level: existingJob.experience_level || "Mid",
         language_requirements: existingJob.language_requirements || "",
-        
+
         // New fields
         salary_visibility: existingJob.salary_visibility || "Show",
         minimum_experience: existingJob.minimum_experience?.toString() || "",
         is_featured: existingJob.is_featured ?? false,
         salary_type: existingJob.salary_type || "Monthly",
-        
+
         // Compensation & Schedule
         salary_currency: existingJob.salary_currency || "KES",
         salary_min: existingJob.salary_min?.toString() || "",
         salary_max: existingJob.salary_max?.toString() || "",
         salary_period: existingJob.salary_period || "MONTH",
         work_schedule: existingJob.work_schedule || "",
-        
+
         // Application
         apply_link: existingJob.apply_link || "",
         apply_email: existingJob.apply_email || "",
-        
+
         // Functional Portal Fields
         tags: existingJob.tags?.toString() || "",
         job_function: existingJob.job_function || "",
@@ -627,9 +627,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         status: existingJob.status || "active",
         additional_info: existingJob.additional_info?.toString() || "",
       };
-      
+
       setFormData(newFormData);
-      
+
       // Set county and town IDs if available
       if (existingJob.job_location_county && counties) {
         const county = counties.find(c => c.name === existingJob.job_location_county);
@@ -637,14 +637,14 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           setSelectedCountyId(String(county.id));
         }
       }
-      
+
       if (existingJob.job_location_city && towns) {
         const town = towns.find(townItem => townItem.name === existingJob.job_location_city);
         if (town) {
           setSelectedTownId(String(town.id));
         }
       }
-      
+
       // Reset company creation state when loading existing job
       if (existingJob.company_id) {
         setShouldCreateCompany(false);
@@ -770,7 +770,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         direct_apply: data.direct_apply,
         application_url: data.application_url || null,
 
-        // Chemistry/Health/Architecture Fields
+        // STEM (Science, Health, Tech, Engineering, Architecture, Math) Fields
         industry: normalizedIndustries[0] || null,
         industries: normalizedIndustries.length > 0 ? normalizedIndustries : null,
         industry_ids: industryIds.length > 0 ? industryIds : null,
@@ -828,7 +828,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           .from("jobs")
           .update(jobData)
           .eq("id", jobId);
-        
+
         if (error) {
           if (error.code === '409') {
             throw new Error("Conflict: The job could not be updated due to a database constraint. Please check that all referenced companies and data are valid.");
@@ -848,13 +848,13 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           company_id: jobData.company_id,
           company: jobData.company
         });
-        
+
         const { data: inserted, error } = await supabase
           .from("jobs")
           .insert([jobData])
           .select("id")
           .single();
-        
+
         if (error) {
           console.error("Job creation error details:", {
             code: error.code,
@@ -863,7 +863,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
             hint: error.hint,
             company_id: jobData.company_id
           });
-          
+
           if (error.code === '409') {
             throw new Error("Conflict: The job could not be created due to a database constraint. Please check that all data is valid.");
           }
@@ -876,7 +876,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
         savedJobId = inserted?.id || null;
       }
 
-      // Universal AI normalize/enrich on production keys (any intake → ChemistryLens fields).
+      // Universal AI normalize/enrich on production keys (any intake → StemBird fields).
       // Save already succeeded — enrich errors must not fail the mutation.
       let enriched = false;
       if (savedJobId) {
@@ -906,10 +906,10 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
     },
     onSuccess: async (result) => {
       const isDraft = formData.status === "draft";
-      const message = jobId 
-        ? "Job updated successfully!" 
-        : isDraft 
-          ? "Job saved as draft! You can publish it later from your dashboard." 
+      const message = jobId
+        ? "Job updated successfully!"
+        : isDraft
+          ? "Job saved as draft! You can publish it later from your dashboard."
           : "Job published successfully!";
       toast.success(message);
       if (result?.enriched) {
@@ -921,9 +921,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
     },
     onError: (error: any) => {
       console.error("Job operation error:", error);
-      
+
       let errorMessage = jobId ? "Failed to update job." : "Failed to post job.";
-      
+
       if (error instanceof Error) {
         errorMessage = error.message;
       } else if (error?.message) {
@@ -931,9 +931,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
       } else if (typeof error === 'string') {
         errorMessage = error;
       }
-      
+
       toast.error(errorMessage);
-      
+
       if (error?.code) {
         console.error("Error details:", {
           code: error.code,
@@ -947,9 +947,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const companyName = shouldCreateCompany && role === "admin" ? newCompanyName : formData.company;
-    
+
     if (!formData.title || !companyName || !formData.description) {
       toast.error("Please fill in all required fields");
       return;
@@ -959,14 +959,14 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
       toast.error("Please create a company profile first from your dashboard");
       return;
     }
-    
+
     // Check that at least one application method is provided
     const hasApplicationMethod = formData.direct_apply || formData.application_url || formData.apply_email || formData.apply_link;
     if (!hasApplicationMethod) {
       toast.error("Please provide at least one application method (enable direct apply, or add an external URL/email/link)");
       return;
     }
-    
+
     mutation.mutate(formData);
   };
 
@@ -1001,7 +1001,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           </AlertDescription>
         </Alert>
       )}
-      
+
       {role === "employer" && !userCompany && (
         <Alert>
           <Info className="h-4 w-4" />
@@ -1149,9 +1149,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                   ))}
                 </div>
               ) : (
-                <Select 
-                  value={formData.industry} 
-                  onValueChange={(value) => setFormData({...formData, industry: value, industries: [value]})}
+                <Select
+                  value={formData.industry}
+                  onValueChange={(value) => setFormData({ ...formData, industry: value, industries: [value] })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select industry" />
@@ -1170,7 +1170,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                       {ind}
                       <button type="button" onClick={() => {
                         const newIndustries = formData.industries.filter(i => i !== ind);
-                        setFormData({...formData, industries: newIndustries, industry: newIndustries[0] || ""});
+                        setFormData({ ...formData, industries: newIndustries, industry: newIndustries[0] || "" });
                       }} className="hover:text-destructive">×</button>
                     </span>
                   ))}
@@ -1205,9 +1205,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                   ))}
                 </div>
               ) : (
-                <Select 
-                  value={formData.job_function} 
-                  onValueChange={(value) => setFormData({...formData, job_function: value, job_functions: [value]})}
+                <Select
+                  value={formData.job_function}
+                  onValueChange={(value) => setFormData({ ...formData, job_function: value, job_functions: [value] })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select job function" />
@@ -1226,7 +1226,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                       {fn}
                       <button type="button" onClick={() => {
                         const newFuncs = formData.job_functions.filter(f => f !== fn);
-                        setFormData({...formData, job_functions: newFuncs, job_function: newFuncs[0] || ""});
+                        setFormData({ ...formData, job_functions: newFuncs, job_function: newFuncs[0] || "" });
                       }} className="hover:text-destructive">×</button>
                     </span>
                   ))}
@@ -1238,17 +1238,17 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           <div className="space-y-2">
             <RichTextEditor
               value={formData.description}
-              onChange={(value) => setFormData({...formData, description: value})}
+              onChange={(value) => setFormData({ ...formData, description: value })}
               label="Job Description *"
               placeholder="Describe the role, requirements, and responsibilities..."
               required
             />
           </div>
-          
+
           <div className="space-y-2">
             <RichTextEditor
               value={formData.responsibilities}
-              onChange={(value) => setFormData({...formData, responsibilities: value})}
+              onChange={(value) => setFormData({ ...formData, responsibilities: value })}
               label="Key Responsibilities"
               placeholder="List the key responsibilities for this role..."
             />
@@ -1316,7 +1316,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
             <div className="space-y-2">
               <Label htmlFor="experience_level">Experience Level</Label>
-              <Select value={formData.experience_level} onValueChange={(value) => setFormData({...formData, experience_level: value})}>
+              <Select value={formData.experience_level} onValueChange={(value) => setFormData({ ...formData, experience_level: value })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -1343,7 +1343,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                 Required for Google job listings. Defaults to 30 days after posting if left blank.
               </p>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="minimum_experience">Minimum Years of Experience</Label>
               <Input
@@ -1355,10 +1355,10 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                 placeholder="e.g., 3"
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="is_featured">Featured Job</Label>
-              <Select value={formData.is_featured.toString()} onValueChange={(value) => setFormData({...formData, is_featured: value === "true"})}>
+              <Select value={formData.is_featured.toString()} onValueChange={(value) => setFormData({ ...formData, is_featured: value === "true" })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -1372,7 +1372,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
           <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
             <p className="text-sm font-medium">Compensation Details</p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="salary_min">Minimum Salary</Label>
@@ -1400,7 +1400,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
               <div className="space-y-2">
                 <Label htmlFor="salary_period">Period</Label>
-                <Select value={formData.salary_period} onValueChange={(value) => setFormData({...formData, salary_period: value})}>
+                <Select value={formData.salary_period} onValueChange={(value) => setFormData({ ...formData, salary_period: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -1413,10 +1413,10 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="salary_type">Salary Type</Label>
-                <Select value={formData.salary_type} onValueChange={(value) => setFormData({...formData, salary_type: value})}>
+                <Select value={formData.salary_type} onValueChange={(value) => setFormData({ ...formData, salary_type: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -1429,11 +1429,11 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
                 </Select>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="salary_visibility">Salary Visibility</Label>
-                <Select value={formData.salary_visibility} onValueChange={(value) => setFormData({...formData, salary_visibility: value})}>
+                <Select value={formData.salary_visibility} onValueChange={(value) => setFormData({ ...formData, salary_visibility: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -1459,7 +1459,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
           <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
             <p className="text-sm font-medium">Location Details</p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="county">County</Label>
@@ -1477,8 +1477,8 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
 
               <div className="space-y-2">
                 <Label htmlFor="city">City/Town</Label>
-                <Select 
-                  value={selectedTownId} 
+                <Select
+                  value={selectedTownId}
                   onValueChange={setSelectedTownId}
                   disabled={!selectedCountyId}
                 >
@@ -1554,7 +1554,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           <div className="space-y-2">
             <RichTextEditor
               value={formData.required_qualifications}
-              onChange={(value) => setFormData({...formData, required_qualifications: value})}
+              onChange={(value) => setFormData({ ...formData, required_qualifications: value })}
               label="Required Qualifications"
               placeholder="Enter required qualifications, e.g., Bachelor's in Computer Science, 3+ years experience"
             />
@@ -1564,9 +1564,9 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="education_level_id">Minimum Education Level</Label>
-              <Select 
-                value={formData.education_level_id} 
-                onValueChange={(value) => setFormData({...formData, education_level_id: value})}
+              <Select
+                value={formData.education_level_id}
+                onValueChange={(value) => setFormData({ ...formData, education_level_id: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select minimum education level" />
@@ -1613,17 +1613,17 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <RichTextEditor
               value={formData.additional_info}
-              onChange={(value) => setFormData({...formData, additional_info: value})}
+              onChange={(value) => setFormData({ ...formData, additional_info: value })}
               label="Additional Information"
               placeholder="Add any additional information about this job, such as career tips, FAQs, etc..."
             />
             <p className="text-xs text-muted-foreground">Shown in the Additional Information card on the job details page (How to Apply plus generated career tips).</p>
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="tags">Tags (Keywords)</Label>
             <Input
@@ -1646,10 +1646,10 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           </Alert>
 
           <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="direct_apply" 
+            <Checkbox
+              id="direct_apply"
               checked={formData.direct_apply}
-              onCheckedChange={(checked) => setFormData({...formData, direct_apply: !!checked})}
+              onCheckedChange={(checked) => setFormData({ ...formData, direct_apply: !!checked })}
             />
             <Label htmlFor="direct_apply" className="font-normal">
               Enable direct application through this portal
@@ -1659,7 +1659,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
           <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
             <p className="text-sm font-medium">External Application Methods (Optional)</p>
             <p className="text-xs text-muted-foreground">Add any external application methods. All provided methods will be shown to candidates.</p>
-            
+
             <div className="space-y-2">
               <Label htmlFor="application_url">Company Application URL</Label>
               <Input
@@ -1701,7 +1701,7 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
             <Label htmlFor="status">Job Status</Label>
             <Select
               value={formData.status || "active"}
-              onValueChange={(value) => setFormData({...formData, status: value})}
+              onValueChange={(value) => setFormData({ ...formData, status: value })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Active (Publish Now)" />
@@ -1718,16 +1718,16 @@ const JobPostingForm = ({ jobId, isEdit = false, initialData, isParsedData = fal
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">
-              {formData.status === "draft" 
-                ? "Draft jobs are saved but not visible to job seekers. You can edit and publish them later." 
+              {formData.status === "draft"
+                ? "Draft jobs are saved but not visible to job seekers. You can edit and publish them later."
                 : "Active jobs are immediately visible to job seekers."}
             </p>
           </div>
         </TabsContent>
       </Tabs>
 
-      <Button 
-        type="submit" 
+      <Button
+        type="submit"
         className="w-full bg-gradient-primary hover:opacity-90 transition-opacity"
         disabled={mutation.isPending || (role === "employer" && !userCompany)}
       >

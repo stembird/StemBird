@@ -6,64 +6,56 @@ import {
   industryToSlug,
 } from "./companyDirectory";
 import { resolveIndustryLabel } from "./jobParseNormalization";
+import { ACTIVE_INDUSTRY_NAMES } from "./stemBird.taxonomy";
 
 function assert(condition: unknown, message: string) {
   if (!condition) throw new Error(message);
 }
 
-const industries = [
-  "Industrial & Basic Chemicals",
-  "Pharmaceuticals & Drug Manufacturing",
-  "Clinical Chemistry & Medical Laboratory Services",
-  "Regulatory, Standards & Public Health Authorities",
-  "Chemicals-Driven Manufacturing & Industrial Production",
-  "Food, Beverage & Brewery Laboratories",
-  "Personal Care, Cosmetics & Fragrances",
-  "Environmental Consulting, EIA & Air Quality",
-  "Mining, Geology & Assay Laboratories",
-  "Testing, Inspection, Certification & Calibration",
-  "Laboratory & Scientific Supply Services",
-  "Education & Training — Universities, TVET & Professional",
-  "Education & Training — Schools",
-];
+const industries = [...ACTIVE_INDUSTRY_NAMES];
 
 // ── Alias resolution (fuzzy label → canonical) ─────────────────────────────
 assert(
-  resolveIndustryLabel("governmental", industries) ===
-    "Regulatory, Standards & Public Health Authorities",
+  resolveIndustryLabel("governmental", industries) === "Science & Research",
   "governmental alias"
 );
 assert(
   resolveIndustryLabel("pharmaceuticals", industries) ===
-    "Pharmaceuticals & Drug Manufacturing",
+    "Pharmaceuticals & Biotechnology",
   "pharmaceuticals alias"
 );
 assert(
   resolveIndustryLabel("healthcare", industries) ===
-    "Clinical Chemistry & Medical Laboratory Services",
+    "Healthcare & Medical Sciences",
   "healthcare alias"
 );
 assert(
-  resolveIndustryLabel("ngo/non-profit", industries) === null,
-  "retired ngo alias resolves out-of-list to null"
-);
-assert(
   resolveIndustryLabel("manufacturing", industries) ===
-    "Chemicals-Driven Manufacturing & Industrial Production",
+    "Manufacturing & Industrial Processing",
   "manufacturing alias"
 );
 assert(
   resolveIndustryLabel("wines & spirits", industries) ===
-    "Food, Beverage & Brewery Laboratories",
+    "Agriculture & Food Science",
   "wines & spirits alias"
+);
+assert(
+  resolveIndustryLabel("software", industries) ===
+    "Information Technology & Software",
+  "software alias"
+);
+assert(
+  resolveIndustryLabel("telecom", industries) ===
+    "Telecommunications & Networking",
+  "telecom alias"
 );
 
 // ── Exact label pass-through ────────────────────────────────────────────────
 assert(
   resolveIndustryLabel(
-    "Regulatory, Standards & Public Health Authorities",
+    "Engineering & Construction",
     industries
-  ) === "Regulatory, Standards & Public Health Authorities",
+  ) === "Engineering & Construction",
   "exact industry"
 );
 
@@ -73,10 +65,10 @@ assert(
     {
       name: "Acme Ltd",
       website: null,
-      industry: "Regulatory, Standards & Public Health Authorities",
+      industry: "Engineering & Construction",
     },
     industries
-  ) === "Regulatory, Standards & Public Health Authorities",
+  ) === "Engineering & Construction",
   "stored industry wins"
 );
 
@@ -84,48 +76,40 @@ assert(
   resolveDirectoryCompanyIndustry(
     { name: "Kenya Bureau of Standards (KEBS)", website: null, industry: null },
     industries
-  ) === "Regulatory, Standards & Public Health Authorities",
-  "infer kebs as regulator via known-company override"
+  ) === "Science & Research",
+  "infer kebs as research/standards via known-company override"
 );
 
 assert(
   resolveDirectoryCompanyIndustry(
-    { name: "Nursing Council of Kenya NCK", website: null, industry: null },
+    { name: "Safaricom", website: null, industry: null },
     industries
-  ) === "Regulatory, Standards & Public Health Authorities",
-  "nursing council is a professional regulator via council-of-kenya pattern"
+  ) === "Telecommunications & Networking",
+  "safaricom telecom"
 );
 
 assert(
   resolveDirectoryCompanyIndustry(
     { name: "Unknown Co", website: null, industry: null },
     industries,
-    "Testing, Inspection, Certification & Calibration"
-  ) === "Testing, Inspection, Certification & Calibration",
+    "Science & Research"
+  ) === "Science & Research",
   "modal job industry fallback"
 );
 
-assert(
-  resolveDirectoryCompanyIndustry(
-    { name: "Unknown Co", website: null, industry: "Paper Milling" },
-    industries
-  ) === "Chemicals-Driven Manufacturing & Industrial Production",
-  "paper milling alias retargets to the general chemistry-driven plant industry"
-);
-
-// Companies out of Chemistry Lens scope (banks, ICT) now resolve to null
+// Companies out of STEM scope (banking, HR consultancies) resolve to null
 assert(
   resolveDirectoryCompanyIndustry(
     { name: "Equity Bank", website: null, industry: null },
     industries
   ) === null,
-  "banking is out of Chemistry Lens scope"
+  "banking is out of StemBird STEM scope"
 );
 
 // ── Slug ────────────────────────────────────────────────────────────────────
 assert(
-  industryToSlug("Clinical Chemistry & Medical Laboratory Services") ===
-    "clinical-chemistry-and-medical-laboratory-services",
+  industryToSlug("Healthcare & Medical Sciences") ===
+    "healthcare-and-medical-sciences",
   "slug"
 );
 

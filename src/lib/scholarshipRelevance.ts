@@ -1,6 +1,6 @@
 /**
- * Chemistry Lens scholarship publication gate — decides whether a scraped
- * scholarship/award is in-scope for the Chemistry Lens hub.
+ * StemBird scholarship publication gate — decides whether a scraped
+ * scholarship/award is in-scope for the StemBird hub.
  *
  * Mirrors chemistryRelevance.ts (T1–T4 for jobs) with scholarship-shaped
  * tests. A scholarship passes if ANY of:

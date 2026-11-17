@@ -1,6 +1,6 @@
 /**
- * Chemistry Lens publication gate — decides whether a scraped/parsed job is
- * in-scope for the Chemistry Lens hub.
+ * StemBird publication gate — decides whether a scraped/parsed job is
+ * in-scope for the StemBird hub.
  *
  * Doctrine: "Chemistry is the subject. Industry is the application. Careers
  * are the opportunity." Industry alone never publishes.
@@ -22,20 +22,21 @@
  *   general business/HR/marketing/etc. A vetoed title is only re-admitted
  *   when T2 fires AND duties also pass T3.
  *
- * Env config (mirrors CHEMISTRYLENS_SUBJECT_FILTER_*):
+ * Env config (mirrors STEMBIRD_SUBJECT_FILTER_*):
  *   CHEMISTRY_LENS_GATE_ENABLED     "true" (default) | "false" to bypass
  *   CHEMISTRY_LENS_DISCOVER_FILTER  "false" (default; accuracy-first)
  */
 
 import {
-  CHEMISTRY_CORE_FUNCTION_NAMES,
-} from '@/lib/chemistryLens.taxonomy';
+  matchesSubjectFocus,
+  SKIPPED_NON_STEM_MESSAGE,
+} from '@/lib/scrapeSubjectFilter';
 
 /**
  * Queue error_message stamped when the gate rejects a job.
  * Keep in sync with scrapeQueueStats bucketing (see scrapeProcess.ts).
  */
-export const SKIPPED_NON_CHEMISTRY_MESSAGE = 'Skipped: outside chemistry focus'
+export const SKIPPED_NON_CHEMISTRY_MESSAGE = SKIPPED_NON_STEM_MESSAGE;
 
 // ─── T1 — chemistry-core functions (from taxonomy) ─────────────────────────
 const CHEM_CORE_SET = new Set(CHEMISTRY_CORE_FUNCTION_NAMES.map((n) => n.toLowerCase()))
@@ -435,5 +436,20 @@ export function evaluateChemistryRelevance(input: ChemistryGateInput): Chemistry
 
 /** Convenience boolean wrapper used by scrapeProcess/scrapePublish call sites. */
 export function matchesChemistryFocus(input: ChemistryGateInput): boolean {
-  return evaluateChemistryRelevance(input).publish
+  if (evaluateChemistryRelevance(input).publish) {
+    return true;
+  }
+  return matchesSubjectFocus({
+    title: input.title,
+    field_of_study: input.fieldOfStudy ?? null,
+    area_of_study: input.areaOfStudy ?? null,
+    job_function: input.jobFunctions?.[0] ?? null,
+    job_functions: input.jobFunctions ?? null,
+    tags: input.tags ?? null,
+    required_qualifications: input.requiredQualifications ?? null,
+    responsibilities: input.responsibilities ?? null,
+    description: input.description ?? null,
+  });
 }
+
+export const matchesStemFocus = matchesChemistryFocus;

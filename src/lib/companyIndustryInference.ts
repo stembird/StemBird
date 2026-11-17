@@ -1,93 +1,90 @@
 /**
  * Infer an employer's industry from their name/website — NOT from the jobs
- * they post. Chemistry Lens scope: only chemical, laboratory, pharma, process,
- * environmental, mining/assay, TIC and chemistry-education employers are
- * mapped. Banks, ICT firms, real-estate developers, logistics, HR consultancies
- * and general retailers intentionally return null so the directory filter
- * drops them rather than mislabelling.
+ * they post.
+ *
+ * Scope: StemBird 20 Canonical STEM Industries
+ * (Science & Healthcare, Technology, Engineering & Architecture, Mathematics)
  */
 
 import { fuzzyMatchOption } from "./jobParseNormalization";
 
-const GOVERNMENT = "Regulatory, Standards & Public Health Authorities";
-const NGO = "Development Organisations & NGO Laboratory Programmes";
-const EDUCATION = "Education & Training — Universities, TVET & Professional";
-const SCHOOLS = "Education & Training — Schools";
-const HEALTHCARE = "Clinical Chemistry & Medical Laboratory Services";
-const PHARMA = "Pharmaceuticals & Drug Manufacturing";
-const BIOTECH = "Biotechnology & Life Sciences";
-const CONSULTING = "Chemical & Process Engineering Consultancy";
-const ENVIRONMENT = "Environmental Consulting, EIA & Air Quality";
-const WATER = "Water Supply & Treatment";
-const WASTEWATER = "Wastewater & Effluent Management";
-const WASTE = "Waste Management & Recycling";
-const MANUFACTURING = "Chemicals-Driven Manufacturing & Industrial Production";
-const ENERGY = "Energy, Power & Utilities";
-const BUILDING = "Building & Construction Materials Chemistry";
-const PAINTS = "Paints, Coatings, Adhesives & Sealants";
-const POLYMERS = "Polymers, Plastics & Rubber";
-const COSMETICS = "Personal Care, Cosmetics & Fragrances";
-const PETRO = "Petrochemicals, Refining & Fuels";
-const MINING = "Mining, Geology & Assay Laboratories";
-const FOOD = "Food, Beverage & Brewery Laboratories";
-const TIC = "Testing, Inspection, Certification & Calibration";
-const LAB_SUPPLY = "Laboratory & Scientific Supply Services";
-const TEA = "Tea, Coffee & Horticulture Post-Harvest Processing";
-const RESEARCH = "Scientific Research & R&D Institutions";
+const SCIENCE_RESEARCH = "Science & Research";
+const HEALTHCARE = "Healthcare & Medical Sciences";
+const PHARMA = "Pharmaceuticals & Biotechnology";
+const AGRICULTURE = "Agriculture & Food Science";
+const CHEMICALS = "Chemicals & Chemical Manufacturing";
+const MANUFACTURING = "Manufacturing & Industrial Processing";
+const ENERGY = "Energy, Oil & Gas";
+const ENVIRONMENT = "Environmental & Natural Sciences";
+const IT_SOFTWARE = "Information Technology & Software";
+const TELECOM = "Telecommunications & Networking";
+const DATA_AI = "Data Science & Artificial Intelligence";
+const CONSTRUCTION = "Engineering & Construction";
+const ARCHITECTURE = "Architecture & Urban Planning";
+const MINING = "Mining, Geology & Earth Sciences";
+const WATER_WASTE = "Water, Sanitation & Waste Management";
+const MATH_ACTUARIAL = "Mathematics, Statistics & Actuarial Science";
+const EDUCATION = "Education & STEM Training";
+const AEROSPACE = "Aerospace & Aviation";
+const AUTOMOTIVE = "Automotive & Transport Technology";
+const ELECTRONICS = "Electronics & Electrical Equipment";
 
-/** Exact / identity-style overrides for Kenyan employers within Chemistry Lens scope. */
+/** Exact / identity-style overrides for Kenyan employers within StemBird scope. */
 export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
-  // Building / construction-materials chemistry (cement, admixtures)
-  "bamburi cement": BUILDING,
-  "eastern cement": BUILDING,
-  "devki cement": BUILDING,
-  "nyati cement": BUILDING,
-  "mima cement": BUILDING,
+  // Building & Construction / Materials
+  "bamburi cement": CONSTRUCTION,
+  "eastern cement": CONSTRUCTION,
+  "devki cement": CONSTRUCTION,
+  "nyati cement": CONSTRUCTION,
+  "mima cement": CONSTRUCTION,
 
-  // Paints / coatings / adhesives
-  "savitri industries": PAINTS,
-  savitri: PAINTS,
-  "atlantic paint industries": PAINTS,
-  "atlas paint": PAINTS,
-  "dulux kenya": PAINTS,
+  // Paints / coatings / adhesives / chemicals
+  "savitri industries": CHEMICALS,
+  savitri: CHEMICALS,
+  "atlantic paint industries": CHEMICALS,
+  "atlas paint": CHEMICALS,
+  "dulux kenya": CHEMICALS,
+  "nyala plastics": CHEMICALS,
+  "polymac plastics": CHEMICALS,
+  intaplast: CHEMICALS,
+  "mcdk plastics": CHEMICALS,
+  "basf kenya": CHEMICALS,
 
-  // Polymers / plastics / rubber
-  "nyala plastics": POLYMERS,
-  "polymac plastics": POLYMERS,
-  "intaplast": POLYMERS,
-  "mcdk plastics": POLYMERS,
+  // Petrochemicals / fuels / energy
+  "national oil corporation of kenya": ENERGY,
+  nopk: ENERGY,
+  "rubis fuel kenya": ENERGY,
+  "total kenya": ENERGY,
+  "ptl kenya": ENERGY,
+  veboken: ENERGY,
+  "kenya pipeline": ENERGY,
+  "kenya power": ENERGY,
+  kplc: ENERGY,
+  "kenya electricity transmission": ENERGY,
+  "powergen renewable energy": ENERGY,
+  powergen: ENERGY,
+  kengen: ENERGY,
+  "geothermal development corporation": ENERGY,
 
-  // Petrochemicals / refining / fuels
-  "national oil corporation of kenya": PETRO,
-  "nopk": PETRO,
-  "rubis fuel kenya": PETRO,
-  "total kenya": PETRO,
-  "ptl kenya": PETRO,
-  "veboken": PETRO,
-  "kenya pipeline": PETRO,
+  // Scientific supply & labs
+  "dcsa laboratories": SCIENCE_RESEARCH,
+  "labtech kenya": SCIENCE_RESEARCH,
+  "scientific suppliers kenya": SCIENCE_RESEARCH,
+  "sigma aldrich": SCIENCE_RESEARCH,
+  "merck kenya": SCIENCE_RESEARCH,
 
-  // Chemical distribution / laboratory supply
-  "dcsa laboratories": LAB_SUPPLY,
-  "labtech kenya": LAB_SUPPLY,
-  "scientific suppliers kenya": LAB_SUPPLY,
-  "basf kenya": "Industrial & Basic Chemicals",
-  "sigma aldrich": LAB_SUPPLY,
-  "merck kenya": LAB_SUPPLY,
-
-  // Pharmaceuticals & drug manufacturing
+  // Pharmaceuticals & biotechnology
   "twaha pharmaceuticals": PHARMA,
   "universal micropharma": PHARMA,
   "dawa limited": PHARMA,
-  "philapharm": PHARMA,
+  philapharm: PHARMA,
   "cosmos pharmaceuticals": PHARMA,
   "mcm5 kenya": PHARMA,
   "wellness pharmaceuticals": PHARMA,
+  bioline: PHARMA,
+  "boston lab africa": PHARMA,
 
-  // Biotechnology / life sciences
-  "bioline": BIOTECH,
-  "boston lab africa": BIOTECH,
-
-  // Clinical chemistry / pathology labs
+  // Clinical & healthcare
   "lancet kenya": HEALTHCARE,
   "nhct laboratories": HEALTHCARE,
   "afya medic laboratories": HEALTHCARE,
@@ -98,130 +95,99 @@ export const KNOWN_COMPANY_INDUSTRIES: Record<string, string> = {
   "nairobi hospital": HEALTHCARE,
   "kenyatta national hospital": HEALTHCARE,
 
-  // Food, beverage & brewery labs
-  "east african breweries": FOOD,
-  "eabl": FOOD,
-  "titan brewing": FOOD,
-  "christopher industries": FOOD,
-  "kp foods": FOOD,
-  "kerry group kenya": FOOD,
-  "delmonte kenya": FOOD,
-  "mcoa bakery": FOOD,
+  // Food & Agriculture
+  "east african breweries": AGRICULTURE,
+  eabl: AGRICULTURE,
+  "titan brewing": AGRICULTURE,
+  "christopher industries": AGRICULTURE,
+  "kp foods": AGRICULTURE,
+  "kerry group kenya": AGRICULTURE,
+  "delmonte kenya": AGRICULTURE,
+  "mcoa bakery": AGRICULTURE,
+  "kenya tea growers association": AGRICULTURE,
+  ktda: AGRICULTURE,
+  "kenya tea research institute": AGRICULTURE,
+  gtw kenya: AGRICULTURE,
+  ktgda: AGRICULTURE,
+  "coffee bureau of kenya": AGRICULTURE,
+  "kenya coffee estates": AGRICULTURE,
 
-  // Tea / coffee / post-harvest
-  "kenya tea growers association": TEA,
-  "ktda": TEA,
-  "kenya tea research institute": TEA,
-  "gtw kenya": TEA,
-  "ktgda": TEA,
-  "coffee bureau of kenya": TEA,
-  "kenya coffee estates": TEA,
-
-  // Mining / assay
+  // Mining / Geology
   "base titanium": MINING,
   "kwale mining": MINING,
   "kenya gold mine": MINING,
   "sokim gold": MINING,
-  "geothermal development corporation": ENERGY,
 
-  // Water / wastewater / waste
-  "nairobi water": WATER,
-  "kenya pipeline and distribution agency": WATER,
-  "ncpwb": WATER,
-  "national water harvest and storage": WATER,
-  "wajir water": WATER,
+  // Water & waste management
+  "nairobi water": WATER_WASTE,
+  "kenya pipeline and distribution agency": WATER_WASTE,
+  ncpwb: WATER_WASTE,
+  "national water harvest and storage": WATER_WASTE,
+  "wajir water": WATER_WASTE,
 
-  // Environmental regulator
+  // Environmental
   "national environment management authority (nema)": ENVIRONMENT,
   nema: ENVIRONMENT,
   "national environment management agency": ENVIRONMENT,
   "kenya forest service": ENVIRONMENT,
   "kenya wildlife service": ENVIRONMENT,
-
-  // Energy / utilities
-  "kenya power": ENERGY,
-  "kplc": ENERGY,
-  "kenya electricity transmission": ENERGY,
-  "powergen renewable energy": ENERGY,
-  powergen: ENERGY,
-
-  // Regulators & standards bodies
-  "kenya bureau of standards (kebs)": GOVERNMENT,
-  kebs: GOVERNMENT,
-  "pharmaceutical and poison board": GOVERNMENT,
-  "kenya pharmacy board": GOVERNMENT,
-  "energy and petroleum regulatory authority (epra)": GOVERNMENT,
-  epra: GOVERNMENT,
-  "kenya revenue authority": GOVERNMENT,
-  "national oils laboratory": GOVERNMENT,
-  "kenya nuclear science and technology authority": GOVERNMENT,
-
-  // Research institutions
-  "kenya medical research institute (kemri)": RESEARCH,
-  kemri: RESEARCH,
-  "kenya agricultural research institute ( kari )": RESEARCH,
-  "international centre of insect physiology and ecology": RESEARCH,
-  "icipe": RESEARCH,
-  "kenya science research institute in Nairobi": RESEARCH,
-  cgibin: RESEARCH,
-  "worldfish center": RESEARCH,
-
-  // TIC / testing / inspection
-  "sgs kenya": TIC,
-  "intertek kenya": TIC,
-  "bureau veritas": TIC,
-  "cotecna east africa": TIC,
-  "svensken inspection": TIC,
-  "ekopetsken": TIC,
-
-  // NGOs (chemistry-relevant labelling/quality programmes)
-  care: NGO,
-  "care usa": NGO,
-  "care international": NGO,
-  "catholic relief services": NGO,
-  "one acre fund": NGO,
-  oneacrefund: NGO,
-  inkomoko: NGO,
-  acumen: NGO,
-  "acumen academy": NGO,
   "conservation international": ENVIRONMENT,
 
-  // Education (universities/schools)
+  // Research institutes
+  "kenya medical research institute (kemri)": SCIENCE_RESEARCH,
+  kemri: SCIENCE_RESEARCH,
+  "kenya agricultural research institute ( kari )": SCIENCE_RESEARCH,
+  "international centre of insect physiology and ecology": SCIENCE_RESEARCH,
+  icipe: SCIENCE_RESEARCH,
+  "kenya science research institute in nairobi": SCIENCE_RESEARCH,
+  "worldfish center": SCIENCE_RESEARCH,
+  kalro: SCIENCE_RESEARCH,
+
+  // Standards / TIC
+  "kenya bureau of standards (kebs)": SCIENCE_RESEARCH,
+  kebs: SCIENCE_RESEARCH,
+  "sgs kenya": SCIENCE_RESEARCH,
+  "intertek kenya": SCIENCE_RESEARCH,
+  "bureau veritas": SCIENCE_RESEARCH,
+  "cotecna east africa": SCIENCE_RESEARCH,
+
+  // IT & Tech & Telecoms
+  safaricom: TELECOM,
+  airtel: TELECOM,
+  telkom: TELECOM,
+  cellulant: IT_SOFTWARE,
+  andela: IT_SOFTWARE,
+  microsoft: IT_SOFTWARE,
+  google: IT_SOFTWARE,
+
+  // Education & STEM Training
   "aga khan university": EDUCATION,
   aku: EDUCATION,
   "university of nairobi": EDUCATION,
   uon: EDUCATION,
   "kenyatta university": EDUCATION,
-  "jk3 institute of science and technology": EDUCATION,
   "technical university of kenya": EDUCATION,
   tuk: EDUCATION,
-
-  // Government bodies → regulator is the closest active industry for a hub
-  // that excludes general public administration.
-  "public service commission kenya (psck)": GOVERNMENT,
-  "trans nzoia county public service board": GOVERNMENT,
-  "makueni county public service board": GOVERNMENT,
-  "nakuru county government": GOVERNMENT,
-  "baringo county government": GOVERNMENT,
-  "judicial service commission": GOVERNMENT,
+  "strathmore university": EDUCATION,
+  "jkuat": EDUCATION,
 };
 
-/** Company blurb overrides (unchanged for known employers). */
+/** Company blurb overrides. */
 export const KNOWN_COMPANY_DESCRIPTIONS: Record<string, string> = {
   "kenya bureau of standards (kebs)":
     "The Kenya Bureau of Standards (KEBS) sets and enforces product, laboratory and metrology standards across Kenya.",
   "national environment management authority (nema)":
-    "NEMA regulates environmental impact and monitors pollution through Kenya's environmental chemistry laboratories.",
+    "NEMA regulates environmental impact, biodiversity and sustainable natural resource management in Kenya.",
   "kenya revenue authority":
-    "The Kenya Revenue Authority (KRA) collects revenue and operates laboratory services for excise, fuel and commodity verification.",
+    "The Kenya Revenue Authority (KRA) operates technical and laboratory services for verification and customs.",
   kemri:
-    "The Kenya Medical Research Institute (KEMRI) conducts biomedical and clinical-chemistry research across Kenya.",
+    "The Kenya Medical Research Institute (KEMRI) conducts biomedical and clinical health sciences research across Kenya.",
   "east african breweries":
-    "East African Breweries Limited (EABL) produces spirits and beverages with on-site analytical chemistry and QA laboratories.",
+    "East African Breweries Limited (EABL) is a leading manufacturing and agro-processing enterprise with state-of-the-art QA facilities.",
   "kenya power":
-    "Kenya Power (KPLC) is the national electric utility, employing water/boiler chemistry and laboratory engineers.",
+    "Kenya Power (KPLC) manages electric power transmission and distribution engineering across Kenya.",
   "university of nairobi":
-    "The University of Nairobi is Kenya's flagship public university, hosting chemistry, chemical engineering and materials-science departments.",
+    "The University of Nairobi is Kenya's flagship university offering premier education across all STEM fields.",
 };
 
 function normalizeLookupKey(name: string): string {
@@ -247,10 +213,7 @@ const NORMALIZED_INDUSTRIES = buildNormalizedMap(KNOWN_COMPANY_INDUSTRIES);
 const NORMALIZED_DESCRIPTIONS = buildNormalizedMap(KNOWN_COMPANY_DESCRIPTIONS);
 
 /**
- * Infer company industry from the employer identity itself.
- * Returns null when confidence is low OR when the employer is outside the
- * Chemistry Lens scope (banking, ICT, real estate, general retail, HR
- * consultancies, logistics, etc.).
+ * Infer company industry from the employer identity.
  */
 export function inferCompanyIndustry(
   name: string,
@@ -266,7 +229,7 @@ export function inferCompanyIndustry(
 
   let bestKnown: { known: string; industry: string } | null = null;
   for (const [known, industry] of NORMALIZED_INDUSTRIES) {
-    if (known.length < 6) continue;
+    if (known.length < 5) continue;
     if (key === known || key.includes(known) || known.includes(key)) {
       if (!bestKnown || known.length > bestKnown.known.length) {
         bestKnown = { known, industry };
@@ -279,139 +242,108 @@ export function inferCompanyIndustry(
 
   const host = (website || "").toLowerCase();
 
-  // ---- Chemistry-relevant regex patterns ----
+  // 1. Tech & Software
+  if (/\b(software|tech|technologies|systems|digital|app|cloud|saas|fintech|cyber|solutions|developer)\b/.test(key)) {
+    return matchAllowed(IT_SOFTWARE, allowedIndustries);
+  }
 
-  // Pharma / drug manufacturing (before generic "medical")
-  if (/\b(pharmaceutic|pharma(?!\s+(board|council|authority))|drug (manufactur|house)|api (plant|manufactur))\b/.test(key)) {
+  // 2. Telecoms & Networking
+  if (/\b(telecom|telecommunication|network|fibre|fiber|cellular|wireless|broadband|isp)\b/.test(key)) {
+    return matchAllowed(TELECOM, allowedIndustries);
+  }
+
+  // 3. Data Science & AI
+  if (/\b(data science|analytics|artificial intelligence|machine learning|bi analytics)\b/.test(key)) {
+    return matchAllowed(DATA_AI, allowedIndustries);
+  }
+
+  // 4. Pharma & Biotech
+  if (/\b(pharmaceutic|pharma|drug|biotech|biotechnolog|molecular|life science)\b/.test(key)) {
     return matchAllowed(PHARMA, allowedIndustries);
   }
 
-  // Biotech / reagents / life-science labs
-  if (/\b(biotech|biotechnolog|life science|molecular (diagnostics|sciences)|reagent (supplier|labs))\b/.test(key)) {
-    return matchAllowed(BIOTECH, allowedIndustries);
-  }
-
-  // Clinical chemistry / pathology / medical laboratory
+  // 5. Healthcare & Medical
   if (
-    /\b(pathology|clinical (lab|chemistry)|medical laborator|lab(oratories|oratory)? (kenya|africa)?|health lab|diagnostic lab|nhct|lancet)\b/.test(key) ||
-    /\b(hospital|clinic|afya|health)\b/.test(key)
+    /\b(hospital|clinic|afya|health|medical|pathology|diagnostic|clinical|dispensary)\b/.test(key)
   ) {
     return matchAllowed(HEALTHCARE, allowedIndustries);
   }
 
-  // Petrochemicals / refining / fuels / LPG
-  if (/\b(oil|petro|refinery|fuel|petrol|diesel|lpg|lubricant|bitumen)\b/.test(key)) {
-    return matchAllowed(PETRO, allowedIndustries);
+  // 6. Agriculture & Food Science
+  if (/\b(agriculture|agri|farm|crop|seed|brew|beverage|food|dairy|tea|coffee|flour|grain|sugar)\b/.test(key)) {
+    return matchAllowed(AGRICULTURE, allowedIndustries);
   }
 
-  // Energy / power / utilities
-  if (/\b(power|electricity|energy|solar|wind farm|geothermal|utility|utilities)\b/.test(key)) {
+  // 7. Chemicals & Chemical Manufacturing
+  if (/\b(chemical|paint|coating|adhesive|plastic|polymer|rubber|cosmetic|fragrance|fertilizer|soap|detergent)\b/.test(key)) {
+    return matchAllowed(CHEMICALS, allowedIndustries);
+  }
+
+  // 8. Energy, Oil & Gas
+  if (/\b(oil|petro|refinery|fuel|gas|power|electric|energy|solar|wind|geothermal)\b/.test(key)) {
     return matchAllowed(ENERGY, allowedIndustries);
   }
 
-  // Water / wastewater
-  if (/\b(water supply|water utility|water treatment|water works|ncpwb|water company|county water)\b/.test(key) || /\bwater\b/.test(key)) {
-    return matchAllowed(WATER, allowedIndustries);
-  }
-  if (/\b(sewerage|wastewater|effluent)\b/.test(key)) {
-    return matchAllowed(WASTEWATER, allowedIndustries);
-  }
-
-  // Waste / recycling
-  if (/\b(waste|recycling|scrap|e-?waste)\b/.test(key)) {
-    return matchAllowed(WASTE, allowedIndustries);
-  }
-
-  // Mining / assay / mineral processing
-  if (/\b(mine|mining|quarry|assay|beneficiation|gold|copper|titanium|soda ash|trona|mineral)\b/.test(key)) {
-    return matchAllowed(MINING, allowedIndustries);
-  }
-
-  // Cement / concrete / building-materials chemistry
-  if (/\b(cement|concrete|admixtures?|building material)\b/.test(key)) {
-    return matchAllowed(BUILDING, allowedIndustries);
-  }
-
-  // Paints / coatings / adhesives / sealants
-  if (/\b(paints?|coating|adhesive|sealant|varnish|lacquer)\b/.test(key)) {
-    return matchAllowed(PAINTS, allowedIndustries);
-  }
-
-  // Polymers / plastics / rubber
-  if (/\b(plastic|polymer|rubber|composite|injection mould|injection mold)\b/.test(key)) {
-    return matchAllowed(POLYMERS, allowedIndustries);
-  }
-
-  // Cosmetics / personal care
-  if (/\b(cosmetic|personal care|toiletries|skin ?care|fragrance|perfume|soap and detergent)\b/.test(key)) {
-    return matchAllowed(COSMETICS, allowedIndustries);
-  }
-
-  // Food / beverage / brewery / dairy / milling
-  if (/\b(brewer|brewery|beverage|distiller|malt|dairy|milling|flour|food (co|compan|labs|technolog)|sugar|juice|bottler)\b/.test(key)) {
-    return matchAllowed(FOOD, allowedIndustries);
-  }
-
-  // Tea / coffee / horticulture post-harvest
-  if (/\b(tea (factory|estate|research|growers|development)|coffee (bureau|estate|research|processing)|flower (farm|export|esh|bouquet)|horticulture post[- ]harvest)\b/.test(key)) {
-    return matchAllowed(TEA, allowedIndustries);
-  }
-
-  // Fertilizers / agrochemicals
-  if (/\b(fertilizer|fertiliser|agrochemical|pesticide|herbicide|insecticide)\b/.test(key)) {
-    return matchAllowed("Fertilizers & Agrochemicals", allowedIndustries);
-  }
-
-  // Industrial & basic chemicals
-  if (/\b(chemical|chem\.?(s|ical)?|acids?|alkali|solvent|caustic|industrial gas)\b/.test(key) && !/chemical engineering/.test(key)) {
-    return matchAllowed("Industrial & Basic Chemicals", allowedIndustries);
-  }
-
-  // TIC / testing / inspection / calibration
-  if (/\b(testing|inspection|certification|calibration|surveyor|sgs|intertek|bv )\b/.test(key)) {
-    return matchAllowed(TIC, allowedIndustries);
-  }
-
-  // Laboratory / scientific supply / instrument supplier
-  if (/\b(lab(oratory)? (supplier|equipment|outfitting|services)|scientific (instrument|supplier|equipment)|reagent supplier)\b/.test(key)) {
-    return matchAllowed(LAB_SUPPLY, allowedIndustries);
-  }
-
-  // Environmental consulting / EIA / air quality
-  if (/\b(environmental|eia|air quality|pollution control|climate (research|change))\b/.test(key)) {
+  // 9. Environmental & Natural Sciences
+  if (/\b(environment|eia|conservation|ecology|forestry|wildlife|climate)\b/.test(key)) {
     return matchAllowed(ENVIRONMENT, allowedIndustries);
   }
 
-  // Research institutes (KEMRI/CSIR/KALRO/icipe/etc.)
-  if (/\b(research (institute|centre|center)|csir|kari|kalro|kemri|icipe|institute of research)\b/.test(key)) {
-    return matchAllowed(RESEARCH, allowedIndustries);
+  // 10. Engineering & Construction
+  if (/\b(construction|builder|cement|concrete|contractor|civil engineering|structural|infrastructure)\b/.test(key)) {
+    return matchAllowed(CONSTRUCTION, allowedIndustries);
   }
 
-  // Universities & higher education
-  if (/\b(university|college|institute of science|polytechnic|tuition)\b/.test(key)) {
+  // 11. Architecture & Urban Planning
+  if (/\b(architecture|architects|urban planning|spatial|interior design)\b/.test(key)) {
+    return matchAllowed(ARCHITECTURE, allowedIndustries);
+  }
+
+  // 12. Mining, Geology & Earth Sciences
+  if (/\b(mining|quarry|assay|geology|geoscience|mineral|gold|titanium)\b/.test(key)) {
+    return matchAllowed(MINING, allowedIndustries);
+  }
+
+  // 13. Water, Sanitation & Waste Management
+  if (/\b(water|sanitation|sewerage|wastewater|effluent|waste|recycling)\b/.test(key)) {
+    return matchAllowed(WATER_WASTE, allowedIndustries);
+  }
+
+  // 14. Mathematics, Statistics & Actuarial
+  if (/\b(actuarial|statistics|mathematics|quant)\b/.test(key)) {
+    return matchAllowed(MATH_ACTUARIAL, allowedIndustries);
+  }
+
+  // 15. Education & STEM Training
+  if (/\b(university|college|polytechnic|school|academy|institute of technology|tvet)\b/.test(key)) {
     return matchAllowed(EDUCATION, allowedIndustries);
   }
-  if (/\b(school|academy)\b/.test(key) && !/\b(driving school)\b/.test(key)) {
-    return matchAllowed(SCHOOLS, allowedIndustries);
+
+  // 16. Aerospace & Aviation
+  if (/\b(aviation|aerospace|airline|airport|airways|avionics|aeronautical)\b/.test(key)) {
+    return matchAllowed(AEROSPACE, allowedIndustries);
   }
 
-  // Regulators & standards bodies (gov)
-  if (
-    /\b(county government|county public service board|public service commission|ministry of|national assembly|revenue authority|standards|authority|board of kenya|council of kenya|regulator|regulatory)\b/.test(
-      key
-    ) ||
-    (/\.go\.ke\b/.test(host) && !/\b(bank|university|hospital)\b/.test(key))
-  ) {
-    return matchAllowed(GOVERNMENT, allowedIndustries);
+  // 17. Automotive & Transport Technology
+  if (/\b(automotive|motor|vehicles|transport technology|assembly plant)\b/.test(key)) {
+    return matchAllowed(AUTOMOTIVE, allowedIndustries);
   }
 
-  // Process-engineering consultancies (name explicitly says chemical/process engineering)
-  if (/\b(chemical engineering|process engineering|process consultancy)\b/.test(key)) {
-    return matchAllowed(CONSULTING, allowedIndustries);
+  // 18. Electronics & Electrical Equipment
+  if (/\b(electronics|electrical equipment|semiconductor|hardware|circuits)\b/.test(key)) {
+    return matchAllowed(ELECTRONICS, allowedIndustries);
   }
 
-  // Everything else (banking, ICT, retail, logistics, real estate, HR, general
-  // manufacturing, media, education-tech, etc.) is out of Chemistry Lens scope.
+  // 19. Manufacturing & Industrial Processing
+  if (/\b(manufacturing|industrial|factory|processing|mills|packaging)\b/.test(key)) {
+    return matchAllowed(MANUFACTURING, allowedIndustries);
+  }
+
+  // 20. Science & Research
+  if (/\b(research|laboratories|laboratory|testing|inspection|standards|kebs|kemri|kari|kalro|icipe)\b/.test(key)) {
+    return matchAllowed(SCIENCE_RESEARCH, allowedIndustries);
+  }
+
   return null;
 }
 
@@ -421,7 +353,7 @@ export function lookupKnownCompanyDescription(name: string): string | null {
 
   let best: { known: string; desc: string } | null = null;
   for (const [known, desc] of NORMALIZED_DESCRIPTIONS) {
-    if (known.length < 6) continue;
+    if (known.length < 5) continue;
     if (key === known || key.startsWith(`${known} `)) {
       const remainder = key.slice(known.length).trim();
       if (remainder && /^(rwanda|uganda|tanzania|afya|insurance|group)\b/.test(remainder)) {

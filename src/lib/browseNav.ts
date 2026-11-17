@@ -35,5 +35,5 @@ export const browseNavLinks = [
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
-  "https://www.careersasa.co.ke"
+  "https://stembird.com"
 ).replace(/\/$/, "");

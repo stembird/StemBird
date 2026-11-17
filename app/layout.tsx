@@ -9,16 +9,16 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.careersasa.co.ke'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://stembird.com'),
   title: {
-    default: "ChemistryLens – Your Career Starts Sasa",
-    template: "%s | ChemistryLens"
+    default: "StemBird – STEM Careers: Science, Healthcare, Tech, Engineering & Math",
+    template: "%s | StemBird"
   },
-  description: "Discover the latest job opportunities in Kenya. Connect with top employers and advance your career with ChemistryLens.",
-  keywords: "jobs, careers, Kenya, employment, job search, career opportunities, Kenyan jobs",
-  authors: [{ name: "ChemistryLens" }],
-  creator: "ChemistryLens",
-  publisher: "ChemistryLens",
+  description: "Discover the latest STEM careers in science & healthcare, technology, engineering & architecture, and mathematics. Connect with top employers and advance your career with StemBird.",
+  keywords: "jobs, careers, Kenya, STEM, science, healthcare, technology, engineering, architecture, mathematics, employment, job search, StemBird",
+  authors: [{ name: "StemBird" }],
+  creator: "StemBird",
+  publisher: "StemBird",
   robots: {
     index: true,
     follow: true,
@@ -44,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "";
-  
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

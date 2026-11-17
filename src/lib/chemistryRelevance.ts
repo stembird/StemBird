@@ -440,17 +440,17 @@ export function matchesChemistryFocus(input: ChemistryGateInput): boolean {
   if (evaluateChemistryRelevance(input).publish) {
     return true;
   }
-  return matchesSubjectFocus({
-    title: input.title,
-    field_of_study: input.fieldOfStudy ?? null,
-    area_of_study: input.areaOfStudy ?? null,
-    job_function: input.jobFunctions?.[0] ?? null,
-    job_functions: input.jobFunctions ?? null,
-    tags: input.tags ?? null,
-    required_qualifications: input.requiredQualifications ?? null,
-    responsibilities: input.responsibilities ?? null,
-    description: input.description ?? null,
-  });
+  // Call matchesSubjectFocus with fields array (title first), description, proseFields
+  const fields = [
+    input.title,
+    input.fieldOfStudy ?? null,
+    input.areaOfStudy ?? null,
+    input.jobFunctions?.[0] ?? null,
+    input.jobFunctions?.[1] ?? null,
+    input.tags ?? null,
+  ];
+  const proseFields = [input.requiredQualifications, input.responsibilities];
+  return matchesSubjectFocus(fields, input.description ?? null, proseFields);
 }
 
 export const matchesStemFocus = matchesChemistryFocus;

@@ -95,6 +95,7 @@ const DEFAULT_SUBJECT_STEMS = [
   'telecomm', // telecommunications
   'automotive',
   'mechantron',
+  'architect', // architect, architectural, architecture, urban planning
   // ── Technology / IT / data ──
   'technolog', // technology, technical
   'software',

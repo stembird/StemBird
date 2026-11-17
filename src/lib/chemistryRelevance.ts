@@ -31,6 +31,7 @@ import {
   matchesSubjectFocus,
   SKIPPED_NON_STEM_MESSAGE,
 } from '@/lib/scrapeSubjectFilter';
+import { CHEMISTRY_CORE_FUNCTION_NAMES } from '@/lib/stemBird.taxonomy';
 
 /**
  * Queue error_message stamped when the gate rejects a job.

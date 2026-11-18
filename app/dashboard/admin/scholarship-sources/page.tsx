@@ -342,9 +342,11 @@ export default function AdminScholarshipSourcesPage() {
                 .join("; ") +
               (failedResults.length > 3 ? `; +${failedResults.length - 3} more` : "")
             : (typeof body.error === "string" ? body.error : (body.error as any)?.message || JSON.stringify(body.error) || "Discover failed")
+      
+      const errorMessage = typeof errorSummary === "string" ? errorSummary : JSON.stringify(errorSummary) || "Discover failed"
 
       if (!response.ok || body.success === false) {
-        throw new Error(errorSummary)
+        throw new Error(errorMessage)
       }
 
       const label = sourceId ? result?.source_id || sourceId : `${body.sources_processed} source(s)`;
@@ -371,7 +373,7 @@ export default function AdminScholarshipSourcesPage() {
       }
 
       if (failedCount > 0) {
-        toast.error(`Discover: ${failedCount} source(s) failed — ${errorSummary}`);
+        toast.error(`Discover: ${failedCount} source(s) failed — ${errorMessage}`);
       }
 
       if (typeof body.stopped_early === "string" && body.stopped_early) {

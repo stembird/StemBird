@@ -318,10 +318,12 @@ export default function AdminScraperSourcesPage() {
                 .join("; ") +
               (failedResults.length > 3 ? `; +${failedResults.length - 3} more` : "")
             : (typeof body.error === "string" ? body.error : (body.error as any)?.message || JSON.stringify(body.error) || "Discover failed")
+      
+      const errorMessage = typeof errorSummary === "string" ? errorSummary : JSON.stringify(errorSummary) || "Discover failed"
 
       // Full failure (HTTP 502 / success:false) — don't pretend it completed.
       if (!response.ok || body.success === false) {
-        throw new Error(errorSummary)
+        throw new Error(errorMessage)
       }
 
       const label = sourceId
@@ -355,7 +357,7 @@ export default function AdminScraperSourcesPage() {
 
       if (failedCount > 0) {
         toast.error(
-          `Discover: ${failedCount} source(s) failed — ${errorSummary}`
+          `Discover: ${failedCount} source(s) failed — ${errorMessage}`
         );
       }
 

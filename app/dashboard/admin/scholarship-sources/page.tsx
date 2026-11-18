@@ -321,6 +321,16 @@ export default function AdminScholarshipSourcesPage() {
 
       const body = await parseJsonResponse(response);
 
+      // If response is not OK, throw immediately with the error message
+      if (!response.ok) {
+        const errorMsg = typeof body.error === "string" 
+          ? body.error 
+          : body.error && typeof body.error === "object" && "message" in body.error
+            ? String((body.error as any).message)
+            : JSON.stringify(body) || `HTTP ${response.status} error`;
+        throw new Error(errorMsg);
+      }
+
       const results = (body.results || []) as Array<{
         source_id?: string
         found?: number
@@ -345,7 +355,7 @@ export default function AdminScholarshipSourcesPage() {
       
       const errorMessage = typeof errorSummary === "string" ? errorSummary : JSON.stringify(errorSummary) || "Discover failed"
 
-      if (!response.ok || body.success === false) {
+      if (body.success === false) {
         throw new Error(errorMessage)
       }
 

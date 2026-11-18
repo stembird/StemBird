@@ -32,7 +32,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result, { status })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
+    const stack = err instanceof Error ? err.stack : undefined
     console.error('[admin/scraper-sources/discover] Error:', message)
-    return NextResponse.json({ error: message }, { status: 500 })
+    if (stack) console.error('[admin/scraper-sources/discover] Stack:', stack)
+    return NextResponse.json({ 
+      error: message,
+      success: false,
+      ...(process.env.NODE_ENV === 'development' && stack ? { stack } : {})
+    }, { status: 500 })
   }
 }

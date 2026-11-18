@@ -317,7 +317,7 @@ export default function AdminScraperSourcesPage() {
                 .map(r => `${r.source_id}: ${r.error}`)
                 .join("; ") +
               (failedResults.length > 3 ? `; +${failedResults.length - 3} more` : "")
-            : (typeof body.error === "string" ? body.error : body.error?.message || JSON.stringify(body.error) || "Discover failed")
+            : (typeof body.error === "string" ? body.error : (body.error as any)?.message || JSON.stringify(body.error) || "Discover failed")
 
       // Full failure (HTTP 502 / success:false) — don't pretend it completed.
       if (!response.ok || body.success === false) {

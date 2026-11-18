@@ -341,7 +341,7 @@ export default function AdminScholarshipSourcesPage() {
                 .map(r => `${r.source_id}: ${r.error}`)
                 .join("; ") +
               (failedResults.length > 3 ? `; +${failedResults.length - 3} more` : "")
-            : (typeof body.error === "string" ? body.error : body.error?.message || JSON.stringify(body.error) || "Discover failed")
+            : (typeof body.error === "string" ? body.error : (body.error as any)?.message || JSON.stringify(body.error) || "Discover failed")
 
       if (!response.ok || body.success === false) {
         throw new Error(errorSummary)

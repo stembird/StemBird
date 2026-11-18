@@ -31,14 +31,39 @@ export async function POST(request: NextRequest) {
     const status = result.success ? 200 : 502
     return NextResponse.json(result, { status })
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err)
-    const stack = err instanceof Error ? err.stack : undefined
-    console.error('[admin/scraper-sources/discover] Error:', message)
-    if (stack) console.error('[admin/scraper-sources/discover] Stack:', stack)
+    // Extract error message with maximum defensive handling
+    let message: string;
+    if (err instanceof Error) {
+      message = err.message;
+    } else if (typeof err === 'string') {
+      message = err;
+    } else if (err && typeof err === 'object') {
+      // Try to extract message from object
+      if ('message' in err && typeof (err as any).message === 'string') {
+        message = (err as any).message;
+      } else if ('error' in err && typeof (err as any).error === 'string') {
+        message = (err as any).error;
+      } else {
+        // Last resort: stringify the object
+        try {
+          message = JSON.stringify(err);
+        } catch {
+          message = 'Unknown error occurred';
+        }
+      }
+    } else {
+      message = 'Unknown error occurred';
+    }
+    
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error('[admin/scraper-sources/discover] Error:', message);
+    console.error('[admin/scraper-sources/discover] Raw error:', err);
+    if (stack) console.error('[admin/scraper-sources/discover] Stack:', stack);
+    
     return NextResponse.json({ 
       error: message,
       success: false,
       ...(process.env.NODE_ENV === 'development' && stack ? { stack } : {})
-    }, { status: 500 })
+    }, { status: 500 });
   }
 }

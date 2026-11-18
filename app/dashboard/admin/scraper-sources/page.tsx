@@ -317,7 +317,7 @@ export default function AdminScraperSourcesPage() {
                 .map(r => `${r.source_id}: ${r.error}`)
                 .join("; ") +
               (failedResults.length > 3 ? `; +${failedResults.length - 3} more` : "")
-            : body.error || "Discover failed"
+            : (typeof body.error === "string" ? body.error : body.error?.message || JSON.stringify(body.error) || "Discover failed")
 
       // Full failure (HTTP 502 / success:false) — don't pretend it completed.
       if (!response.ok || body.success === false) {
@@ -365,7 +365,13 @@ export default function AdminScraperSourcesPage() {
 
       await fetchSources();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Discover failed";
+      const message = error instanceof Error 
+        ? error.message 
+        : typeof error === "string" 
+          ? error 
+          : error && typeof error === "object" && "message" in error 
+            ? String((error as any).message)
+            : JSON.stringify(error) || "Discover failed";
       toast.error(message);
     } finally {
       setDiscoveringAll(false);

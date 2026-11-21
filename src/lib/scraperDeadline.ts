@@ -195,8 +195,10 @@ export function resolveScrapedDeadline(
  * employer posted more than this many days ago is never published, even when
  * it states no (or a future) deadline. Override without a code change via
  * STEMBIRD_MAX_POSTING_AGE_DAYS (e.g. "3" to tighten, "14" to loosen).
+ * 
+ * DEFAULT: 3 days (to focus on the freshest STEM opportunities)
  */
-export const MAX_POSTING_AGE_DAYS = 7
+export const MAX_POSTING_AGE_DAYS = 3
 
 /** Effective posting-age cap (env override wins when a sane number). */
 export function maxPostingAgeDays(): number {

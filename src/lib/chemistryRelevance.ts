@@ -1,6 +1,6 @@
 /**
- * StemBird publication gate — decides whether a scraped/parsed job is
- * in-scope for the StemBird hub.
+ * Legacy chemistry relevance diagnostics. Job publication uses the shared
+ * STEM subject gate in scrapeSubjectFilter.ts.
  *
  * Doctrine: "Chemistry is the subject. Industry is the application. Careers
  * are the opportunity." Industry alone never publishes.
@@ -28,7 +28,7 @@
  */
 
 import {
-  matchesSubjectFocus,
+  matchesStemFocus as matchesSharedStemFocus,
   SKIPPED_NON_STEM_MESSAGE,
 } from '@/lib/scrapeSubjectFilter';
 import { CHEMISTRY_CORE_FUNCTION_NAMES } from '@/lib/stemBird.taxonomy';
@@ -435,22 +435,12 @@ export function evaluateChemistryRelevance(input: ChemistryGateInput): Chemistry
   }
 }
 
-/** Convenience boolean wrapper used by scrapeProcess/scrapePublish call sites. */
+/**
+ * Compatibility wrapper for job-publishing call sites. Jobs follow StemBird's
+ * full STEM scope; chemistry-specific diagnostics above are not a publish gate.
+ */
 export function matchesChemistryFocus(input: ChemistryGateInput): boolean {
-  if (evaluateChemistryRelevance(input).publish) {
-    return true;
-  }
-  // Call matchesSubjectFocus with fields array (title first), description, proseFields
-  const fields = [
-    input.title,
-    input.fieldOfStudy ?? null,
-    input.areaOfStudy ?? null,
-    input.jobFunctions?.[0] ?? null,
-    input.jobFunctions?.[1] ?? null,
-    input.tags ?? null,
-  ];
-  const proseFields = [input.requiredQualifications, input.responsibilities];
-  return matchesSubjectFocus(fields, input.description ?? null, proseFields);
+  return matchesSharedStemFocus(input);
 }
 
 export const matchesStemFocus = matchesChemistryFocus;

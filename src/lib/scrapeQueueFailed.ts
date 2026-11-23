@@ -381,7 +381,7 @@ export async function listFailedQueueItems(
     // in-memory below via rowMatchesDoneBucket (mirrors scrapeQueueStats).
     if (bucket === 'non_stem') {
       // Match BOTH the legacy STEM-gate skip ("...outside STEM...") and the
-      // current StemBird gate skip ("Skipped: outside chemistry focus").
+      // current StemBird gate skip ("Skipped: outside STEM focus").
       // This must mirror isNonStemSkipMessage / isNonStemSkip in scrapeQueueStats,
       // or the count (uses the broad predicate) and this list (used to query only
       // "outside STEM") diverge — which is why the non-chemistry dialog showed

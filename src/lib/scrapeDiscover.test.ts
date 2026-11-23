@@ -213,11 +213,11 @@ assert.equal(
   false,
   'HR role with R&D duty prose is NOT STEM'
 )
-// STEM research titles still pass via the explicit research compounds.
+// Generic research titles do not identify a STEM discipline.
 assert.equal(
   matchesSubjectFocus(['Field Research Officer']),
-  true,
-  'field research officer is STEM'
+  false,
+  'field research officer without a STEM discipline is not necessarily STEM'
 )
 
 // Clear STEM titles pass on title alone.
@@ -250,7 +250,12 @@ assert.equal(
 // is no longer enough — the title veto forces a hard degree beside a study cue.
 assert.equal(
   matchesSubjectFocus(
-    ['Business Continuity Management Analyst', 'Data Science, Analytics & Artificial Intelligence'],
+    [
+      'Business Continuity Management Analyst',
+      null,
+      null,
+      'Data Science, Analytics & Artificial Intelligence',
+    ],
     'Coordinate stakeholders and maintain continuity plans.'
   ),
   false,
@@ -268,7 +273,12 @@ assert.equal(
 // A hard STEM degree requirement rescues either title, veto notwithstanding.
 assert.equal(
   matchesSubjectFocus(
-    ['Business Continuity Management Analyst', 'Data Science, Analytics & Artificial Intelligence'],
+    [
+      'Business Continuity Management Analyst',
+      null,
+      null,
+      'Data Science, Analytics & Artificial Intelligence',
+    ],
     'Required: Bachelor of Science in Computer Science or Information Technology.'
   ),
   true,
@@ -288,12 +298,45 @@ assert.equal(
   true,
   'network operations engineer is STEM (title stem beats the veto)'
 )
+assert.equal(
+  matchesSubjectFocus([
+    'IT Support Associate',
+    null,
+    null,
+    'Laboratory Information Systems (LIMS) & Informatics',
+  ]),
+  false,
+  'a classifier-generated STEM job function alone does not qualify an unrelated title'
+)
+assert.equal(
+  matchesSubjectFocus(['Quality Assurance Officer']),
+  false,
+  'generic quality assurance is not enough to qualify a STEM role'
+)
+assert.equal(
+  matchesSubjectFocus(['Chemical Sales Representative']),
+  false,
+  'selling a STEM product is not itself a STEM role'
+)
+assert.equal(
+  matchesSubjectFocus(['Sales Engineer']),
+  true,
+  'an explicit engineering role remains in scope despite a sales title'
+)
+assert.equal(
+  matchesSubjectFocus(['Environmental Compliance Officer']),
+  false,
+  'generic environmental compliance is not enough to qualify a STEM role'
+)
+assert.equal(matchesSubjectFocus(['Architect']), true, 'architecture is in scope')
+assert.equal(matchesSubjectFocus(['Registered Nurse']), true, 'healthcare is in scope')
+assert.equal(matchesSubjectFocus(['Statistician']), true, 'mathematics is in scope')
 
 // "Data entry" must NOT match the two-word data stems.
 assert.equal(matchesSubjectFocus(['Data Entry Clerk']), false, 'data entry is not STEM')
 
-// Empty signal (all fields + description blank) → keep, err on publishing.
-assert.equal(matchesSubjectFocus([null, '', undefined]), true, 'no signal keeps job')
+// Empty signal is not enough to publish a STEM-only job.
+assert.equal(matchesSubjectFocus([null, '', undefined]), false, 'no signal rejects job')
 
 // Discovery is a NO-OP by default (accuracy wins): keeps every title, even
 // confident non-STEM ones, so the deep gate can read their description.

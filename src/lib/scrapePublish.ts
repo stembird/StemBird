@@ -33,7 +33,7 @@ import {
   scholarshipPublishFields,
   withoutScholarshipColumns,
 } from './listingKind'
-import { matchesChemistryFocus } from './chemistryRelevance'
+import { matchesStemFocus } from './scrapeSubjectFilter'
 
 export interface PublishScrapedJobParams {
   supabase: SupabaseClient
@@ -248,19 +248,16 @@ export async function publishScrapedJob(
       }
     }
 
-    // StemBird publication gate (see chemistryRelevance.ts). A job
-    // publishes only when at least one of T1 chemistry-core function,
-    // T2 chemistry-family degree, T3 chemical duties, or T4 commercial
-    // chemistry passes. Clinical / pure-biology / general-business titles
-    // are hard-vetoed unless T2 + T3 rescue them.
+    // Apply the shared STEM subject gate after parsing. Classifier-generated
+    // job functions alone cannot qualify a listing; the gate checks the title,
+    // study fields, and explicit STEM degree requirements.
     if (
-      !matchesChemistryFocus({
+      !matchesStemFocus({
         title: normalized.title || '',
         jobFunctions: [
           parsed.job_function,
           ...(parsed.job_functions || []),
         ].filter((v): v is string => typeof v === 'string' && v.length > 0),
-        industries: parsed.industries || (parsed.industry ? [parsed.industry] : null),
         description: parsed.description || normalized.description || null,
         requiredQualifications:
           parsed.required_qualifications || normalized.required_qualifications || null,

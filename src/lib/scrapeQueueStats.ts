@@ -162,8 +162,7 @@ export function emptyQueueStats(): QueueStatusCounts {
  * A `done` queue row means "processed", not "published": duplicates, expired
  * adverts and chemistry/STEM-screened rejects are all marked done too. Bucket
  * them by error_message so the admin UI can show the real outcomes. Legacy
- * STEM-gate skips ("Skipped: pre-check outside STEM…") and current Chemistry
- * Lens gate skips ("Skipped: outside chemistry focus") land in the same bucket.
+ * STEM-gate and chemistry-gate skip messages land in the same bucket.
  */
 export function isNonStemSkipMessage(message: string | null | undefined): boolean {
   if (typeof message !== 'string') return false

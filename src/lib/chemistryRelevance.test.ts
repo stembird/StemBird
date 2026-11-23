@@ -1,32 +1,27 @@
 /**
  * Run: npx tsx src/lib/chemistryRelevance.test.ts
  *
- * StemBird publication gate smoke tests. Each case exercises one of the
- * T1–T4 tests or a hard veto with/without rescue.
+ * Job-publish compatibility tests for the shared STEM subject gate.
  */
 import assert from 'node:assert/strict'
-import {
-  evaluateChemistryRelevance,
-  matchesChemistryFocus,
-  SKIPPED_NON_CHEMISTRY_MESSAGE,
-} from './chemistryRelevance'
+import { matchesChemistryFocus, SKIPPED_NON_CHEMISTRY_MESSAGE } from './chemistryRelevance'
 
-// ── T1 — chemistry-core function tag, corroborated by title or prose ────────
+// The job-publish compatibility wrapper uses the complete STEM subject gate.
 assert.equal(
   matchesChemistryFocus({
     title: 'QC Analyst',
     jobFunctions: ['Quality Control (QC)'],
   }),
-  true,
-  'T1 + chem-plausible title (QC) publishes'
+  false,
+  'generic quality-control classification does not establish a STEM role'
 )
 assert.equal(
   matchesChemistryFocus({
     title: 'Analytical Officer',
     jobFunctions: ['Analytical & Instrumental Chemistry'],
   }),
-  true,
-  'T1 + chem-plausible title (Analytical) publishes'
+  false,
+  'an AI chemistry function tag does not establish a STEM role'
 )
 assert.equal(
   matchesChemistryFocus({
@@ -37,7 +32,7 @@ assert.equal(
   'T1 with mismatched title and no prose corroboration is a stale tag → reject'
 )
 
-// ── T2 — chemistry-family degree requirement in qualifications ───────────────
+// Explicit STEM degree requirements can rescue otherwise generic job titles.
 assert.equal(
   matchesChemistryFocus({
     title: 'Production Supervisor',
@@ -45,7 +40,7 @@ assert.equal(
     requiredQualifications: '<ul><li>Bachelor of Science in Industrial Chemistry</li></ul>',
   }),
   true,
-  'T2 — Industrial Chemistry degree requirement publishes'
+  'an industrial chemistry degree requirement qualifies'
 )
 assert.equal(
   matchesChemistryFocus({
@@ -53,17 +48,17 @@ assert.equal(
     requiredQualifications: '<ul><li>Degree in Business Administration</li></ul>',
   }),
   false,
-  'non-chemistry degree does not fire T2, no other test passes'
+  'a business degree does not qualify the role'
 )
 
-// ── T3 — chemical duty language in description/title ─────────────────────────
+// A STEM title is enough; unrelated duty phrases are not.
 assert.equal(
   matchesChemistryFocus({
     title: 'Laboratory Assistant',
     description: '<p>Perform HPLC and titration on incoming raw materials.</p>',
   }),
   true,
-  'T3 — HPLC/titration phrases publish'
+  'a laboratory title qualifies'
 )
 assert.equal(
   matchesChemistryFocus({
@@ -71,8 +66,8 @@ assert.equal(
     description:
       '<p>Conduct raw material testing, batch analysis, and finished product testing per ISO 17025.</p>',
   }),
-  true,
-  'T3 — chemist-plausible duties (raw material/batch/product testing) publish without naming any instrument'
+  false,
+  'generic quality duties do not establish that the job is STEM'
 )
 assert.equal(
   matchesChemistryFocus({
@@ -84,7 +79,7 @@ assert.equal(
   'T2 — "or related field" phrasing on Food Science/Nutrition admits chemists'
 )
 
-// ── T4 — commercial chemistry (instrument sales + chem-literacy) ────────────
+// Sales titles qualify only when their posting explicitly requires a STEM degree.
 assert.equal(
   matchesChemistryFocus({
     title: 'Sales Representative',
@@ -92,7 +87,7 @@ assert.equal(
       '<p>Sell HPLC columns and chromatography consumables. Candidates must have a BSc in Chemistry.</p>',
   }),
   true,
-  'T4 — chemistry product sales with a chem degree requirement publishes'
+  'a chemistry degree requirement qualifies the sales role'
 )
 assert.equal(
   matchesChemistryFocus({
@@ -100,28 +95,28 @@ assert.equal(
     description: '<p>Sell insurance policies across Nairobi.</p>',
   }),
   false,
-  'non-chemistry sales fails all four tests'
+  'non-STEM sales does not qualify'
 )
 
-// ── Hard vetoes: clinical care, pure biology, general business ───────────────
+// Healthcare is part of StemBird's STEM scope.
 assert.equal(
   matchesChemistryFocus({
     title: 'Registered Nurse',
     jobFunctions: ['Laboratory Operations & Management'],
   }),
-  false,
-  'vetoed clinical-care title cannot be rescued by tagging alone'
+  true,
+  'healthcare roles are in StemBird scope'
 )
 assert.equal(
   matchesChemistryFocus({
     title: 'Geneticist',
     description: '<p>Runs PCR panels for rare disease research.</p>',
   }),
-  false,
-  'vetoed pure-biology title stays excluded'
+  true,
+  'genetics is a science role in StemBird scope'
 )
 
-// ── Veto rescue: chem degree + chemical duties re-admits an otherwise vetoed title
+// A STEM degree requirement can rescue a generic management title.
 assert.equal(
   matchesChemistryFocus({
     title: 'Operations Manager',
@@ -129,20 +124,9 @@ assert.equal(
     description: '<p>Oversee wet chemistry and ICP-OES sample preparation for the refinery lab.</p>',
   }),
   true,
-  'veto rescued via T2+T3'
+  'a chemistry degree requirement qualifies the role'
 )
 
-// ── Detailed verdict shape (used by admin moderation & skip messaging) ───────
-const verdict = evaluateChemistryRelevance({
-  title: 'Analytical Chemist',
-  jobFunctions: ['Analytical & Instrumental Chemistry'],
-  description: '<p>Run GC-MS and HPLC on beverage samples.</p>',
-})
-assert.equal(verdict.publish, true, 'analytical chemist publishes')
-assert.ok(verdict.testsPassed.includes('T1'), 'T1 fires')
-assert.ok(verdict.testsPassed.includes('T3'), 'T3 fires from GC-MS/HPLC duties')
-assert.equal(verdict.vetoed, false)
-
-assert.equal(SKIPPED_NON_CHEMISTRY_MESSAGE, 'Skipped: outside chemistry focus')
+assert.equal(SKIPPED_NON_CHEMISTRY_MESSAGE, 'Skipped: outside STEM focus')
 
 console.log('chemistryRelevance.test.ts: all assertions passed')

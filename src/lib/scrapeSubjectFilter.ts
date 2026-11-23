@@ -14,18 +14,10 @@
  *     for the deep gate. Set STEMBIRD_SUBJECT_DISCOVER_FILTER=true to re-enable
  *     cheap title-based skipping of confident non-STEM roles (trades accuracy
  *     for AI cost).
- *   - at PUBLISH time on full parsed fields (matchesSubjectFocus) — the
- *     intelligent decision. Three confidence tiers:
- *       HIGH  : title, field/area of study, job function, tags — a STEM stem
- *               alone counts.
- *       PROSE : required_qualifications, responsibilities — AI-restated free
- *               text; a stem only counts next to a study cue AND a hard-STEM
- *               degree/discipline (so business-ese like "supports technical
- *               systems" or "market research" no longer passes).
- *       BODY  : description — same guarded treatment as PROSE.
- *     A confident non-STEM title ("Sales Executive") can therefore only be
- *     rescued by an explicit hard-STEM study requirement ("degree in
- *     Pharmacy"), never by a loose stem lurking in prose fields.
+ *   - at PUBLISH time on full parsed fields (matchesSubjectFocus). A STEM
+ *     title or explicit field/area of study qualifies directly. Classifier
+ *     job functions and tags do not qualify a listing on their own; free text
+ *     must pair a study cue with a hard-STEM discipline.
  *
  * CONFIG (no code edits needed to widen/narrow later):
  *   - STEMBIRD_SUBJECT_FILTER_ENABLED      "true" (default) | "false" to disable
@@ -37,10 +29,8 @@
  *                                          entry is treated as a case-
  *                                          insensitive substring match.
  *
- * The deep matcher reads high-signal fields plus the description so that a STEM
- * requirement buried in body copy (a required degree/discipline) is caught. The
- * description is only ever ADDITIVE: it can promote a job to STEM, never
- * demote one, so incidental mentions don't cause wrongful skips.
+ * The deep matcher reads the description and qualification/responsibility
+ * fields to catch explicit STEM degree requirements buried in the posting.
  *
  * NOTE: the filter never checks location. A STEM role outside Kenya still
  * passes; country gating is a separate concern.
@@ -57,8 +47,10 @@ const DEFAULT_SUBJECT_STEMS = [
   // ── Life sciences / lab (original focus) ──
   'biolog', // biology, biologist, biology teacher, molecular biology
   'biochem', // biochemistry, biochemist
+  'genetic', // genetics, geneticist
   'chemis', // chemistry, chemist
-  'chemical',
+  'chemical engineer', // chemical engineering (must come before 'chemical')
+  'chemical', // chemical (but not "chemical sales" unless rescued by degree)
   'botan', // botany, botanist
   'zoolog', // zoology, zoologist
   'microbio', // microbiology, microbiologist, microbial
@@ -67,57 +59,58 @@ const DEFAULT_SUBJECT_STEMS = [
   'laborator', // laboratory, lab technician
   'pharmac', // pharmacy, pharmaceutical, pharmacology
   'clinical research',
-  'quality control',
-  'quality assurance',
   // 'analytical' removed: fires on business-ese ("analytical skills",
   // "analytical mindset") in prose fields. Analytical chemist/lab still pass
   // via 'chemis'/'laborator'.
   'lab', // \blab\b only
-  'qc', // \bQC\b only
-  'qa', // \bQA\b only
   // ── Health / medical ──
   'medic', // medicine, medical, paramedic
-  'health', // public health, health officer
-  'nursing', // nursing officer (avoids matching inside random words)
+  'health officer', // public health, health officer (not bare "health" - too generic)
+  'public health',
+  'nurs', // nurse, nursing officer
   'dental',
   'nutrition',
   'dietitian', // was bare 'diet' — substring of 'study of diet' noise; titles say "Dietitian"
   'veterinar',
   'epidemiolog',
-  'public health',
   'clinical',
   // ── Engineering ──
   'engineer', // engineer, engineering (any discipline)
-  'mechanic', // mechanical engineer/technician
+  'mechanical engineer',
   'electron', // electronics, electrical engineering
-  'electric', // electrician is trade; electrical engineer passes anyway via "engineer"
-  'civil', // civil engineer/works — common Kenyan STEM title stem
+  'electrical engineer',
+  'civil engineer',
   'telecomm', // telecommunications
   'automotive',
   'mechantron',
   'architect', // architect, architectural, architecture, urban planning
+  'structural design',
+  'construction engineer',
   // ── Technology / IT / data ──
-  'technolog', // technology, technical
+  'software engineer',
+  'software developer',
   'software',
   'hardware',
-  'network',
+  'network engineer',
+  'network administrator',
+  'network technician',
   'database',
   'sysadmin',
   'system admin',
   'devops',
   'cyber',
   'informatics',
-  'computer',
+  'computer scien', // computer science/scientist
+  'computer engineer',
   'programming',
   'developer', // software/web/app developer
   'data scien', // data scientist (two-word stem avoids "data entry")
   'data analy', // data analyst
-  'data engine', // data engineer
-  'data manage', // data manager (avoids bare "data")
+  'data engineer', // data engineer
   'machine learning',
   'artificial intelligence',
-  'ai engine', // AI engineer (word-boundary "ai" would be noisy; use compound)
-  'business intel', // BI analyst — borderline but analytics-role signal
+  'ai engineer', // AI engineer (word-boundary "ai" would be noisy; use compound)
+  'business intelligence analyst', // BI analyst — borderline but analytics-role signal
   'geospatial',
   'gis', // \bGIS\b only
   // ── Physical sciences / math ──
@@ -134,30 +127,26 @@ const DEFAULT_SUBJECT_STEMS = [
   'agronom', // agronomy
   'livestock',
   'fisher', // fisheries
-  'environment', // environmental science/officer
+  'environmental science', // environmental science/officer
+  'environmental engineer',
   'meteorolog',
-  'climate',
+  'climate scien',
   'conservation',
   // ── Research / general STEM ──
   'scientist',
   // Bare 'research' removed: "market research", "user research", "research
   // and development" prose fires on sales/finance/HR jobs. Match the STEM
   // title/role compounds explicitly instead.
-  'research officer',
-  'research assistant',
-  'research associate',
   'research scientist',
-  'research fellow',
-  'research intern',
   'scientific research',
-  'research programme',
-  'research program',
   'stem',
-  'technical',
+  // 'technical' REMOVED: Too generic - fires on "technical sales", "technical writer",
+  // "technical support" for non-STEM products. Real technical roles will have specific
+  // STEM keywords (engineer, technician, laboratory, etc.)
 ]
 
 /** Stems that are too short/common to substring-match; require word boundaries. */
-const WORD_BOUNDARY_TERMS = new Set(['lab', 'qc', 'qa', 'gis', 'stem'])
+const WORD_BOUNDARY_TERMS = new Set(['lab', 'gis', 'stem'])
 
 /**
  * Title stems that are CONFIDENTLY non-STEM. Two jobs:
@@ -182,10 +171,13 @@ const NEGATIVE_TITLE_STEMS = [
   'advertis',
   'brand',
   'public relations',
+  'business',
   // ── Generic business / management / operations (publish-gate title veto) ──
   // Roles whose title is pure management/operations/business carry no STEM
   // signal on their face; require an explicit STEM degree to publish.
-  'operations',
+  'operations manager',
+  'operations officer',
+  'operations coordinator',
   'business continuity',
   'continuity',
   'business analyst',
@@ -193,11 +185,13 @@ const NEGATIVE_TITLE_STEMS = [
   'management analyst',
   'project management',
   'project manager',
+  'project coordinator',
   'general management',
   'assistant manager',
   'deputy manager',
   'administration',
   'administrative',
+  'admin ',
   'office manager',
   'team leader',
   'unit manager',
@@ -209,20 +203,30 @@ const NEGATIVE_TITLE_STEMS = [
   'cluster manager',
   'store manager',
   'outlet manager',
-  'driver',
-  'chauffeur',
-  'cleaner',
-  'cleaning',
-  'housekeep',
-  'guard',
-  'watchman',
-  'cashier',
-  'teller',
+  'retail manager',
+  'shop manager',
+  // ── Finance / Accounting ──
+  'finance',
+  'financial',
   'accountant',
   'account officer',
   'bookkeep',
   'audit',
   'tax',
+  'credit control',
+  'credit officer',
+  'loan officer',
+  'banking',
+  'cashier',
+  'teller',
+  // ── HR / Recruitment ──
+  'recruiter',
+  'recruitment',
+  'human resource',
+  'hr ',
+  'people operations',
+  'talent acquisition',
+  // ── Support / Admin roles ──
   'receptionist',
   'reception',
   'secretary',
@@ -230,30 +234,66 @@ const NEGATIVE_TITLE_STEMS = [
   'administrative assistant',
   'admin assistant',
   'office assistant',
+  'executive assistant',
   'customer care',
   'customer service',
+  'customer success',
   'call center',
   'call centre',
   'telemarket',
+  'front desk',
+  // ── Procurement / Logistics / Supply Chain ──
+  'procurement',
+  'supply chain',
+  'logistics',
+  'warehouse',
+  'storekeeper',
+  'store keeper',
+  'inventory clerk',
+  'courier',
+  'dispatch',
+  'rider',
+  'driver',
+  'chauffeur',
+  // ── Legal / Compliance ──
+  'lawyer',
+  'advocate',
+  'paralegal',
+  'legal officer',
+  'legal counsel',
+  'compliance officer',
+  'regulatory affairs', // unless pharmaceutical/medical context
+  // ── Hospitality / Service ──
   'waiter',
   'waitress',
   'chef',
   'cook',
   'barista',
   'bartend',
+  'housekeeper',
+  'housekeep',
+  'cleaner',
+  'cleaning',
+  'catering',
+  // ── Security / Facilities ──
+  'guard',
+  'security guard',
+  'watchman',
+  'security officer',
+  // ── Trades / Manual labor ──
   'tailor',
   'seamstress',
   'hairdress',
   'barber',
   'mason',
   'plumber',
-  'storekeeper',
-  'store keeper',
-  'warehouse',
-  'courier',
-  'dispatch',
-  'rider',
+  'carpenter',
+  'welder',
+  'mechanic', // will be overridden by "mechanical engineer" in positive list
+  'fitter',
+  'electrician', // will be overridden by "electrical engineer" in positive list
   'pilot', // aircraft pilot, not "pilot project"
+  // ── Communications / Creative ──
   'journalist',
   'writer',
   'editor',
@@ -264,17 +304,45 @@ const NEGATIVE_TITLE_STEMS = [
   'graphic design',
   'social media',
   'content creat',
-  'lawyer',
-  'advocate',
-  'paralegal',
-  'legal officer',
-  'recruiter',
-  'recruitment officer',
-  'human resource',
-  'hr ',
+  'content writer',
+  'copywriter',
+  'communications',
+  // ── Religious ──
   'clergy',
   'pastor',
   'usher',
+  'chaplain',
+  // ── Education (non-STEM) ──
+  'teacher', // generic teacher without STEM subject
+  'tutor',
+  'instructor',
+  'lecturer', // generic, unless in STEM department
+  // ── Agriculture (non-technical) ──
+  'farm worker',
+  'farm hand',
+  'farm manager', // unless agricultural engineer/scientist
+]
+
+const COMMERCIAL_TITLE_VETO_STEMS = [
+  'sales',
+  'marketing',
+  'advertis',
+  'brand',
+  'public relations',
+]
+
+const TECHNICAL_ROLE_TITLE_STEMS = [
+  'engineer',
+  'scientist',
+  'architect',
+  'developer',
+  'programmer',
+  'technician',
+  'technologist',
+  'chemist',
+  'biologist',
+  'statistician',
+  'mathematician',
 ]
 
 function escapeRe(s: string): string {
@@ -448,19 +516,10 @@ function matchesHardStudyContext(texts: Array<string | null | undefined>): boole
  * Returns true when the job should be PUBLISHED (i.e. it matches the subject
  * focus, or the filter is disabled). Returns false to SKIP as off-topic.
  *
- * Three confidence tiers:
- *   - `fields` (title, field/area of study, job function, tags) are HIGH
- *     signal: a STEM stem anywhere in them counts.
- *   - `proseFields` (required_qualifications, responsibilities) are
- *     AI-restated free text: a stem only counts when a study cue AND a hard
- *     STEM degree stem sit in the same clause.
- *   - `description` (raw body copy): same guarded treatment as proseFields.
- *
- * Title dominance: when the title is confidently non-STEM ("Sales
- * Executive"), a high-signal stem that appears ONLY in non-title fields
- * (e.g. the AI taxonomy tagging job_function "Technical Sales & Business
- * Development") cannot rescue it — the title itself must carry the stem, or
- * prose/description must name a hard STEM degree ("degree in Pharmacy").
+ * `fields` is ordered as title, field of study, area of study, job functions,
+ * then tags. A clear STEM title or parsed field/area of study qualifies directly.
+ * Classifier-generated job functions and tags are not sufficient on their
+ * own; free text must pair a study cue with a hard STEM discipline.
  */
 export function matchesSubjectFocus(
   fields: Array<string | null | undefined>,
@@ -469,39 +528,59 @@ export function matchesSubjectFocus(
 ): boolean {
   if (!isFilterEnabled()) return true
 
-  const values = fields.filter((v): v is string => typeof v === 'string' && v.length > 0)
-  const title = (values[0] || '').trim()
-  const hasTitle = title.length > 0
-
-  const highSignal = values.join(' \n ').toLowerCase()
+  const title = (typeof fields[0] === 'string' ? fields[0] : '').trim()
+  const studyFields = fields
+    .slice(1, 3)
+    .filter((v): v is string => typeof v === 'string' && v.length > 0)
   const desc = (description || '').trim()
   const prose = (proseFields || []).filter((v): v is string => typeof v === 'string' && v.length > 0)
 
-  // ── HIGH-signal tier ──
-  if (hasTitle && containsStem(title)) return true
+  // A role title or explicitly parsed field/area of study is stronger evidence
+  // than classifier-generated job functions and tags, which are often noisy.
+  const commercialTitle = COMMERCIAL_TITLE_VETO_STEMS.some(stem =>
+    title.toLowerCase().includes(stem)
+  )
+  const technicalRoleTitle = TECHNICAL_ROLE_TITLE_STEMS.some(stem =>
+    title.toLowerCase().includes(stem)
+  )
+  if (
+    (containsStem(title) && (!commercialTitle || technicalRoleTitle)) ||
+    studyFields.some(containsStem)
+  ) return true
 
-  if (highSignal.trim() && containsStem(highSignal)) {
-    // A confident non-STEM title vetoes rescue by loose stems in other
-    // fields ("Sales Executive" + job_function "Technical Sales…"). Unless
-    // the title itself carries a STEM word ("Sales Engineer" — checked
-    // above), non-title high-signal fields only pass when they contain a
-    // study-qualified HARD degree requirement.
-    if (!isConfidentlyNonStem(title)) return true
-    if (matchesHardStudyContext([...values.slice(1), ...prose, desc])) return true
-    return false
-  }
+  // In all other fields, require an explicit study cue and a STEM discipline
+  // in the same clause. This keeps generic job-function tags and incidental
+  // mentions such as "computer skills" from qualifying unrelated roles.
+  if (matchesHardStudyContext([...studyFields, ...prose, desc])) return true
 
-  // ── PROSE / BODY tiers: stem must sit in the same clause as a study cue
-  //    AND be a hard STEM degree discipline. ──
-  if (matchesHardStudyContext([...prose, desc])) return true
-
-  const hasAnySignal =
-    highSignal.trim().length > 0 || desc.length > 0 || prose.length > 0
-  // No signal at all -> keep, so we never silently drop everything when parsing
-  // degraded. Err on the side of publishing.
-  if (!hasAnySignal) return true
-
+  // Missing or ambiguous evidence is not enough to publish a STEM-only job.
   return false
+}
+
+export interface StemFocusInput {
+  title: string
+  jobFunctions?: string[] | null
+  description?: string | null
+  requiredQualifications?: string | null
+  responsibilities?: string | null
+  tags?: string | null
+  fieldOfStudy?: string | null
+  areaOfStudy?: string | null
+}
+
+export function matchesStemFocus(input: StemFocusInput): boolean {
+  const fields = [
+    input.title,
+    input.fieldOfStudy ?? null,
+    input.areaOfStudy ?? null,
+    ...(input.jobFunctions || []),
+    input.tags ?? null,
+  ]
+  return matchesSubjectFocus(
+    fields,
+    input.description ?? null,
+    [input.requiredQualifications, input.responsibilities]
+  )
 }
 
 export interface TitleFilterInput {

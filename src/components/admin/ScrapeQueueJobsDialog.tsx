@@ -203,14 +203,14 @@ function titleFor(status: QueueDialogStatus, e: QueueEntity): string {
 function descriptionFor(status: QueueDialogStatus, e: QueueEntity): string {
   if (status === "published") return e.publishedDescription;
   if (status === "non_stem") {
-    return `Processed ${e.plural} the chemistry gate rejected (marked done with 'outside chemistry focus'). Review them here if you suspect the filter missed something.`;
+    return `Processed ${e.plural} the STEM gate rejected (marked done with 'outside STEM focus'). Review them here if you suspect the filter missed something.`;
   }
   return ENTITY_COPY_DEFAULTS[status].description(e);
 }
 
 function emptyFor(status: QueueDialogStatus, e: QueueEntity): string {
   if (status === "published") return e.publishedEmpty;
-  if (status === "non_stem") return `No ${e.plural} have been screened out as non-chemistry.`;
+  if (status === "non_stem") return `No ${e.plural} have been screened out as non-STEM.`;
   return ENTITY_COPY_DEFAULTS[status].empty(e);
 }
 

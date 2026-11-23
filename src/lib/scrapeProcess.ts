@@ -6,7 +6,7 @@
 
 import { SupabaseClient } from '@supabase/supabase-js'
 import { fetchHtml, extractJobDetails, normalizeJob, ScraperSelectors, datePostedForInsert } from '@/lib/scraper'
-import { matchesChemistryFocus, SKIPPED_NON_CHEMISTRY_MESSAGE } from '@/lib/chemistryRelevance'
+import { matchesStemFocus, SKIPPED_NON_STEM_MESSAGE } from '@/lib/scrapeSubjectFilter'
 import {
   fetchWorkableJobDetails,
   normalizeWorkableJob,
@@ -709,31 +709,16 @@ export async function runScrapeProcessOne(
       }
     }
 
-    // Subject focus gate: StemBird publishes STEM roles only. This is the
-    // intelligent, deep decision. Three tiers (see scrapeSubjectFilter.ts):
-    // title/field-of-study/job-function/tags are high-signal; qualifications
-    // and responsibilities are AI-restated prose that only count when a study
-    // cue names a hard STEM degree ("BSc Pharmacy" keeps a "Sales Rep";
-    // "degree in Business Research" does not). Discovery does not pre-filter
-    // (accuracy wins) unless STEMBIRD_SUBJECT_DISCOVER_FILTER=true. Off-topic
-    // listings are recorded as skipped (so discover won't re-queue the URL).
-    // Tune the stem list via STEMBIRD_SUBJECT_TERMS / disable via
-    // STEMBIRD_SUBJECT_FILTER_ENABLED=false.
-    // StemBird publication gate — replaces the general STEM filter.
-    // A job publishes only when it satisfies at least one of T1 (chemistry-core
-    // function), T2 (chemistry-family degree requirement), T3 (chemical
-    // duties), or T4 (commercial chemistry with chemical-literacy). Hard vetoes
-    // for clinical care / pure biology / general business can only be rescued
-    // by T2 + T3 together. See chemistryRelevance.ts. Tune via
-    // CHEMISTRY_LENS_GATE_ENABLED=false to bypass entirely.
+    // Apply the shared STEM subject gate after parsing. Classifier-generated
+    // job functions alone cannot qualify a listing; the gate checks the title,
+    // study fields, and explicit STEM degree requirements.
     if (
-      !matchesChemistryFocus({
+      !matchesStemFocus({
         title: normalized.title || '',
         jobFunctions: [
           parsed.job_function,
           ...(parsed.job_functions || []),
         ].filter((v): v is string => typeof v === 'string' && v.length > 0),
-        industries: parsed.industries || (parsed.industry ? [parsed.industry] : null),
         description: parsed.description || normalized.description || null,
         requiredQualifications:
           parsed.required_qualifications || normalized.required_qualifications || null,
@@ -748,7 +733,7 @@ export async function runScrapeProcessOne(
         .update({
           status: 'done',
           processed_at: new Date().toISOString(),
-          error_message: SKIPPED_NON_CHEMISTRY_MESSAGE,
+          error_message: SKIPPED_NON_STEM_MESSAGE,
         })
         .eq('id', queueItem.id)
 
@@ -768,7 +753,7 @@ export async function runScrapeProcessOne(
       )
 
       return {
-        message: 'Off-topic job skipped (outside chemistry focus)',
+        message: 'Off-topic job skipped (outside STEM focus)',
         processed: 1,
         off_topic: true,
         job_url: queueItem.job_url,

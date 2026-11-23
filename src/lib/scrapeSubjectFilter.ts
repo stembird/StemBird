@@ -56,6 +56,8 @@ const DEFAULT_SUBJECT_STEMS = [
   'microbio', // microbiology, microbiologist, microbial
   'biotech', // biotechnology, biotechnologist
   'life science',
+  'food science',
+  'food technolog',
   'laborator', // laboratory, lab technician
   'pharmac', // pharmacy, pharmaceutical, pharmacology
   'clinical research',
@@ -67,6 +69,9 @@ const DEFAULT_SUBJECT_STEMS = [
   'medic', // medicine, medical, paramedic
   'health officer', // public health, health officer (not bare "health" - too generic)
   'public health',
+  'midwif',
+  'mental health',
+  'radiolog',
   'nurs', // nurse, nursing officer
   'dental',
   'nutrition',
@@ -86,11 +91,20 @@ const DEFAULT_SUBJECT_STEMS = [
   'architect', // architect, architectural, architecture, urban planning
   'structural design',
   'construction engineer',
+  'auto-mechanic',
+  'electrician',
+  'printing technolog',
+  'packaging technolog',
   // ── Technology / IT / data ──
   'software engineer',
   'software developer',
   'software',
   'hardware',
+  'information technology',
+  'quantity survey',
+  'building technology',
+  'construction',
+  'ict',
   'network engineer',
   'network administrator',
   'network technician',
@@ -114,7 +128,9 @@ const DEFAULT_SUBJECT_STEMS = [
   'geospatial',
   'gis', // \bGIS\b only
   // ── Physical sciences / math ──
-  'physic', // physics, physicist
+  'physics',
+  'physicist',
+  'physical science',
   'mathemat', // mathematics, mathematician
   'statistic', // statistician, statistics
   'actuar', // actuarial
@@ -139,6 +155,9 @@ const DEFAULT_SUBJECT_STEMS = [
   // title/role compounds explicitly instead.
   'research scientist',
   'scientific research',
+  'science teacher',
+  'math teacher',
+  'maths teacher',
   'stem',
   // 'technical' REMOVED: Too generic - fires on "technical sales", "technical writer",
   // "technical support" for non-STEM products. Real technical roles will have specific
@@ -146,24 +165,21 @@ const DEFAULT_SUBJECT_STEMS = [
 ]
 
 /** Stems that are too short/common to substring-match; require word boundaries. */
-const WORD_BOUNDARY_TERMS = new Set(['lab', 'gis', 'stem'])
+const WORD_BOUNDARY_TERMS = new Set(['lab', 'gis', 'stem', 'ict', 'it'])
 
 /**
  * Title stems that are CONFIDENTLY non-STEM. Two jobs:
  *   1. Discovery (cheap cost cut) — obvious off-topic roles never reach the AI.
  *   2. Publish gate title veto — a title matched here can ONLY be rescued by a
- *      HARD STEM degree named next to a study cue in responsibilities /
- *      qualifications / description (see matchesSubjectFocus). This encodes the
+ *   hard STEM degree named next to a study cue in responsibilities /
+ *   qualifications / description (see matchesSubjectFocus). This encodes the
  *      rule that generic management / operations / business / administrative
  *      roles ("Business Continuity Management Analyst", "Assistant Operations
  *      Manager") are NOT STEM unless the requirements actually demand a STEM
  *      discipline — an AI-tagged job_function or a source skills string alone
  *      is no longer enough.
- * A positive STEM word in the title always wins first ("Sales Engineer",
- * "Laboratory Operations Manager", "Network Operations Engineer" stay STEM), so
- * these entries only gate titles that carry no STEM word of their own. Kept
- * deliberately clear of genuinely ambiguous trade titles still rescued by their
- * degree requirement.
+ * A positive STEM word in the title only wins over a veto when it also names a
+ * technical role or a STEM teaching role.
  */
 const NEGATIVE_TITLE_STEMS = [
   'sales',
@@ -323,14 +339,6 @@ const NEGATIVE_TITLE_STEMS = [
   'farm manager', // unless agricultural engineer/scientist
 ]
 
-const COMMERCIAL_TITLE_VETO_STEMS = [
-  'sales',
-  'marketing',
-  'advertis',
-  'brand',
-  'public relations',
-]
-
 const TECHNICAL_ROLE_TITLE_STEMS = [
   'engineer',
   'scientist',
@@ -343,6 +351,34 @@ const TECHNICAL_ROLE_TITLE_STEMS = [
   'biologist',
   'statistician',
   'mathematician',
+  'auto-mechanic',
+  'electrician',
+  'head of it',
+  'it support',
+  'information technology',
+  'ict',
+  'business intelligence analyst',
+]
+
+const STEM_EDUCATION_ROLE_STEMS = [
+  'teacher',
+  'lecturer',
+  'tutor',
+  'instructor',
+  'trainer',
+  'training',
+]
+
+const HARD_NON_STEM_TITLE_STEMS = [
+  'driver',
+  'chauffeur',
+  'housekeeper',
+  'housekeeping',
+  'head of security',
+  'security guard',
+  'security officer',
+  'chef',
+  'cook',
 ]
 
 function escapeRe(s: string): string {
@@ -395,7 +431,7 @@ function containsStem(text: string): boolean {
   return false
 }
 
-/** True when a listing title is CONFIDENTLY a non-STEM role (discovery-only). */
+/** True when a listing title is confidently a non-STEM role. */
 function isConfidentlyNonStem(title: string): boolean {
   const lower = title.toLowerCase()
   return NEGATIVE_TITLE_STEMS.some(stem => lower.includes(stem))
@@ -418,6 +454,8 @@ const HARD_DEGREE_STEMS = [
   'botan',
   'zoolog',
   'pharmac',
+  'food science',
+  'food technolog',
   'laborator',
   'clinical',
   'medic',
@@ -443,7 +481,9 @@ const HARD_DEGREE_STEMS = [
   'data engine',
   'machine learning',
   'artificial intelligence',
-  'physic',
+  'physics',
+  'physicist',
+  'physical science',
   'mathemat',
   'statistic',
   'actuar',
@@ -455,9 +495,17 @@ const HARD_DEGREE_STEMS = [
   'agronom',
   'livestock',
   'fisher',
-  'environment',
+  'environmental science',
+  'environmental engineering',
+  'printing technolog',
+  'packaging technolog',
+  'quantity survey',
+  'building technology',
+  'construction',
+  'architect',
+  'midwif',
   'meteorolog',
-  'climate',
+  'climate science',
   'conservation',
   'scientist',
 ]
@@ -468,7 +516,10 @@ const HARD_DEGREE_STEMS = [
  * analytical skills"). Paired with a stem in the SAME clause to promote a job.
  */
 const STUDY_CUE_RE =
-  /\b(degree|diploma|associate|bachelor|baccalaureate|bsc|master|msc|mba|phd|doctorate|doctoral|field of study|area of study|major|speciali[sz]ation|studied|study of|qualification|certified|certification|background in|discipline|curriculum|alumni|alumna|graduate|graduated|university|college|institute|polytechnic|coursework|course of study)\b/i
+  /\b(degree|diploma|associate|bachelor|baccalaureate|bsc|master|msc|mba|phd|doctorate|doctoral|field of study|area of study|major|speciali[sz]ation|studied|study of|qualification|certified|certification|background in|coursework|course of study)\b/i
+// Avoid pairing a credential with an unrelated STEM word elsewhere in a long clause.
+const MAX_DISCIPLINE_AFTER_STUDY_CUE_DISTANCE = 100
+const MAX_DISCIPLINE_BEFORE_STUDY_CUE_DISTANCE = 40
 
 /**
  * Split free text into short clauses so a study cue and a STEM word must sit in
@@ -479,6 +530,8 @@ const STUDY_CUE_RE =
 function splitClauses(text: string): string[] {
   const sentinel = '\u0000'
   const normalized = text
+    .replace(/<\/?(?:li|p|div|ul|ol|br|h[1-6])\b[^>]*>/gi, sentinel)
+    .replace(/<[^>]+>/g, ' ')
     .replace(/[\u2022\t]/g, sentinel) // bullet / tab
     .replace(/[.;:\n]+/g, sentinel) // sentence / line boundaries
     .replace(/\b(?:and\s*\/?\s*or|or)\b/gi, sentinel) // "or", "and/or"
@@ -501,15 +554,31 @@ function matchesHardStudyContext(texts: Array<string | null | undefined>): boole
     .join(' \n ')
   if (!joined.trim()) return false
   const lower = joined.toLowerCase()
-  return splitClauses(lower).some(
-    clause =>
-      STUDY_CUE_RE.test(clause) &&
-      HARD_DEGREE_STEMS.some(stem =>
-        WORD_BOUNDARY_TERMS.has(stem)
-          ? new RegExp(`\\b${escapeRe(stem)}\\b`, 'i').test(clause)
-          : clause.includes(stem)
-      )
-  )
+  return splitClauses(lower).some(clause => {
+    const cueIndices: number[] = []
+    const cuePattern = new RegExp(STUDY_CUE_RE.source, 'gi')
+    let cueMatch: RegExpExecArray | null
+    while ((cueMatch = cuePattern.exec(clause)) !== null) cueIndices.push(cueMatch.index)
+    if (cueIndices.length === 0) return false
+
+    return HARD_DEGREE_STEMS.some(stem => {
+      const disciplinePattern = WORD_BOUNDARY_TERMS.has(stem)
+        ? new RegExp(`\\b${escapeRe(stem)}\\b`, 'gi')
+        : new RegExp(escapeRe(stem), 'gi')
+      let disciplineMatch: RegExpExecArray | null
+      while ((disciplineMatch = disciplinePattern.exec(clause)) !== null) {
+        if (cueIndices.some(cueIndex => {
+          const distance = disciplineMatch.index - cueIndex
+          return distance >= 0
+            ? distance <= MAX_DISCIPLINE_AFTER_STUDY_CUE_DISTANCE
+            : -distance <= MAX_DISCIPLINE_BEFORE_STUDY_CUE_DISTANCE
+        })) {
+          return true
+        }
+      }
+      return false
+    })
+  })
 }
 
 /**
@@ -517,7 +586,9 @@ function matchesHardStudyContext(texts: Array<string | null | undefined>): boole
  * focus, or the filter is disabled). Returns false to SKIP as off-topic.
  *
  * `fields` is ordered as title, field of study, area of study, job functions,
- * then tags. A clear STEM title or parsed field/area of study qualifies directly.
+ * then tags. Only the title is trusted as a direct signal; the parsed fields,
+ * functions, and tags are model-generated and must be corroborated by the
+ * original posting text.
  * Classifier-generated job functions and tags are not sufficient on their
  * own; free text must pair a study cue with a hard STEM discipline.
  */
@@ -529,29 +600,26 @@ export function matchesSubjectFocus(
   if (!isFilterEnabled()) return true
 
   const title = (typeof fields[0] === 'string' ? fields[0] : '').trim()
-  const studyFields = fields
-    .slice(1, 3)
-    .filter((v): v is string => typeof v === 'string' && v.length > 0)
   const desc = (description || '').trim()
   const prose = (proseFields || []).filter((v): v is string => typeof v === 'string' && v.length > 0)
 
-  // A role title or explicitly parsed field/area of study is stronger evidence
-  // than classifier-generated job functions and tags, which are often noisy.
-  const commercialTitle = COMMERCIAL_TITLE_VETO_STEMS.some(stem =>
-    title.toLowerCase().includes(stem)
-  )
+  const lowerTitle = title.toLowerCase()
+  const titleHasStem = containsStem(title)
+  const titleVetoed = isConfidentlyNonStem(title)
   const technicalRoleTitle = TECHNICAL_ROLE_TITLE_STEMS.some(stem =>
-    title.toLowerCase().includes(stem)
+    lowerTitle.includes(stem)
   )
-  if (
-    (containsStem(title) && (!commercialTitle || technicalRoleTitle)) ||
-    studyFields.some(containsStem)
-  ) return true
+  const hardNonStemTitle = HARD_NON_STEM_TITLE_STEMS.some(stem =>
+    lowerTitle.includes(stem)
+  )
+  const stemEducationTitle =
+    STEM_EDUCATION_ROLE_STEMS.some(stem => lowerTitle.includes(stem)) && titleHasStem
+  if (hardNonStemTitle && !technicalRoleTitle) return false
+  if (titleHasStem && (!titleVetoed || technicalRoleTitle || stemEducationTitle)) return true
 
   // In all other fields, require an explicit study cue and a STEM discipline
-  // in the same clause. This keeps generic job-function tags and incidental
-  // mentions such as "computer skills" from qualifying unrelated roles.
-  if (matchesHardStudyContext([...studyFields, ...prose, desc])) return true
+  // in the same clause. Use only posting text, never model-generated fields.
+  if (matchesHardStudyContext([...prose, desc])) return true
 
   // Missing or ambiguous evidence is not enough to publish a STEM-only job.
   return false

@@ -175,6 +175,92 @@ assert.equal(
   false,
   'technical/health in responsibilities prose are NOT STEM'
 )
+assert.equal(
+  matchesSubjectFocus(
+    ['Head of Security'],
+    '<ul><li>Bachelor degree in Security</li><li>Manage computer-based security systems</li></ul>'
+  ),
+  false,
+  'HTML list items must not combine an unrelated degree cue and STEM keyword'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Driver'],
+    '<ul><li>KCSE Certificate</li><li>Practical experience in electrical repairs</li></ul>'
+  ),
+  false,
+  'manual repair duties do not turn a driver role into a STEM job'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['2027 Drivers (Eldoret Primary)'],
+    null,
+    ['Diploma in Auto-mechanical or Electrical Engineering from a recognized institution']
+  ),
+  false,
+  'school driver title is not rescued by an unrelated STEM diploma'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Driver /Auto-Mechanic/ Electrician (Tatu Primary)'],
+    null,
+    ['Diploma in Auto-mechanical engineering from a recognized institution']
+  ),
+  true,
+  'a combined driver and auto-mechanic/electrician role retains its technical scope'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Facilities Coordinator'],
+    'Maintains college premises and carries out minor electrical repairs.'
+  ),
+  false,
+  'college site and electrical repairs do not imply a STEM study requirement'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Head of Security'],
+    null,
+    [
+      'Certification in Security Management or Risk (CPP (Certified Protection Professional) and PSP (Physical Security Professional), or equivalent preferred). Physical security systems and surveillance technologies.',
+    ]
+  ),
+  false,
+  'physical security certifications do not count as a physics qualification'
+)
+assert.equal(
+  matchesSubjectFocus(['Head of Physical Security']),
+  false,
+  'physical security wording is not itself a physics signal'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Production Manager - Flexible Packaging'],
+    null,
+    ["Bachelor's degree in Printing Technology, Packaging & Printing Management"]
+  ),
+  true,
+  'printing technology is a relevant manufacturing discipline'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['Human Resource Intern'],
+    'The Agricultural Employers Association offers an internship for graduates who completed their degree in 2024.'
+  ),
+  false,
+  'an employer name and unrelated degree wording do not make an HR internship STEM'
+)
+assert.equal(
+  matchesSubjectFocus(
+    ['RGM Manager'],
+    null,
+    [
+      'Strong execution discipline and ownership, working in a structured, detail-oriented way while thriving in a fast-paced, results-driven environment.',
+    ]
+  ),
+  false,
+  'generic discipline and environment wording do not imply an environmental science qualification'
+)
 // Business degrees named in qualifications must not promote a finance role.
 assert.equal(
   matchesSubjectFocus(
@@ -300,13 +386,28 @@ assert.equal(
 )
 assert.equal(
   matchesSubjectFocus([
-    'IT Support Associate',
+    'Claims Associate Representative',
     null,
     null,
     'Laboratory Information Systems (LIMS) & Informatics',
   ]),
   false,
   'a classifier-generated STEM job function alone does not qualify an unrelated title'
+)
+assert.equal(
+  matchesSubjectFocus([
+    'Accounts Assistant',
+    'Computer Science',
+    null,
+    'Data Science & Analytics',
+  ]),
+  false,
+  'a model-generated STEM study field does not qualify an unrelated title'
+)
+assert.equal(
+  matchesSubjectFocus(['Head of Security', null, null, 'HSE & Process Safety']),
+  false,
+  'security work tagged as process safety is not automatically STEM'
 )
 assert.equal(
   matchesSubjectFocus(['Quality Assurance Officer']),
@@ -322,6 +423,16 @@ assert.equal(
   matchesSubjectFocus(['Sales Engineer']),
   true,
   'an explicit engineering role remains in scope despite a sales title'
+)
+assert.equal(
+  matchesSubjectFocus(['Information Technology-Intern']),
+  true,
+  'information technology internships are in scope'
+)
+assert.equal(
+  matchesSubjectFocus(['Mathematics/Science Teacher']),
+  true,
+  'teaching a STEM subject is in scope'
 )
 assert.equal(
   matchesSubjectFocus(['Environmental Compliance Officer']),

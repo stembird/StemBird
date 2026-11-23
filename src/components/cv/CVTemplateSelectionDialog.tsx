@@ -63,8 +63,10 @@ export default function CVTemplateSelectionDialog({
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'text/plain'
       ];
-      
-      if (!allowedTypes.includes(file.type)) {
+      const allowedExtensions = ['pdf', 'doc', 'docx', 'txt'];
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+      if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension || '')) {
         toast({
           title: 'Invalid File Type',
           description: 'Please upload a PDF, Word document, or text file',
@@ -124,7 +126,10 @@ export default function CVTemplateSelectionDialog({
       console.error('Error parsing CV:', error);
       toast({
         title: 'Parsing Failed',
-        description: 'Failed to parse your CV. Please try again or create a new CV.',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Failed to parse your CV. Please try again or create a new CV.',
         variant: 'destructive'
       });
     } finally {

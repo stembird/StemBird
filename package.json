@@ -31,7 +31,7 @@
     "test:career-tips": "npx tsx src/lib/careerTips.test.ts",
     "test:job-industry-model": "npx tsx src/lib/jobIndustryModel.test.ts",
     "test:enrich-job": "npx tsx src/lib/enrichJobById.test.ts",
-    "test:career-docs": "npx tsx src/lib/cvContent.test.ts && npx tsx src/lib/coverLetterContent.test.ts && npx tsx src/lib/applyDocuments.test.ts && npx tsx src/lib/jobTargeting.test.ts && npx tsx src/lib/careerSuggest.test.ts && npx tsx src/lib/cvDesign.test.ts && npx tsx src/lib/cvTemplateExtras.test.ts && npx tsx src/lib/cvShare.test.ts && npx tsx src/lib/savedJobDocuments.test.ts && npx tsx src/lib/careerDocumentExport.test.ts && npx tsx src/lib/coverLetterExport.test.ts",
+    "test:career-docs": "npx tsx src/lib/cvContent.test.ts && npx tsx src/lib/coverLetterContent.test.ts && npx tsx src/lib/applyDocuments.test.ts && npx tsx src/lib/jobTargeting.test.ts && npx tsx src/lib/careerSuggest.test.ts && npx tsx src/lib/cvDesign.test.ts && npx tsx src/lib/cvTemplateExtras.test.ts && npx tsx src/lib/cvShare.test.ts && npx tsx src/lib/savedJobDocuments.test.ts && npx tsx src/lib/careerDocumentExport.test.ts && npx tsx src/lib/coverLetterExport.test.ts && npx tsx src/lib/cvTextExtraction.test.ts",
     "merge:companies": "npx tsx scripts/merge-duplicate-companies.mts",
     "merge:companies:apply": "npx tsx scripts/merge-duplicate-companies.mts --apply",
     "enrich:companies": "npx tsx scripts/enrich-company-profiles.mts",
@@ -93,6 +93,7 @@
     "html2pdf.js": "^0.14.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.462.0",
+    "mammoth": "^1.13.0",
     "next": "15.5.7",
     "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
@@ -111,6 +112,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
+    "word-extractor": "^1.0.4",
     "zod": "^3.25.76"
   },
   "devDependencies": {

@@ -49,10 +49,12 @@ export default function DocumentsSection({ candidateId, documents, onUpdate, onC
         'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       ];
-      if (!validTypes.includes(file.type)) {
+      const validExtensions = ['pdf', 'doc', 'docx'];
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension || '')) {
         toast({
           title: 'Invalid file type',
-          description: 'Please upload a PDF or DOC file',
+          description: 'Please upload a PDF or Word document',
           variant: 'destructive',
         });
         return;
@@ -81,8 +83,6 @@ export default function DocumentsSection({ candidateId, documents, onUpdate, onC
     }
 
     setIsUploading(true);
-    let uploadedFileUrl = '';
-    let uploadedFileType = '';
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -92,7 +92,7 @@ export default function DocumentsSection({ candidateId, documents, onUpdate, onC
       const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${user.id}/${Date.now()}.${fileExt}`;
       
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('candidate-documents')
         .upload(fileName, selectedFile);
 
@@ -102,9 +102,6 @@ export default function DocumentsSection({ candidateId, documents, onUpdate, onC
       const { data: { publicUrl } } = supabase.storage
         .from('candidate-documents')
         .getPublicUrl(fileName);
-
-      uploadedFileUrl = publicUrl;
-      uploadedFileType = selectedFile.type;
 
       // If this is a CV/resume and it's the first one, make it primary
       const isPrimary = (documentType === 'cv' || documentType === 'resume') && 
@@ -147,13 +144,11 @@ export default function DocumentsSection({ candidateId, documents, onUpdate, onC
         setIsParsing(true);
         
         try {
+          const formData = new FormData();
+          formData.append('file', selectedFile);
           const response = await fetch('/api/parse-cv', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              fileUrl: uploadedFileUrl,
-              fileType: uploadedFileType,
-            }),
+            body: formData,
           });
 
           const result = await response.json();

@@ -284,7 +284,7 @@ export default function CoverLetterGenerator({
                 </span>
               </div>
             </div>
-            <div className="mt-3 space-y-2">
+            <div className="mt-3 space-y-2 text-center">
               <h4 className="text-sm font-semibold text-[#0A66C2] sm:text-base">{tpl.name}</h4>
               <CoverLetterTemplatePreview templateName={tpl.name} showDescription={true} descriptionOnly={true} />
               <div className="flex flex-wrap gap-1">
@@ -321,11 +321,11 @@ export default function CoverLetterGenerator({
 
   return (
     <div className="space-y-8">
-      <div className="space-y-1">
+      <div className="space-y-1 text-center">
         <h2 className="text-xl font-semibold tracking-tight text-[#0A66C2] sm:text-2xl">
           Cover Letter Templates
         </h2>
-        <p className="text-sm text-muted-foreground max-w-2xl">
+        <p className="mx-auto max-w-2xl text-sm text-muted-foreground">
           Structured letters for Kenyan applications. Build and preview for free — pay when you download or copy the finished letter.
         </p>
         {initialJobId && (
@@ -337,7 +337,7 @@ export default function CoverLetterGenerator({
 
       {letters.length > 0 && (
         <section className="space-y-3">
-          <div>
+          <div className="text-center">
             <h3 className="text-base font-semibold">My Cover Letters</h3>
             <p className="text-xs text-muted-foreground">
               {letters.length} saved {letters.length === 1 ? 'letter' : 'letters'}
@@ -392,9 +392,9 @@ export default function CoverLetterGenerator({
 
       <div className="space-y-10">
         <section className="space-y-4">
-          <div className="border-b border-border/60 pb-3">
+          <div className="border-b border-border/60 pb-3 text-center">
             <h3 className="text-base font-semibold text-[#0A66C2] sm:text-lg">Professional</h3>
-            <p className="mt-0.5 text-sm text-muted-foreground max-w-2xl">
+            <p className="mx-auto mt-0.5 max-w-2xl text-sm text-muted-foreground">
               Corporate, government, NGO, banking, and private-sector applications.
             </p>
           </div>
@@ -402,9 +402,9 @@ export default function CoverLetterGenerator({
         </section>
 
         <section className="space-y-4">
-          <div className="border-b border-border/60 pb-3">
+          <div className="border-b border-border/60 pb-3 text-center">
             <h3 className="text-base font-semibold text-[#0A66C2] sm:text-lg">Entry-Level</h3>
-            <p className="mt-0.5 text-sm text-muted-foreground max-w-2xl">
+            <p className="mx-auto mt-0.5 max-w-2xl text-sm text-muted-foreground">
               For graduates, students, and people with skills but little formal experience.
             </p>
           </div>

@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
@@ -61,8 +62,22 @@ export default function JobTargetingPanel({
   const [pastedJd, setPastedJd] = useState('');
   const [saving, setSaving] = useState(false);
   const [selectedCvId, setSelectedCvId] = useState('');
+  const [showTargeting, setShowTargeting] = useState(false);
+  const targetingToggleId = useId();
+  const pasteJdId = useId();
 
   const workingCv = activeCv || cvs.find((cv) => cv.id === selectedCvId) || cvs.find((cv) => cv.is_primary) || cvs[0] || null;
+
+  useEffect(() => {
+    setShowTargeting(Boolean(
+      initialJobId || workingCv?.target_job_id || workingCv?.target_jd_text
+    ));
+  }, [
+    initialJobId,
+    workingCv?.id,
+    workingCv?.target_job_id,
+    workingCv?.target_jd_text,
+  ]);
 
   useEffect(() => {
     if (activeCv?.id) setSelectedCvId(activeCv.id);
@@ -70,6 +85,7 @@ export default function JobTargetingPanel({
   }, [activeCv?.id, cvs, selectedCvId]);
 
   useEffect(() => {
+    if (!showTargeting) return;
     let cancelled = false;
     async function load() {
       try {
@@ -89,7 +105,7 @@ export default function JobTargetingPanel({
     }
     load();
     return () => { cancelled = true; };
-  }, [initialJobId]);
+  }, [initialJobId, showTargeting]);
 
   const jdText = useMemo(() => {
     if (pastedJd.trim()) return pastedJd.trim();
@@ -166,126 +182,140 @@ export default function JobTargetingPanel({
 
   return (
     <div className="rounded-xl border border-[#0A66C2]/20 bg-[#0A66C2]/5 p-4 space-y-4">
-      <div className="flex items-start gap-2">
-        <Target className="h-5 w-5 shrink-0 text-[#0A66C2] mt-0.5" />
+      <div className="flex flex-col items-center gap-2 text-center">
+        <Target className="h-5 w-5 text-[#0A66C2]" />
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-[#0A66C2]">Target this job</h3>
+          <h3 className="text-sm font-semibold text-[#0A66C2]">Attach a job?</h3>
           <p className="text-xs text-muted-foreground">
-            Attach a StemBird listing or paste a JD. We highlight listing keywords that are missing from this CV. Nothing is rewritten automatically.
+            Optional: attach a StemBird listing or paste a job description to compare its keywords with this CV.
           </p>
         </div>
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id={targetingToggleId}
+            checked={showTargeting}
+            onCheckedChange={(checked) => setShowTargeting(checked === true)}
+          />
+          <Label htmlFor={targetingToggleId} className="cursor-pointer text-sm">
+            Yes, attach a job
+          </Label>
+        </div>
       </div>
 
-      {job && (
-        <p className="text-sm">
-          Listing: <span className="font-medium">{job.title}</span>
-          {job.company ? <span className="text-muted-foreground"> · {job.company}</span> : null}
-        </p>
-      )}
-      {!job && attachedHeadline && (
-        <p className="text-sm text-muted-foreground">Currently attached: {attachedHeadline}</p>
-      )}
-
-      {savedJobs.length > 0 && (
-        <div className="space-y-1.5">
-          <Label>Saved job</Label>
-          <Select onValueChange={chooseSavedJob}>
-            <SelectTrigger>
-              <SelectValue placeholder="Choose a saved job" />
-            </SelectTrigger>
-            <SelectContent>
-              {savedJobs.map((row) => (
-                <SelectItem key={row.id} value={row.job_id}>
-                  {row.jobs?.title || 'Saved job'}
-                  {row.jobs?.company ? ` · ${row.jobs.company}` : ''}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      <div className="space-y-1.5">
-        <Label htmlFor="paste-jd">Or paste a job description</Label>
-        <Textarea
-          id="paste-jd"
-          rows={4}
-          placeholder="Paste the vacancy text here…"
-          value={pastedJd}
-          onChange={(e) => setPastedJd(e.target.value)}
-        />
-      </div>
-
-      {!activeCv && cvs.length > 1 && (
-        <div className="space-y-1.5">
-          <Label>CV to target</Label>
-          <Select value={selectedCvId} onValueChange={setSelectedCvId}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a CV" />
-            </SelectTrigger>
-            <SelectContent>
-              {cvs.map((cv) => (
-                <SelectItem key={cv.id} value={cv.id}>
-                  {cv.title}{cv.is_primary ? ' (Primary)' : ''}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {workingCv ? (
-        <div className="flex flex-wrap gap-2">
-          <Button size="sm" disabled={saving || !jdText.trim()} onClick={() => persist(workingCv, false)}>
-            Attach to this CV
-          </Button>
-          <Button size="sm" variant="outline" disabled={saving || !jdText.trim()} onClick={() => persist(workingCv, true)}>
-            <Copy className="h-4 w-4 mr-1" />
-            Save tailored copy
-          </Button>
-          {(workingCv.target_job_id || workingCv.target_jd_text) && (
-            <Button size="sm" variant="ghost" disabled={saving} onClick={clearTargeting}>
-              Clear
-            </Button>
+      {showTargeting && (
+        <div className="space-y-4">
+          {job && (
+            <p className="text-sm">
+              Listing: <span className="font-medium">{job.title}</span>
+              {job.company ? <span className="text-muted-foreground"> · {job.company}</span> : null}
+            </p>
           )}
-          {job?.job_slug || job?.id ? (
-            <Button asChild size="sm" variant="link" className="px-0">
-              <Link href={`/jobs/${job.job_slug || job.id}`}>Open listing</Link>
-            </Button>
-          ) : null}
-        </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">Create a CV first, then attach this job to it.</p>
-      )}
+          {!job && attachedHeadline && (
+            <p className="text-sm text-muted-foreground">Currently attached: {attachedHeadline}</p>
+          )}
 
-      {gap && gap.totalCount > 0 && (
-        <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">
-            {gap.matchedCount} of {gap.totalCount} listing keywords appear on this CV.
-            {gap.missingCount > 0 ? ' Add the missing ones where they are true for you — do not invent them.' : ' This CV already covers the extracted keywords.'}
-          </p>
-          {gap.missing.length > 0 && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium">Missing from this CV</p>
-              <div className="flex flex-wrap gap-1.5">
-                {gap.missing.map((keyword) => (
-                  <Badge key={keyword} variant="outline" className="border-amber-300 bg-amber-50 text-amber-900 capitalize">
-                    {keyword}
-                  </Badge>
-                ))}
-              </div>
+          {savedJobs.length > 0 && (
+            <div className="space-y-1.5">
+              <Label>Saved job</Label>
+              <Select onValueChange={chooseSavedJob}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a saved job" />
+                </SelectTrigger>
+                <SelectContent>
+                  {savedJobs.map((row) => (
+                    <SelectItem key={row.id} value={row.job_id}>
+                      {row.jobs?.title || 'Saved job'}
+                      {row.jobs?.company ? ` · ${row.jobs.company}` : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           )}
-          {gap.matched.length > 0 && (
-            <div className="space-y-1">
-              <p className="text-xs font-medium">Already on this CV</p>
-              <div className="flex flex-wrap gap-1.5">
-                {gap.matched.map((keyword) => (
-                  <Badge key={keyword} variant="secondary" className="capitalize">
-                    {keyword}
-                  </Badge>
-                ))}
-              </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor={pasteJdId}>Or paste a job description</Label>
+            <Textarea
+              id={pasteJdId}
+              rows={4}
+              placeholder="Paste the vacancy text here…"
+              value={pastedJd}
+              onChange={(e) => setPastedJd(e.target.value)}
+            />
+          </div>
+
+          {!activeCv && cvs.length > 1 && (
+            <div className="space-y-1.5">
+              <Label>CV to target</Label>
+              <Select value={selectedCvId} onValueChange={setSelectedCvId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a CV" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cvs.map((cv) => (
+                    <SelectItem key={cv.id} value={cv.id}>
+                      {cv.title}{cv.is_primary ? ' (Primary)' : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {workingCv ? (
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" disabled={saving || !jdText.trim()} onClick={() => persist(workingCv, false)}>
+                Attach to this CV
+              </Button>
+              <Button size="sm" variant="outline" disabled={saving || !jdText.trim()} onClick={() => persist(workingCv, true)}>
+                <Copy className="h-4 w-4 mr-1" />
+                Save tailored copy
+              </Button>
+              {(workingCv.target_job_id || workingCv.target_jd_text) && (
+                <Button size="sm" variant="ghost" disabled={saving} onClick={clearTargeting}>
+                  Clear
+                </Button>
+              )}
+              {job?.job_slug || job?.id ? (
+                <Button asChild size="sm" variant="link" className="px-0">
+                  <Link href={`/jobs/${job.job_slug || job.id}`}>Open listing</Link>
+                </Button>
+              ) : null}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Create a CV first, then attach this job to it.</p>
+          )}
+
+          {gap && gap.totalCount > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">
+                {gap.matchedCount} of {gap.totalCount} listing keywords appear on this CV.
+                {gap.missingCount > 0 ? ' Add the missing ones where they are true for you — do not invent them.' : ' This CV already covers the extracted keywords.'}
+              </p>
+              {gap.missing.length > 0 && (
+                <div className="space-y-1">
+                  <p className="text-xs font-medium">Missing from this CV</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {gap.missing.map((keyword) => (
+                      <Badge key={keyword} variant="outline" className="border-amber-300 bg-amber-50 text-amber-900 capitalize">
+                        {keyword}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {gap.matched.length > 0 && (
+                <div className="space-y-1">
+                  <p className="text-xs font-medium">Already on this CV</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {gap.matched.map((keyword) => (
+                      <Badge key={keyword} variant="secondary" className="capitalize">
+                        {keyword}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

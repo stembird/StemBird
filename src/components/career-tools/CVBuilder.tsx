@@ -438,11 +438,11 @@ export default function CVBuilder({
             </span>
           </div>
         </div>
-        <div className="mt-3 space-y-1.5">
-          <div className="flex items-start justify-between gap-2">
+        <div className="mt-3 space-y-1.5 text-center">
+          <div className="flex flex-col items-center gap-1">
             <h4 className="text-sm font-semibold text-[#0A66C2] sm:text-base">{template.name}</h4>
             {template.is_premium && (
-              <Badge variant="secondary" className="shrink-0 text-[10px]">Premium</Badge>
+              <Badge variant="secondary" className="text-[10px]">Premium</Badge>
             )}
           </div>
           <CVTemplatePreview templateName={template.name} showDescription={true} descriptionOnly={true} />
@@ -483,11 +483,11 @@ export default function CVBuilder({
 
   return (
     <div className="space-y-8">
-      <div className="space-y-1">
+      <div className="space-y-1 text-center">
         <h2 className="text-xl font-semibold tracking-tight text-[#0A66C2] sm:text-2xl">
           CV Templates
         </h2>
-        <p className="text-sm text-muted-foreground max-w-2xl">
+        <p className="mx-auto max-w-2xl text-sm text-muted-foreground">
           ATS-friendly designs for the Kenyan job market. Build and preview for free — pay when you download, share, or apply.
         </p>
       </div>
@@ -502,8 +502,9 @@ export default function CVBuilder({
 
       {cvs.length > 0 && (
         <section className="space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
+          <div className="grid min-h-10 grid-cols-[1fr_auto_1fr] items-center gap-3">
+            <div />
+            <div className="text-center">
               <h3 className="text-base font-semibold">My CVs</h3>
               <p className="text-xs text-muted-foreground">
                 {cvs.length} saved {cvs.length === 1 ? 'version' : 'versions'}
@@ -511,7 +512,7 @@ export default function CVBuilder({
             </div>
             <Dialog open={isCreating} onOpenChange={setIsCreating}>
               <DialogTrigger asChild>
-                <Button size="sm">
+                <Button size="sm" className="justify-self-end">
                   <Plus className="h-4 w-4 mr-1.5" />
                   New CV
                 </Button>
@@ -571,7 +572,7 @@ export default function CVBuilder({
                   </Badge>
                 )}
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-base pr-16">{cv.title}</CardTitle>
+                  <CardTitle className="pr-16 text-base">{cv.title}</CardTitle>
                   <CardDescription className="text-xs">
                     {getTemplateName(cv.template_id)} · Updated {new Date(cv.updated_at).toLocaleDateString()}
                   </CardDescription>
@@ -633,9 +634,9 @@ export default function CVBuilder({
           if (sectionTemplates.length === 0) return null;
           return (
             <section key={section.title} className="space-y-4">
-              <div className="border-b border-border/60 pb-3">
+              <div className="border-b border-border/60 pb-3 text-center">
                 <h3 className="text-base font-semibold text-[#0A66C2] sm:text-lg">{section.title}</h3>
-                <p className="mt-0.5 text-sm text-muted-foreground max-w-2xl">{section.blurb}</p>
+                <p className="mx-auto mt-0.5 max-w-2xl text-sm text-muted-foreground">{section.blurb}</p>
               </div>
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {sectionTemplates.map(renderTemplateCard)}
@@ -670,7 +671,7 @@ export default function CVBuilder({
           <div className="flex-1 overflow-hidden flex flex-col">
             {selectedCV && (
               <>
-                <div className="px-6 pb-3 max-h-[34%] overflow-y-auto">
+                <div className="shrink-0 px-6 pb-3">
                   <JobTargetingPanel
                     cvs={cvs}
                     activeCv={selectedCV}

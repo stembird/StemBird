@@ -21,7 +21,7 @@ import {
   targetingHeadline,
 } from '@/lib/jobTargeting';
 import { getSavedJobs, type SavedJob } from '@/lib/savedJobs';
-import { Copy, Target } from 'lucide-react';
+import { Copy } from 'lucide-react';
 
 type JobRow = {
   id: string;
@@ -181,16 +181,10 @@ export default function JobTargetingPanel({
   const attachedHeadline = workingCv?.target_jd_text ? targetingHeadline(workingCv.target_jd_text) : '';
 
   return (
-    <div className="rounded-xl border border-[#0A66C2]/20 bg-[#0A66C2]/5 p-4 space-y-4">
-      <div className="flex flex-col items-center gap-2 text-center">
-        <Target className="h-5 w-5 text-[#0A66C2]" />
-        <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-[#0A66C2]">Attach a job?</h3>
-          <p className="text-xs text-muted-foreground">
-            Optional: attach a StemBird listing or paste a job description to compare its keywords with this CV.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+    <div className="rounded-xl border border-[#0A66C2]/20 bg-[#0A66C2]/5 p-3 space-y-3">
+      <div className="flex flex-wrap items-center justify-start gap-x-2 gap-y-1 text-left">
+        <h3 className="text-sm font-semibold text-[#0A66C2]">Attach a Job?</h3>
+        <div className="flex items-center gap-1.5">
           <Checkbox
             id={targetingToggleId}
             checked={showTargeting}
@@ -200,6 +194,9 @@ export default function JobTargetingPanel({
             Yes, attach a job
           </Label>
         </div>
+        <span className="text-xs text-muted-foreground">
+          (Optional: attach a StemBird listing or paste a job description to compare its keywords with this CV).
+        </span>
       </div>
 
       {showTargeting && (
